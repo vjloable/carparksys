@@ -48,6 +48,7 @@ class _ReserveLotState extends State<ReserveLot> {
     spacesStreamSubscription = controllerSpaces.spacesStreamController.stream.listen((event){
       setState(() {
         _parkingLotsName = event[0];
+        //test
       });
     });
   }
