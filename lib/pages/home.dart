@@ -1,4 +1,5 @@
 import 'package:carparksys/assets/swatches/swatch.dart';
+import 'package:carparksys/pages/lots.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,22 +22,36 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   height: 40,
                   width: double.maxFinite,
-                  //padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.white),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const CircleAvatar(radius: 4, backgroundColor: Colors.green),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          CircleAvatar(radius: 4, backgroundColor: Colors.red),
-                          SizedBox(width: 1),
-                          CircleAvatar(radius: 4, backgroundColor: Colors.orange)
-                        ],
-                      )
+                      IconButton(
+                          onPressed: (){},
+                          icon: const Icon(Icons.menu_rounded)
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const CircleAvatar(radius: 4, backgroundColor: Colors.green),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                CircleAvatar(radius: 4, backgroundColor: Colors.red),
+                                SizedBox(width: 1),
+                                CircleAvatar(radius: 4, backgroundColor: Colors.orange)
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: (){},
+                          icon: const Icon(Icons.dark_mode_outlined)
+                      ),
                     ],
                   ),
                 )
@@ -305,7 +320,12 @@ class _HomePageState extends State<HomePage> {
                           icon: const Icon(Icons.space_dashboard_rounded),
                           iconSize: 28,
                           color: Swatch.buttons.shade700,
-                          onPressed: () {}
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Lots()),
+                            );
+                          }
                       ),
                       const Text('LOTS')
                     ],
