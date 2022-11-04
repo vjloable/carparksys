@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Container(
                       height: 220,
-                      width: 500,
+                      width: double.infinity,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(
                             Radius.circular(5)
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.white,
                       )
                   ),
-                  const SizedBox(height: 20, width: 500),
+                  const SizedBox(height: 20, width: double.infinity),
                   FittedBox(
                     child: Row(
                       children: [
@@ -77,6 +77,19 @@ class _HomePageState extends State<HomePage> {
                                   Radius.circular(20)
                               ),
                               color: Swatch.prime,
+                            ),
+                            child: MaterialButton(
+                              onPressed: (){},
+                              child: const FittedBox(
+                                child: Text(
+                                  'RESERVE',
+                                  style: TextStyle(
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Arial'
+                                  ),
+                                ),
+                              ),
                             )
                         ),
                         const SizedBox(height: 100, width: 20),
@@ -93,10 +106,10 @@ class _HomePageState extends State<HomePage> {
                       ],
                     )
                   ),
-                  const SizedBox(height: 40, width: 500),
+                  const SizedBox(height: 40, width: double.infinity),
                   Container(
                     height: 960,
-                    width: 500,
+                    width: double.infinity,
                     decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(
                             Radius.circular(20)
@@ -116,34 +129,41 @@ class _HomePageState extends State<HomePage> {
           BottomAppBar(
               elevation: 50,
               shape: const CircularNotchedRectangle(),
-              notchMargin: 5,
+              notchMargin: 8,
+              color: Colors.white,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  IconButton(
-                      icon: const Icon(Icons.home),
-                      iconSize: 36,
-                      color: Swatch.buttonsAccent.shade400,
-                      onPressed: () {}
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          icon: const Icon(Icons.home),
+                          iconSize: 28,
+                          color: Swatch.buttonsAccent.shade400,
+                          onPressed: () {}
+                      ),
+                      const Text('HOME')
+                    ],
                   ),
-                  IconButton(
-                      icon: const Icon(Icons.space_dashboard_rounded),
-                      iconSize: 30,
-                      color: Swatch.buttons.shade700,
-                      onPressed: () {}
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      SizedBox(width: 50, height: 30),
+                      Text('TICKET')
+                    ],
                   ),
-                  Container(width: 50),
-                  IconButton(
-                      icon: const Icon(Icons.book_rounded),
-                      iconSize: 28,
-                      color: Swatch.buttons.shade700,
-                      onPressed: () {}
-                  ),
-                  IconButton(
-                      icon: const Icon(Icons.account_circle),
-                      iconSize: 32,
-                      color: Swatch.buttons.shade700,
-                      onPressed: () {}
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          icon: const Icon(Icons.space_dashboard_rounded),
+                          iconSize: 28,
+                          color: Swatch.buttons.shade700,
+                          onPressed: () {}
+                      ),
+                      const Text('LOTS')
+                    ],
                   ),
                 ],
               )
