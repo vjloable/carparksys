@@ -16,45 +16,45 @@ class _HomePageState extends State<HomePage> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(75.0),
         child: AppBar(
-            title: Container(
+          automaticallyImplyLeading: false,
+          title: Container(
               padding: const EdgeInsets.fromLTRB(0,25,0,10),
-              child:
-                Container(
-                  height: 40,
-                  width: double.maxFinite,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.white),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                          onPressed: (){},
-                          icon: const Icon(Icons.menu_rounded)
+              child: Container(
+                height: 40,
+                width: double.maxFinite,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.white),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                        onPressed: (){},
+                        icon: const Icon(Icons.menu_rounded)
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const CircleAvatar(radius: 4, backgroundColor: Colors.green),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              CircleAvatar(radius: 4, backgroundColor: Colors.red),
+                              SizedBox(width: 1),
+                              CircleAvatar(radius: 4, backgroundColor: Colors.orange)
+                            ],
+                          )
+                        ],
                       ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const CircleAvatar(radius: 4, backgroundColor: Colors.green),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                CircleAvatar(radius: 4, backgroundColor: Colors.red),
-                                SizedBox(width: 1),
-                                CircleAvatar(radius: 4, backgroundColor: Colors.orange)
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                          onPressed: (){},
-                          icon: const Icon(Icons.dark_mode_outlined)
-                      ),
-                    ],
-                  ),
-                )
+                    ),
+                    IconButton(
+                        onPressed: (){},
+                        icon: const Icon(Icons.dark_mode_outlined)
+                    ),
+                  ],
+                ),
+              )
             ),
             centerTitle: true,
             shape: const RoundedRectangleBorder(
@@ -301,7 +301,13 @@ class _HomePageState extends State<HomePage> {
                           icon: const Icon(Icons.home),
                           iconSize: 28,
                           color: Swatch.buttonsAccent.shade400,
-                          onPressed: () {}
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => const HomePage()),
+                                  (Route<dynamic> route) => false,
+                            );
+                          }
                       ),
                       const Text('HOME')
                     ],
@@ -323,7 +329,7 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const Lots()),
+                              MaterialPageRoute(builder: (context) => const LotsPage()),
                             );
                           }
                       ),

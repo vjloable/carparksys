@@ -1,15 +1,16 @@
+import 'package:carparksys/pages/home.dart';
 import 'package:flutter/material.dart';
 
 import '../assets/swatches/swatch.dart';
 
-class Lots extends StatefulWidget {
-  const Lots({Key? key}) : super(key: key);
+class LotsPage extends StatefulWidget {
+  const LotsPage({Key? key}) : super(key: key);
 
   @override
-  State<Lots> createState() => _LotsState();
+  State<LotsPage> createState() => _LotsPageState();
 }
 
-class _LotsState extends State<Lots>
+class _LotsPageState extends State<LotsPage>
     with SingleTickerProviderStateMixin {
   List<String> _parkingLotsName() {
     return [
@@ -138,15 +139,17 @@ class _LotsState extends State<Lots>
                       elevation: 10.0,
                       fillColor: (_parkingLotsStatus()[index] == 1)
                           ? const Color(0xFFFFFFFF)
-                          : const Color(0xFF4F4F4F),
+                          : Swatch.buttons.shade100,
                       padding: const EdgeInsets.all(14.0),
                       shape: const CircleBorder(),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(_parkingLotsName()[index].toString(),
-                              style: const TextStyle(
-                                  color: Color(0xFF383838),
+                              style: TextStyle(
+                                  color: (_parkingLotsStatus()[index] == 1)
+                                      ? Colors.black
+                                      : Colors.black12,
                                   fontSize: 26,
                                   fontWeight: FontWeight.bold)),
                           CircleAvatar(
@@ -177,7 +180,12 @@ class _LotsState extends State<Lots>
                             icon: const Icon(Icons.home),
                             iconSize: 28,
                             color: Swatch.buttons.shade700,
-                            onPressed: () {}
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const HomePage()),
+                              );
+                            }
                         ),
                         const Text('HOME')
                       ],
@@ -192,7 +200,7 @@ class _LotsState extends State<Lots>
                             onPressed: () {
                               Navigator.pushAndRemoveUntil(
                                 context,
-                                MaterialPageRoute(builder: (context) => const Lots()),
+                                MaterialPageRoute(builder: (context) => const LotsPage()),
                                     (Route<dynamic> route) => false,
                               );
                             }
