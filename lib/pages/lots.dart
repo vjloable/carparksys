@@ -1,3 +1,4 @@
+import 'package:carparksys/pages/persistent_components/appbar.dart';
 import 'package:carparksys/pages/home.dart';
 import 'package:flutter/material.dart';
 
@@ -27,104 +28,54 @@ class _LotsPageState extends State<LotsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(75.0),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            title: Container(
-                padding: const EdgeInsets.fromLTRB(0,25,0,10),
-                child:
-                Container(
-                  height: 40,
-                  width: double.maxFinite,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.white),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                          onPressed: (){},
-                          icon: const Icon(Icons.menu_rounded)
+        appBar: MyAppbar().myAppbar() as PreferredSizeWidget,
+        body: GridView.count(
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
+          crossAxisCount: 3,
+          padding: const EdgeInsets.all(50),
+          children: List.generate(_parkingLotsName().length, (index) {
+            return Center(
+                child: RawMaterialButton(
+                    onPressed: (_parkingLotsStatus()[index] == 1) ? () {} : null,
+                    highlightColor: Swatch.prime.shade800,
+                    highlightElevation: 15,
+                    splashColor: Swatch.prime,
+                    elevation: 10.0,
+                    fillColor: (_parkingLotsStatus()[index] == 1)
+                        ? Colors.white
+                        : Swatch.buttons.shade100,
+                    //padding: const EdgeInsets.all(20.0),
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
+                    child: SizedBox(
+                      width: 40,
+                      height: 90,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(_parkingLotsName()[index].toString(),
+                              style: TextStyle(
+                                  color: (_parkingLotsStatus()[index] == 1)
+                                      ? Colors.black
+                                      : Colors.black12,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold)),
+                          CircleAvatar(
+                            radius: 4,
+                            backgroundColor: (_parkingLotsStatus()[index] == 1)
+                                ? const Color(0xFF00FF22)
+                                : ((_parkingLotsStatus()[index] == 2)
+                                ? const Color(0xFFFF0000)
+                                : const Color(0xFFFFD60A)),
+                          )
+                        ],
                       ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const CircleAvatar(radius: 4, backgroundColor: Colors.green),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                CircleAvatar(radius: 4, backgroundColor: Colors.red),
-                                SizedBox(width: 1),
-                                CircleAvatar(radius: 4, backgroundColor: Colors.orange)
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                          onPressed: (){},
-                          icon: const Icon(Icons.dark_mode_outlined)
-                      ),
-                    ],
-                  ),
+                    )
                 )
-            ),
-            centerTitle: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(40),
-              ),
-            ),
-          ),
-        ),
-        body: Container(
-          padding: const EdgeInsets.all(0),
-          child: GridView.count(
-            crossAxisCount: 3,
-            padding: const EdgeInsets.all(30),
-            children: List.generate(_parkingLotsName().length, (index) {
-              return Center(
-                  child: RawMaterialButton(
-                      onPressed: (_parkingLotsStatus()[index] == 1) ? () {} : null,
-                      highlightColor: const Color(0xFFFFD60A),
-                      highlightElevation: 15,
-                      splashColor: const Color(0x44FFD60A),
-                      elevation: 10.0,
-                      fillColor: (_parkingLotsStatus()[index] == 1)
-                          ? const Color(0xFFFFFFFF)
-                          : Swatch.buttons.shade100,
-                      //padding: const EdgeInsets.all(20.0),
-                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
-                      child: SizedBox(
-                        width: 50,
-                        height: 90,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(_parkingLotsName()[index].toString(),
-                                style: TextStyle(
-                                    color: (_parkingLotsStatus()[index] == 1)
-                                        ? Colors.black
-                                        : Colors.black12,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold)),
-                            CircleAvatar(
-                              radius: 4,
-                              backgroundColor: (_parkingLotsStatus()[index] == 1)
-                                  ? const Color(0xFF00FF22)
-                                  : ((_parkingLotsStatus()[index] == 2)
-                                  ? const Color(0xFFFF0000)
-                                  : const Color(0xFFFFD60A)),
-                            )
-                          ],
-                        ),
-                      )));
-            }),
-          ),
+            );
+          }),
         ),
         bottomNavigationBar: SizedBox(
             height: 90,
