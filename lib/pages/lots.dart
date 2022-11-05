@@ -1,8 +1,9 @@
-import 'package:carparksys/pages/persistent_components/appbar.dart';
+import 'package:carparksys/pages/components/appbar.dart';
+import 'package:carparksys/pages/components/reservation.dart';
 import 'package:carparksys/pages/home.dart';
 import 'package:flutter/material.dart';
 
-import '../assets/swatches/swatch.dart';
+import '../assets/swatches/custom_colors.dart';
 
 class LotsPage extends StatefulWidget {
   const LotsPage({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _LotsPageState extends State<LotsPage>
   }
   List<int> _parkingLotsStatus() {
     return [
-      1, 1, 1, 3, 3, 2, 3, 1, 3, 2, 1, 2, 1, 3, 2, 1, 1, 1
+      1, 1, 1, 1, 3, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
     ];
   }
 
@@ -37,7 +38,17 @@ class _LotsPageState extends State<LotsPage>
           children: List.generate(_parkingLotsName().length, (index) {
             return Center(
                 child: RawMaterialButton(
-                    onPressed: (_parkingLotsStatus()[index] == 1) ? () {} : null,
+                    onPressed: (_parkingLotsStatus()[index] == 1) ? () {
+                      showModalBottomSheet(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          context: context,
+                          builder: (BuildContext context) {
+                            return showReserveLot(context, _parkingLotsName()[index]);
+                          }
+                      );
+                    } : null,
                     highlightColor: Swatch.prime.shade800,
                     highlightElevation: 15,
                     splashColor: Swatch.prime,
@@ -46,30 +57,44 @@ class _LotsPageState extends State<LotsPage>
                         ? Colors.white
                         : Swatch.buttons.shade100,
                     //padding: const EdgeInsets.all(20.0),
-                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5),
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15)
+                        )
+                    ),
                     child: SizedBox(
                       width: 40,
                       height: 90,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          CircleAvatar(
+                            radius: 5,
+                            backgroundColor: (_parkingLotsStatus()[index] == 1)
+                                ? SigCol.green
+                                : ((_parkingLotsStatus()[index] == 2)
+                                ? SigCol.red
+                                : SigCol.orange),
+                          ),
                           Text(_parkingLotsName()[index].toString(),
                               style: TextStyle(
                                   color: (_parkingLotsStatus()[index] == 1)
                                       ? Colors.black
                                       : Colors.black12,
                                   fontSize: 28,
-                                  fontWeight: FontWeight.bold)),
-                          CircleAvatar(
-                            radius: 4,
-                            backgroundColor: (_parkingLotsStatus()[index] == 1)
-                                ? const Color(0xFF00FF22)
-                                : ((_parkingLotsStatus()[index] == 2)
-                                ? const Color(0xFFFF0000)
-                                : const Color(0xFFFFD60A)),
-                          )
+                                  fontWeight: FontWeight.w100)),
+                          /*
+                          Divider(thickness: 3, color: (_parkingLotsStatus()[index] == 1)
+                              ? SigCol.green
+                              : ((_parkingLotsStatus()[index] == 2)
+                              ? SigCol.red
+                              : SigCol.orange)
+                          )*/
                         ],
                       ),
                     )

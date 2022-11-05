@@ -1,3 +1,4 @@
+import 'package:carparksys/assets/swatches/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class MyAppbar {
@@ -24,14 +25,14 @@ class MyAppbar {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const CircleAvatar(radius: 4, backgroundColor: Colors.green),
+                        const CircleAvatar(radius: 4, backgroundColor: SigCol.green),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            CircleAvatar(radius: 4, backgroundColor: Colors.red),
+                            CircleAvatar(radius: 4, backgroundColor: SigCol.red),
                             SizedBox(width: 1),
-                            CircleAvatar(radius: 4, backgroundColor: Colors.orange)
+                            CircleAvatar(radius: 4, backgroundColor: SigCol.orange)
                           ],
                         )
                       ],
