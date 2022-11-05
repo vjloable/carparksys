@@ -166,15 +166,15 @@ class _LotsPageState extends State<LotsPage>
           ),
         ),
         bottomNavigationBar: SizedBox(
-            height: 80,
+            height: 90,
             child: BottomAppBar(
                 elevation: 10,
                 color: Colors.white,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
                             icon: const Icon(Icons.home),
@@ -191,7 +191,7 @@ class _LotsPageState extends State<LotsPage>
                       ],
                     ),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
                             icon: const Icon(Icons.space_dashboard_rounded),
@@ -205,7 +205,7 @@ class _LotsPageState extends State<LotsPage>
                               );
                             }
                         ),
-                        const Text('LOTS')
+                        const Text('LOTS', style: TextStyle(color: Colors.orange))
                       ],
                     ),
                   ],

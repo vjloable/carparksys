@@ -10,6 +10,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _hasNoTicket = true;
+
+  void _showTicket(){
+    setState(() {
+      _hasNoTicket = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,7 +201,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  ///const SizedBox(height: 20, width: double.infinity),
                   const SizedBox(height: 40, width: double.infinity),
                   Container(
                     height: 150,
@@ -207,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Parking Space Statistics:\n'),
+                          const Text('Parking Space Statistics:'),
                           const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -215,6 +222,12 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Column(
                                 children: [
+                                  const SizedBox(height: 10, width: 1),
+                                  const CircleAvatar(
+                                      radius: 4,
+                                      backgroundColor: Colors.red
+                                  ),
+                                  const SizedBox(height: 10, width: 1),
                                   Text(
                                       '12',
                                       style: TextStyle(
@@ -235,6 +248,12 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Column(
                                 children: [
+                                  const SizedBox(height: 10, width: 1),
+                                  const CircleAvatar(
+                                      radius: 4,
+                                      backgroundColor: Colors.green
+                                  ),
+                                  const SizedBox(height: 10, width: 1),
                                   Text(
                                       '10',
                                       style: TextStyle(
@@ -255,6 +274,12 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Column(
                                 children: [
+                                  const SizedBox(height: 10, width: 1),
+                                  const CircleAvatar(
+                                      radius: 4,
+                                      backgroundColor: Colors.orange
+                                  ),
+                                  const SizedBox(height: 10, width: 1),
                                   Text(
                                       '8',
                                       style: TextStyle(
@@ -277,14 +302,15 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ]
                     )
-                  )
+                  ),
+                  const SizedBox(height: 10, width: double.infinity),
                 ],
               ),
             ),
           )
       ),
       bottomNavigationBar: SizedBox(
-        height: 80,
+        height: 90,
         child:
           BottomAppBar(
               elevation: 10,
@@ -292,35 +318,36 @@ class _HomePageState extends State<HomePage> {
               notchMargin: 8,
               color: Colors.white,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  ///const SizedBox(height: 1, width: 1),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
                           icon: const Icon(Icons.home),
                           iconSize: 28,
                           color: Swatch.buttonsAccent.shade400,
                           onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => const HomePage()),
-                                  (Route<dynamic> route) => false,
-                            );
+                            //Navigator.pushAndRemoveUntil(
+                            //  context,
+                            //  MaterialPageRoute(builder: (context) => const HomePage()),
+                            //      (Route<dynamic> route) => false,
+                            //);
                           }
                       ),
-                      const Text('HOME')
+                      const Text('HOME', style: TextStyle(color: Colors.orange))
                     ],
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      SizedBox(width: 50, height: 30),
+                      SizedBox(width: 60, height: 30),
                       Text('TICKET')
                     ],
                   ),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
                           icon: const Icon(Icons.space_dashboard_rounded),
