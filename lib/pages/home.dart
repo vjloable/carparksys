@@ -31,6 +31,39 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   Container(
+                      height: 30,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(30)
+                        ),
+                        color: Swatch.buttonsAccent.shade100,
+                      ),
+                      child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                'Ticket Status:',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: Swatch.buttons.shade300
+                                )
+                              ),
+                              Text(
+                                  'No Reservation',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      color: Swatch.buttons.shade300
+                                  )
+                              ),
+                            ],
+                          )
+                      )
+                  ),
+                  const SizedBox(height: 10, width: 1),
+                  Container(
                     height: 280,
                     width: double.infinity,
                     decoration: const BoxDecoration(
@@ -285,6 +318,7 @@ class _HomePageState extends State<HomePage> {
                           icon: const Icon(Icons.home),
                           iconSize: 28,
                           color: Swatch.buttonsAccent.shade400,
+                          splashRadius: 30,
                           onPressed: () {
                             //Navigator.pushAndRemoveUntil(
                             //  context,
@@ -310,6 +344,7 @@ class _HomePageState extends State<HomePage> {
                           icon: const Icon(Icons.space_dashboard_rounded),
                           iconSize: 28,
                           color: Swatch.buttons.shade700,
+                          splashRadius: 30,
                           onPressed: () {
                             Navigator.push(
                               context,
