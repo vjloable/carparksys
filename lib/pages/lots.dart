@@ -58,12 +58,7 @@ class _LotsPageState extends State<LotsPage>
                         : Swatch.buttons.shade100,
                     //padding: const EdgeInsets.all(20.0),
                     shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          topRight: Radius.circular(5),
-                          bottomLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15)
-                        )
+                        borderRadius: BorderRadius.all(Radius.circular(8))
                     ),
                     child: SizedBox(
                       width: 40,
