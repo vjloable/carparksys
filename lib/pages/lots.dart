@@ -34,7 +34,7 @@ class _LotsPageState extends State<LotsPage>
           crossAxisSpacing: 20,
           mainAxisSpacing: 20,
           crossAxisCount: 3,
-          padding: const EdgeInsets.all(50),
+          padding: const EdgeInsets.all(40),
           children: List.generate(_parkingLotsName().length, (index) {
             return Center(
                 child: RawMaterialButton(
@@ -52,13 +52,19 @@ class _LotsPageState extends State<LotsPage>
                     highlightColor: Swatch.prime.shade800,
                     highlightElevation: 15,
                     splashColor: Swatch.prime,
-                    elevation: 10.0,
+                    elevation: 5.0,
                     fillColor: (_parkingLotsStatus()[index] == 1)
                         ? Colors.white
                         : Swatch.buttons.shade100,
-                    //padding: const EdgeInsets.all(20.0),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(8))
+                    shape: Border(
+                      bottom: BorderSide(
+                          width: 5,
+                          color: (_parkingLotsStatus()[index] == 1)
+                              ? SigCol.green
+                              : ((_parkingLotsStatus()[index] == 2)
+                              ? SigCol.red
+                              : SigCol.orange)
+                      ),
                     ),
                     child: SizedBox(
                       width: 40,
@@ -68,6 +74,7 @@ class _LotsPageState extends State<LotsPage>
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          /*
                           CircleAvatar(
                             radius: 5,
                             backgroundColor: (_parkingLotsStatus()[index] == 1)
@@ -76,13 +83,14 @@ class _LotsPageState extends State<LotsPage>
                                 ? SigCol.red
                                 : SigCol.orange),
                           ),
+                          */
                           Text(_parkingLotsName()[index].toString(),
                               style: TextStyle(
                                   color: (_parkingLotsStatus()[index] == 1)
                                       ? Colors.black
                                       : Colors.black12,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w100)),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold)),
                           /*
                           Divider(thickness: 3, color: (_parkingLotsStatus()[index] == 1)
                               ? SigCol.green
@@ -112,6 +120,7 @@ class _LotsPageState extends State<LotsPage>
                             icon: const Icon(Icons.home),
                             iconSize: 28,
                             color: Swatch.buttons.shade700,
+                            splashRadius: 30,
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -129,6 +138,7 @@ class _LotsPageState extends State<LotsPage>
                             icon: const Icon(Icons.space_dashboard_rounded),
                             iconSize: 28,
                             color: Swatch.buttonsAccent.shade400,
+                            splashRadius: 30,
                             onPressed: () {
                               Navigator.pushAndRemoveUntil(
                                 context,
