@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                                 child: SizedBox(
                                   width: 300,
                                   child: Text(
-                                    'W5',
+                                    '5W',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -170,7 +170,12 @@ class _HomePageState extends State<HomePage> {
                                                   )
                                               )
                                           ),
-                                          onPressed: (){},
+                                          onPressed: (){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => const LotsPage()),
+                                            );
+                                          },
                                           child: Row(
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             mainAxisAlignment: MainAxisAlignment.center,

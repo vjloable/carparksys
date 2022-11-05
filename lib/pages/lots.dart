@@ -14,58 +14,13 @@ class _LotsPageState extends State<LotsPage>
     with SingleTickerProviderStateMixin {
   List<String> _parkingLotsName() {
     return [
-      '1A',
-      '1B',
-      '1C',
-      '1D',
-      '2A',
-      '2B',
-      '2C',
-      '2D',
-      '3A',
-      '3B',
-      '3C',
-      '3D',
-      '4A',
-      '4B',
-      '4C',
-      '4D',
-      '5A',
-      '5B',
-      '5C',
-      '5D',
-      '6A',
-      '6B',
-      '6C',
-      '6D'
+      '1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B', '3C',
+      '4A', '4B', '4C', '5A', '5B', '5C', '6A', '6B', '6C',
     ];
   }
   List<int> _parkingLotsStatus() {
     return [
-      1,
-      1,
-      1,
-      3,
-      3,
-      2,
-      3,
-      1,
-      3,
-      2,
-      1,
-      2,
-      1,
-      3,
-      2,
-      1,
-      1,
-      1,
-      2,
-      2,
-      3,
-      3,
-      1,
-      1
+      1, 1, 1, 3, 3, 2, 3, 1, 3, 2, 1, 2, 1, 3, 2, 1, 1, 1
     ];
   }
 
@@ -125,10 +80,10 @@ class _LotsPageState extends State<LotsPage>
           ),
         ),
         body: Container(
-          padding: const EdgeInsets.all(40),
+          padding: const EdgeInsets.all(0),
           child: GridView.count(
-            crossAxisCount: 4,
-            //padding: const EdgeInsets.all(30),
+            crossAxisCount: 3,
+            padding: const EdgeInsets.all(30),
             children: List.generate(_parkingLotsName().length, (index) {
               return Center(
                   child: RawMaterialButton(
@@ -140,27 +95,33 @@ class _LotsPageState extends State<LotsPage>
                       fillColor: (_parkingLotsStatus()[index] == 1)
                           ? const Color(0xFFFFFFFF)
                           : Swatch.buttons.shade100,
-                      padding: const EdgeInsets.all(14.0),
-                      shape: const CircleBorder(),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(_parkingLotsName()[index].toString(),
-                              style: TextStyle(
-                                  color: (_parkingLotsStatus()[index] == 1)
-                                      ? Colors.black
-                                      : Colors.black12,
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.bold)),
-                          CircleAvatar(
-                            radius: 4,
-                            backgroundColor: (_parkingLotsStatus()[index] == 1)
-                                ? const Color(0xFF00FF22)
-                                : ((_parkingLotsStatus()[index] == 2)
-                                ? const Color(0xFFFF0000)
-                                : const Color(0xFFFFD60A)),
-                          )
-                        ],
+                      //padding: const EdgeInsets.all(20.0),
+                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
+                      child: SizedBox(
+                        width: 50,
+                        height: 90,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(_parkingLotsName()[index].toString(),
+                                style: TextStyle(
+                                    color: (_parkingLotsStatus()[index] == 1)
+                                        ? Colors.black
+                                        : Colors.black12,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold)),
+                            CircleAvatar(
+                              radius: 4,
+                              backgroundColor: (_parkingLotsStatus()[index] == 1)
+                                  ? const Color(0xFF00FF22)
+                                  : ((_parkingLotsStatus()[index] == 2)
+                                  ? const Color(0xFFFF0000)
+                                  : const Color(0xFFFFD60A)),
+                            )
+                          ],
+                        ),
                       )));
             }),
           ),
