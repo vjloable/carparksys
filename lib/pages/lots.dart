@@ -34,7 +34,7 @@ class _LotsPageState extends State<LotsPage>
           crossAxisSpacing: 20,
           mainAxisSpacing: 20,
           crossAxisCount: 3,
-          padding: const EdgeInsets.all(40),
+          padding: const EdgeInsets.all(60),
           children: List.generate(_parkingLotsName().length, (index) {
             return Center(
                 child: RawMaterialButton(
@@ -58,7 +58,7 @@ class _LotsPageState extends State<LotsPage>
                         : Swatch.buttons.shade100,
                     shape: Border(
                       bottom: BorderSide(
-                          width: 5,
+                          width: 3,
                           color: (_parkingLotsStatus()[index] == 1)
                               ? SigCol.green
                               : ((_parkingLotsStatus()[index] == 2)
@@ -90,14 +90,9 @@ class _LotsPageState extends State<LotsPage>
                                       ? Colors.black
                                       : Colors.black12,
                                   fontSize: 20,
-                                  fontWeight: FontWeight.bold)),
-                          /*
-                          Divider(thickness: 3, color: (_parkingLotsStatus()[index] == 1)
-                              ? SigCol.green
-                              : ((_parkingLotsStatus()[index] == 2)
-                              ? SigCol.red
-                              : SigCol.orange)
-                          )*/
+                                  fontWeight: FontWeight.bold
+                              )
+                          ),
                         ],
                       ),
                     )
