@@ -22,22 +22,28 @@ Widget showReserveLot(BuildContext context, String lot){
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Confirm Reservation?',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Swatch.buttons.shade900
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 30,
+                width: 300,
+                child: Center(
+                  child: Text(
+                    'Do you confirm this reservation?',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Swatch.buttons.shade900
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(height: 20),
               Container(
                   height: 160,
                   width: 300,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(
-                        Radius.circular(40)
+                        Radius.circular(30)
                     ),
                     color: Swatch.buttons.shade400,
                   ),
@@ -73,7 +79,7 @@ Widget showReserveLot(BuildContext context, String lot){
                       const SizedBox(
                         width: 140,
                         child: Text(
-                          'Your Parking Lot',
+                          'Your Parking Space',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 30,
@@ -94,9 +100,12 @@ Widget showReserveLot(BuildContext context, String lot){
                     sliderButtonIconPadding: 10,
                     innerColor: Swatch.prime,
                     outerColor: Swatch.buttons.shade600,
-                    elevation: 25,
+                    elevation: 15,
                     text: '   Slide to confirm',
-                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w100, color: Swatch.prime.shade100),
+                    textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w100, color: Swatch.prime.shade100),
+                    onSubmit: () {
+
+                    },
                   )
               ),
               const SizedBox(width: 1, height: 20)
