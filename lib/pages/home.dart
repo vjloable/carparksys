@@ -1,4 +1,5 @@
 import 'package:carparksys/assets/swatches/custom_colors.dart';
+import 'package:carparksys/pages/components/ticket.dart';
 import 'package:carparksys/pages/lots.dart';
 import 'package:flutter/material.dart';
 
@@ -365,12 +366,16 @@ class _HomePageState extends State<HomePage> {
           child: FloatingActionButton(
             elevation: 0,
             onPressed: () {
-              /*
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ParkingSpace()),
+              showModalBottomSheet(
+                  backgroundColor: Swatch.prime,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  context: context,
+                  builder: (BuildContext context) {
+                    return showTicket(context);
+                  }
               );
-              */
             },
             child:
                   Icon(Icons.confirmation_num, size: 32, color: Swatch.buttons.shade500),
