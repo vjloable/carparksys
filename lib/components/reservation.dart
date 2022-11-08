@@ -23,24 +23,25 @@ Widget showReserveLot(BuildContext context, String lot){
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
-              SizedBox(
-                height: 30,
-                width: 300,
-                child: Center(
-                  child: Text(
-                    'Do you confirm this reservation?',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Swatch.buttons.shade900
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: SizedBox(
+                  height: 28,
+                  width: 300,
+                    child: Text(
+                      'Do you confirm this reservation?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Swatch.buttons.shade900
+                      ),
                     ),
-                  ),
                 ),
               ),
               Container(
                   height: 160,
-                  width: 300,
+                  width: 360,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(
                         Radius.circular(30)
@@ -94,7 +95,7 @@ Widget showReserveLot(BuildContext context, String lot){
               const SizedBox(width: 1, height: 5),
               SizedBox(
                   height: 55,
-                  width: 300,
+                  width: 360,
                   child: SlideAction(
                     sliderButtonIconSize: 20,
                     sliderButtonIconPadding: 10,

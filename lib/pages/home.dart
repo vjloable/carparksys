@@ -1,9 +1,10 @@
 import 'package:carparksys/assets/swatches/custom_colors.dart';
-import 'package:carparksys/pages/components/ticket.dart';
 import 'package:carparksys/pages/lots.dart';
 import 'package:flutter/material.dart';
+import '../components/appbar.dart';
+import '../components/drawer.dart';
+import '../components/ticket.dart';
 
-import 'components/appbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,18 +14,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _hasNoTicket = true;
-
-  void _showTicket(){
-    setState(() {
-      _hasNoTicket = false;
-    });
-  }
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppbar().myAppbar() as PreferredSizeWidget,
+      key: _key,
+      appBar: MyAppbar().myAppbar(_key) as PreferredSizeWidget,
+      drawer: Drawer(
+        child: drawerItems(context, 2),
+      ),
       body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -78,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const Text('Suggested Parking Space:'),
+                          const Text('Suggested Parking Space:', style: TextStyle(fontSize: 16)),
                           const SizedBox(
                             height: 150,
                             child: FittedBox(
@@ -205,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Parking Space Statistics:'),
+                          const Text('Parking Space Statistics:', style: TextStyle(fontSize: 16)),
                           const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -307,7 +306,7 @@ class _HomePageState extends State<HomePage> {
               elevation: 10,
               shape: const CircularNotchedRectangle(),
               notchMargin: 8,
-              color: Colors.white,
+              ///color: Colors.white,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

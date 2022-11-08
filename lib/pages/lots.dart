@@ -1,9 +1,9 @@
-import 'package:carparksys/pages/components/appbar.dart';
-import 'package:carparksys/pages/components/reservation.dart';
-import 'package:carparksys/pages/home.dart';
 import 'package:flutter/material.dart';
-
+import 'package:carparksys/pages/home.dart';
 import '../assets/swatches/custom_colors.dart';
+import '../components/appbar.dart';
+import '../components/reservation.dart';
+import '../components/drawer.dart';
 
 class LotsPage extends StatefulWidget {
   const LotsPage({Key? key}) : super(key: key);
@@ -14,6 +14,7 @@ class LotsPage extends StatefulWidget {
 
 class _LotsPageState extends State<LotsPage>
     with SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   List<String> _parkingLotsName() {
     return [
       '1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B', '3C',
@@ -29,7 +30,12 @@ class _LotsPageState extends State<LotsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MyAppbar().myAppbar() as PreferredSizeWidget,
+        key: _key,
+        appBar: MyAppbar().myAppbar(_key) as PreferredSizeWidget,
+        drawer: Drawer(
+          ///backgroundColor: Swatch.prime,
+          child: drawerItems(context, 3),
+        ),
         body: GridView.count(
           crossAxisSpacing: 20,
           mainAxisSpacing: 20,
@@ -104,7 +110,7 @@ class _LotsPageState extends State<LotsPage>
             height: 90,
             child: BottomAppBar(
                 elevation: 10,
-                color: Colors.white,
+                ///color: Colors.white,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [

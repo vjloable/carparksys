@@ -1,8 +1,10 @@
 import 'package:carparksys/assets/swatches/custom_colors.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 class MyAppbar {
-  Widget myAppbar(){
+  Widget myAppbar(GlobalKey<ScaffoldState> key){
     return PreferredSize(
       preferredSize: const Size.fromHeight(75.0),
       child: AppBar(
@@ -17,7 +19,9 @@ class MyAppbar {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   IconButton(
-                      onPressed: (){},
+                      onPressed: (){
+                        key.currentState!.openDrawer();
+                      },
                       icon: const Icon(Icons.menu_rounded)
                   ),
                   Expanded(
@@ -39,8 +43,16 @@ class MyAppbar {
                     ),
                   ),
                   IconButton(
-                      onPressed: (){},
-                      icon: const Icon(Icons.dark_mode_outlined)
+                      onPressed: (){
+
+                        MyApp.themeNotifier.value =
+                          MyApp.themeNotifier.value == ThemeMode.light
+                            ? ThemeMode.dark
+                            : ThemeMode.light;
+                      },
+                      icon: Icon(MyApp.themeNotifier.value == ThemeMode.light
+                      ? Icons.dark_mode_outlined
+                      : Icons.light_mode)
                   ),
                 ],
               ),
