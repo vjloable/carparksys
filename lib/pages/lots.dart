@@ -12,8 +12,7 @@ class LotsPage extends StatefulWidget {
   State<LotsPage> createState() => _LotsPageState();
 }
 
-class _LotsPageState extends State<LotsPage>
-    with SingleTickerProviderStateMixin {
+class _LotsPageState extends State<LotsPage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   List<String> _parkingLotsName() {
     return [
@@ -23,7 +22,7 @@ class _LotsPageState extends State<LotsPage>
   }
   List<int> _parkingLotsStatus() {
     return [
-      1, 1, 1, 1, 3, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+      1, 1, 2, 1, 3, 2, 1, 2, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1
     ];
   }
 
@@ -110,7 +109,6 @@ class _LotsPageState extends State<LotsPage>
             height: 90,
             child: BottomAppBar(
                 elevation: 10,
-                ///color: Colors.white,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [

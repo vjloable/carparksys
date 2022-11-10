@@ -44,7 +44,6 @@ class MyAppbar {
                   ),
                   IconButton(
                       onPressed: (){
-
                         MyApp.themeNotifier.value =
                           MyApp.themeNotifier.value == ThemeMode.light
                             ? ThemeMode.dark

@@ -41,16 +41,10 @@ Widget drawerItems(BuildContext context, int numPops) {
         title: const Text('Sign out'),
         leading: const Icon(Icons.logout_rounded),
         onTap: () {
-          switch(numPops){
-            case 2: {
-              Navigator.of(context)..pop()..pop();
-            }
-            break;
-
-            case 3: {
-              Navigator.of(context)..pop()..pop()..pop();
-            }
-          }
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          );
         },
       ),
     ],

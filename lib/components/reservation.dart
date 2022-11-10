@@ -57,21 +57,19 @@ Widget showReserveLot(BuildContext context, String lot){
                       SizedBox(
                         width: 100,
                         height: 100,
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(30)
-                            ),
-                            color: Colors.white
-                          ),
-                          child: Text(
-                            lot,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 60,
-                                fontWeight: FontWeight.bold,
-                                color: Swatch.buttons.shade600
+                        child: Material(
+                          elevation: 10,
+                          color: Colors.white,
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              lot,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 60,
+                                  fontWeight: FontWeight.bold,
+                                  color: Swatch.buttons.shade600
+                              ),
                             ),
                           ),
                         ),
