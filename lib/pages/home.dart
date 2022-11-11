@@ -68,9 +68,9 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: const BorderRadius.all(
                         Radius.circular(20),
                     ),
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.background,
                     child: SizedBox(
-                      height: 280,
+                      height: 300,
                       width: double.infinity,
                       child: Container(
                         padding: const EdgeInsets.all(20),
@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: const BorderRadius.all(
                       Radius.circular(20),
                     ),
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.background,
                     child: SizedBox(
                       height: 150,
                       width: double.infinity,
@@ -212,19 +212,18 @@ class _HomePageState extends State<HomePage> {
                               textBaseline: TextBaseline.alphabetic,
                               children: [
                                 Column(
-                                  children: [
-                                    const SizedBox(height: 10, width: 1),
-                                    const CircleAvatar(
+                                  children: const [
+                                    SizedBox(height: 10, width: 1),
+                                    CircleAvatar(
                                         radius: 4,
                                         backgroundColor: SigCol.red ///Colors.red
                                     ),
-                                    const SizedBox(height: 10, width: 1),
+                                    SizedBox(height: 10, width: 1),
                                     Text(
                                         '12',
                                         style: TextStyle(
                                             fontSize: 30,
                                             fontWeight: FontWeight.bold,
-                                            color: Swatch.buttons.shade800
                                         )
                                     ),
                                     Text(
@@ -232,25 +231,23 @@ class _HomePageState extends State<HomePage> {
                                         style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
-                                            color: Swatch.buttons.shade800
                                         )
                                     ),
                                   ],
                                 ),
                                 Column(
-                                  children: [
-                                    const SizedBox(height: 10, width: 1),
-                                    const CircleAvatar(
+                                  children: const [
+                                    SizedBox(height: 10, width: 1),
+                                    CircleAvatar(
                                         radius: 4,
                                         backgroundColor: SigCol.green ///Colors.green
                                     ),
-                                    const SizedBox(height: 10, width: 1),
+                                    SizedBox(height: 10, width: 1),
                                     Text(
                                         '10',
                                         style: TextStyle(
                                             fontSize: 40,
                                             fontWeight: FontWeight.bold,
-                                            color: Swatch.buttons.shade800
                                         )
                                     ),
                                     Text(
@@ -258,25 +255,23 @@ class _HomePageState extends State<HomePage> {
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
-                                            color: Swatch.buttons.shade800
                                         )
                                     ),
                                   ],
                                 ),
                                 Column(
-                                  children: [
-                                    const SizedBox(height: 10, width: 1),
-                                    const CircleAvatar(
+                                  children: const [
+                                    SizedBox(height: 10, width: 1),
+                                    CircleAvatar(
                                         radius: 4,
                                         backgroundColor: SigCol.orange ///Colors.orange
                                     ),
-                                    const SizedBox(height: 10, width: 1),
+                                    SizedBox(height: 10, width: 1),
                                     Text(
                                         '8',
                                         style: TextStyle(
                                             fontSize: 30,
                                             fontWeight: FontWeight.bold,
-                                            color: Swatch.buttons.shade800
                                         )
                                     ),
                                     Text(
@@ -284,7 +279,6 @@ class _HomePageState extends State<HomePage> {
                                         style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
-                                            color: Swatch.buttons.shade800
                                         )
                                     ),
                                   ],

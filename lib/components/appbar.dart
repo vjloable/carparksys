@@ -43,16 +43,16 @@ class MyAppbar {
                     ),
                   ),
                   IconButton(
-                      onPressed: (){
-                        MyApp.themeNotifier.value =
-                          MyApp.themeNotifier.value == ThemeMode.light
-                            ? ThemeMode.dark
-                            : ThemeMode.light;
-                      },
-                      icon: Icon(MyApp.themeNotifier.value == ThemeMode.light
-                      ? Icons.dark_mode_outlined
-                      : Icons.light_mode)
-                  ),
+                        onPressed: (){
+                          MyApp.themeNotifier.value =
+                            MyApp.themeNotifier.value == ThemeMode.light
+                              ? ThemeMode.dark
+                              : ThemeMode.light;
+                        },
+                        icon: Icon(MyApp.themeNotifier.value == ThemeMode.light
+                        ? Icons.dark_mode_outlined
+                        : Icons.light_mode)
+                  )
                 ],
               ),
             )
