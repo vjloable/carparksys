@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:carparksys/pages/home.dart';
 import '../assets/swatches/custom_colors.dart';
 import '../components/appbar.dart';
 import '../components/reservation.dart';
@@ -32,7 +31,6 @@ class _LotsPageState extends State<LotsPage> {
         key: _key,
         appBar: MyAppbar().myAppbar(_key, context) as PreferredSizeWidget,
         drawer: Drawer(
-          ///backgroundColor: Swatch.prime,
           child: drawerItems(context, 3),
         ),
         body: GridView.count(
@@ -124,13 +122,7 @@ class _LotsPageState extends State<LotsPage> {
                             iconSize: 28,
                             color: Swatch.buttonsAccent.shade400,
                             splashRadius: 30,
-                            onPressed: () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(builder: (context) => const LotsPage()),
-                                    (Route<dynamic> route) => false,
-                              );
-                            }
+                            onPressed: () {}
                         ),
                         const Text('LOTS', style: TextStyle(color: Colors.orange))
                       ],
