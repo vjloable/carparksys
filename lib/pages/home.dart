@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      appBar: MyAppbar().myAppbar(_key) as PreferredSizeWidget,
+      appBar: MyAppbar().myAppbar(_key, context) as PreferredSizeWidget,
       drawer: Drawer(
         child: drawerItems(context, 2),
       ),
@@ -121,8 +121,8 @@ class _HomePageState extends State<HomePage> {
                                             child: Row(
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               mainAxisAlignment: MainAxisAlignment.center,
-                                              children: const [
-                                                Icon(Icons.confirmation_number_outlined, size: 24),
+                                              children: [
+                                                Icon(Icons.confirmation_number_outlined, size: 24, color: Swatch.buttons.shade800),
                                                 Text(
                                                   '  RESERVE',
                                                   textAlign: TextAlign.start,
@@ -130,6 +130,7 @@ class _HomePageState extends State<HomePage> {
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w400,
                                                     fontFamily: 'Arial',
+                                                    color: Swatch.buttons.shade800
                                                   ),
                                                 ),
                                               ],
@@ -302,11 +303,9 @@ class _HomePageState extends State<HomePage> {
               elevation: 10,
               shape: const CircularNotchedRectangle(),
               notchMargin: 8,
-              ///color: Colors.white,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ///const SizedBox(height: 1, width: 1),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -315,13 +314,7 @@ class _HomePageState extends State<HomePage> {
                           iconSize: 28,
                           color: Swatch.buttonsAccent.shade400,
                           splashRadius: 30,
-                          onPressed: () {
-                            //Navigator.pushAndRemoveUntil(
-                            //  context,
-                            //  MaterialPageRoute(builder: (context) => const HomePage()),
-                            //      (Route<dynamic> route) => false,
-                            //);
-                          }
+                          onPressed: () {}
                       ),
                       const Text('HOME', style: TextStyle(color: Colors.orange))
                     ],
@@ -339,7 +332,6 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                           icon: const Icon(Icons.space_dashboard_rounded),
                           iconSize: 28,
-                          color: Swatch.buttons.shade700,
                           splashRadius: 30,
                           onPressed: () {
                             Navigator.push(
@@ -359,10 +351,10 @@ class _HomePageState extends State<HomePage> {
           height: 70,
           width: 70,
           child: FloatingActionButton(
-            elevation: 0,
+            elevation: 10,
             onPressed: () {
               showModalBottomSheet(
-                  backgroundColor: Swatch.prime,
+                  backgroundColor: Theme.of(context).colorScheme.background,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
