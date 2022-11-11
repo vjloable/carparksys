@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 
 class MyAppbar {
-  Widget myAppbar(GlobalKey<ScaffoldState> key){
+  Widget myAppbar(GlobalKey<ScaffoldState> key, BuildContext context){
     return PreferredSize(
       preferredSize: const Size.fromHeight(75.0),
       child: AppBar(
