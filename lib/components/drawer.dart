@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../../assets/swatches/custom_colors.dart';
 
 Widget drawerHeader = UserAccountsDrawerHeader(
-  accountName: const Text('Test Test', style: TextStyle(fontFamily: 'Arial')),
-  accountEmail: const Text('testing@email.com', style: TextStyle(fontFamily: 'Arial')),
+  accountName: Text('Test Test', style: TextStyle(fontFamily: 'Arial', color: Swatch.buttons.shade800)),
+  accountEmail: Text('testing@email.com', style: TextStyle(fontFamily: 'Arial', color: Swatch.buttons.shade800)),
   currentAccountPicture: CircleAvatar(
     child: Icon(Icons.account_circle, size: 70, color: Swatch.buttons.shade400),
   ),
