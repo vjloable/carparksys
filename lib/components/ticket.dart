@@ -23,7 +23,7 @@ Widget showTicket(BuildContext context){
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Container(
-                color: Colors.white,
+                color: Colors.grey,
                 height: 300,
                 width: 300,
               )

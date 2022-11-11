@@ -1,9 +1,9 @@
-import 'package:carparksys/pages/components/appbar.dart';
-import 'package:carparksys/pages/components/reservation.dart';
-import 'package:carparksys/pages/home.dart';
 import 'package:flutter/material.dart';
-
+import 'package:carparksys/pages/home.dart';
 import '../assets/swatches/custom_colors.dart';
+import '../components/appbar.dart';
+import '../components/reservation.dart';
+import '../components/drawer.dart';
 
 class LotsPage extends StatefulWidget {
   const LotsPage({Key? key}) : super(key: key);
@@ -12,8 +12,8 @@ class LotsPage extends StatefulWidget {
   State<LotsPage> createState() => _LotsPageState();
 }
 
-class _LotsPageState extends State<LotsPage>
-    with SingleTickerProviderStateMixin {
+class _LotsPageState extends State<LotsPage> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   List<String> _parkingLotsName() {
     return [
       '1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B', '3C',
@@ -22,14 +22,19 @@ class _LotsPageState extends State<LotsPage>
   }
   List<int> _parkingLotsStatus() {
     return [
-      1, 1, 1, 1, 3, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+      1, 1, 2, 1, 3, 2, 1, 2, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1
     ];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MyAppbar().myAppbar() as PreferredSizeWidget,
+        key: _key,
+        appBar: MyAppbar().myAppbar(_key, context) as PreferredSizeWidget,
+        drawer: Drawer(
+          ///backgroundColor: Swatch.prime,
+          child: drawerItems(context, 3),
+        ),
         body: GridView.count(
           crossAxisSpacing: 20,
           mainAxisSpacing: 20,
@@ -54,8 +59,8 @@ class _LotsPageState extends State<LotsPage>
                     splashColor: Swatch.prime,
                     elevation: 5.0,
                     fillColor: (_parkingLotsStatus()[index] == 1)
-                        ? Colors.white
-                        : Swatch.buttons.shade100,
+                        ? Theme.of(context).colorScheme.background
+                        : Theme.of(context).colorScheme.error,
                     shape: Border(
                       bottom: BorderSide(
                           width: 3,
@@ -74,21 +79,11 @@ class _LotsPageState extends State<LotsPage>
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          /*
-                          CircleAvatar(
-                            radius: 5,
-                            backgroundColor: (_parkingLotsStatus()[index] == 1)
-                                ? SigCol.green
-                                : ((_parkingLotsStatus()[index] == 2)
-                                ? SigCol.red
-                                : SigCol.orange),
-                          ),
-                          */
                           Text(_parkingLotsName()[index].toString(),
                               style: TextStyle(
                                   color: (_parkingLotsStatus()[index] == 1)
-                                      ? Colors.black
-                                      : Colors.black12,
+                                      ? Theme.of(context).colorScheme.onPrimary
+                                      : Theme.of(context).colorScheme.onError,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold
                               )
@@ -104,7 +99,6 @@ class _LotsPageState extends State<LotsPage>
             height: 90,
             child: BottomAppBar(
                 elevation: 10,
-                color: Colors.white,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -114,13 +108,9 @@ class _LotsPageState extends State<LotsPage>
                         IconButton(
                             icon: const Icon(Icons.home),
                             iconSize: 28,
-                            color: Swatch.buttons.shade700,
                             splashRadius: 30,
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const HomePage()),
-                              );
+                              Navigator.pop(context);
                             }
                         ),
                         const Text('HOME')

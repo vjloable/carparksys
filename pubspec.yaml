@@ -14,6 +14,8 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   slide_to_act: any
+  firebase_core: ^2.1.1
+  firebase_auth: ^4.1.1
 
 dev_dependencies:
   flutter_test:
@@ -23,6 +25,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - lib/assets/logo/google_logo.png
+
   fonts:
     - family: Menlo
       fonts:
