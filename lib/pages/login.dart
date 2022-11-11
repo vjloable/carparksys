@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Material(
               elevation: 15,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.background,
               borderRadius: const BorderRadius.all(
                 Radius.circular(20),
               ),
@@ -40,7 +40,6 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
-                              color: Swatch.buttons
                           ),
                         ),
                       ),
@@ -48,20 +47,20 @@ class _LoginPageState extends State<LoginPage> {
                       const Text(
                           'E-mail',
                           style: TextStyle(
-                              fontSize: 18
+                              fontSize: 18,
                           )
                       ),
-                      const TextField(
-                        style: TextStyle(fontSize: 16),
+                      TextField(
+                        style: const TextStyle(fontSize: 16),
                         maxLines: 1,
                         minLines: 1,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                  color: Swatch.buttons, width: 3
+                                  color: Theme.of(context).colorScheme.onPrimary, width: 3
                               )
                           ),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: const OutlineInputBorder(
                               borderSide: BorderSide(
                                   color: Swatch.prime, width: 3
                               )
@@ -72,20 +71,20 @@ class _LoginPageState extends State<LoginPage> {
                       const Text(
                         'Password',
                         style: TextStyle(
-                          fontSize: 18
+                            fontSize: 18,
                         )
                       ),
-                      const TextField(
-                          style: TextStyle(fontSize: 16),
+                      TextField(
+                          style: const TextStyle(fontSize: 16),
                           maxLines: 1,
                           minLines: 1,
                           decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: Swatch.buttons, width: 3
+                                    color: Theme.of(context).colorScheme.onPrimary, width: 3
                                 )
                             ),
-                            focusedBorder: OutlineInputBorder(
+                            focusedBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Swatch.prime, width: 3
                                 )
@@ -94,7 +93,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
-                          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Swatch.buttons.shade600)),
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.onPrimary)
+                          ),
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -108,13 +109,14 @@ class _LoginPageState extends State<LoginPage> {
                               padding: const EdgeInsets.all(12),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: const [
+                                children: [
                                   Text(
                                     'SUBMIT',
                                     style: TextStyle(
+                                      fontFamily: 'Arial',
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 18,
-                                      color: Swatch.prime,
-                                      fontWeight: FontWeight.w600,
+                                      color: Theme.of(context).colorScheme.background,
                                     ),
                                   ),
                                 ],
@@ -130,9 +132,9 @@ class _LoginPageState extends State<LoginPage> {
                           child: SizedBox(
                             width: double.maxFinite,
                             child: Padding(
-                              padding: const EdgeInsets.all(12),
+                              padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   const SizedBox(
                                     width: 30,
@@ -142,13 +144,14 @@ class _LoginPageState extends State<LoginPage> {
                                       )
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                    padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
                                     child: Text(
                                       'Sign in with Google',
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontFamily: 'Arial',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
                                         color: Swatch.buttons.shade400,
-                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   )
