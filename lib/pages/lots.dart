@@ -30,7 +30,7 @@ class _LotsPageState extends State<LotsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _key,
-        appBar: MyAppbar().myAppbar(_key) as PreferredSizeWidget,
+        appBar: MyAppbar().myAppbar(_key, context) as PreferredSizeWidget,
         drawer: Drawer(
           ///backgroundColor: Swatch.prime,
           child: drawerItems(context, 3),
@@ -59,8 +59,8 @@ class _LotsPageState extends State<LotsPage> {
                     splashColor: Swatch.prime,
                     elevation: 5.0,
                     fillColor: (_parkingLotsStatus()[index] == 1)
-                        ? Colors.white
-                        : Swatch.buttons.shade100,
+                        ? Theme.of(context).colorScheme.background
+                        : Theme.of(context).colorScheme.error,
                     shape: Border(
                       bottom: BorderSide(
                           width: 3,
@@ -79,21 +79,11 @@ class _LotsPageState extends State<LotsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          /*
-                          CircleAvatar(
-                            radius: 5,
-                            backgroundColor: (_parkingLotsStatus()[index] == 1)
-                                ? SigCol.green
-                                : ((_parkingLotsStatus()[index] == 2)
-                                ? SigCol.red
-                                : SigCol.orange),
-                          ),
-                          */
                           Text(_parkingLotsName()[index].toString(),
                               style: TextStyle(
                                   color: (_parkingLotsStatus()[index] == 1)
-                                      ? Colors.black
-                                      : Colors.black12,
+                                      ? Theme.of(context).colorScheme.onPrimary
+                                      : Theme.of(context).colorScheme.onError,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold
                               )
@@ -118,7 +108,6 @@ class _LotsPageState extends State<LotsPage> {
                         IconButton(
                             icon: const Icon(Icons.home),
                             iconSize: 28,
-                            color: Swatch.buttons.shade700,
                             splashRadius: 30,
                             onPressed: () {
                               Navigator.push(
