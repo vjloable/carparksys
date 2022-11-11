@@ -110,10 +110,7 @@ class _LotsPageState extends State<LotsPage> {
                             iconSize: 28,
                             splashRadius: 30,
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const HomePage()),
-                              );
+                              Navigator.pop(context);
                             }
                         ),
                         const Text('HOME')
