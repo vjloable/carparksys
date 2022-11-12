@@ -1,4 +1,3 @@
-import 'package:carparksys/pages/login.dart';
 import 'package:flutter/material.dart';
 
 import '../../assets/swatches/custom_colors.dart';
@@ -17,12 +16,17 @@ Widget drawerItems(BuildContext context, int numPops) {
     children: [
       drawerHeader,
       ListTile(
+        title: const Text('Account'),
+        leading: const Icon(Icons.account_circle),
+        onTap: () {},
+      ),
+      ListTile(
         title: const Text('My Ticket'),
         leading: const Icon(Icons.confirmation_num_rounded),
         onTap: () {},
       ),
       ListTile(
-        title: const Text('Slots'),
+        title: const Text('Lots'),
         leading: const Icon(Icons.dashboard_rounded),
         onTap: () {},
       ),
@@ -41,10 +45,16 @@ Widget drawerItems(BuildContext context, int numPops) {
         title: const Text('Sign out'),
         leading: const Icon(Icons.logout_rounded),
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-          );
+          switch(numPops){
+            case 2: {
+              Navigator.of(context)..pop()..pop();
+            }
+            break;
+
+            case 3: {
+              Navigator.of(context)..pop()..pop()..pop();
+            }
+          }
         },
       ),
     ],
