@@ -15,157 +15,188 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Swatch.prime,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Material(
-              elevation: 15,
-              color: Theme.of(context).colorScheme.background,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(20),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'WELCOME!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 50,
+                  fontFamily: 'Menlo',
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              child: SizedBox(
-                width: 330,
-                height: 380,
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Center(
-                        child: Text(
-                          'LOGIN',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      const Text(
-                          'E-mail',
-                          style: TextStyle(
-                              fontSize: 18,
-                          )
-                      ),
-                      TextField(
-                        style: const TextStyle(fontSize: 16),
-                        maxLines: 1,
-                        minLines: 1,
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).colorScheme.onPrimary, width: 3
-                              )
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Swatch.prime, width: 3
-                              )
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      const Text(
-                        'Password',
-                        style: TextStyle(
-                            fontSize: 18,
-                        )
-                      ),
-                      TextField(
+              const Text(
+                'Sign in to your account',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 26,
+                  fontFamily: 'Arial',
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              const SizedBox(height: 40),
+              Material(
+                elevation: 15,
+                color: Theme.of(context).colorScheme.background,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(40),
+                ),
+                child: SizedBox(
+                  width: 350,
+                  height: 400,
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 1),
+                        TextField(
                           style: const TextStyle(fontSize: 16),
                           maxLines: 1,
                           minLines: 1,
                           decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.alternate_email),
+                            prefixIconColor: Theme.of(context).colorScheme.onPrimary,
+                            label: const Text('E-Mail'),
+                            labelStyle: const TextStyle(fontSize: 18),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                    color: Theme.of(context).colorScheme.onPrimary, width: 3
-                                )
+                                    color: Theme.of(context).colorScheme.onPrimary, width: 1
+                                ),
+                                borderRadius: BorderRadius.circular(50)
                             ),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Swatch.prime, width: 3
-                                )
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Swatch.prime, width: 1
+                                ),
+                                borderRadius: BorderRadius.circular(50)
                             ),
                           ),
-                      ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.onPrimary)
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const HomePage()),
-                            );
-                          },
-                          child: SizedBox(
-                            height: 50,
-                            width: double.maxFinite,
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    'SUBMIT',
-                                    style: TextStyle(
-                                      fontFamily: 'Arial',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Theme.of(context).colorScheme.background,
-                                    ),
+                        ),
+                        const SizedBox(height: 5),
+                        TextField(
+                            style: const TextStyle(fontSize: 16),
+                            maxLines: 1,
+                            minLines: 1,
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.key),
+                              prefixIconColor: Theme.of(context).colorScheme.onPrimary,
+                              label: const Text('Password'),
+                              labelStyle: const TextStyle(fontSize: 18),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).colorScheme.onPrimary, width: 1
                                   ),
-                                ],
+                                  borderRadius: BorderRadius.circular(50)
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Swatch.prime, width: 1
+                                  ),
+                                  borderRadius: BorderRadius.circular(50)
                               ),
                             ),
-                          )
-                      ),
-                      const Divider(thickness: 2),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Swatch.prime.shade100)),
-                          onPressed: () {},
-                          child: SizedBox(
-                            width: double.maxFinite,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                    width: 30,
-                                    height: 25,
-                                      child: Image(
-                                        image: AssetImage('lib/assets/logo/google_logo.png')
-                                      )
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
-                                    child: Text(
-                                      'Sign in with Google',
+                        ),
+                        const SizedBox(height: 30),
+                        ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.onPrimary),
+                              elevation: const MaterialStatePropertyAll(5),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50)
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const HomePage()),
+                              );
+                            },
+                            child: SizedBox(
+                              height: 55,
+                              width: double.maxFinite,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      'SUBMIT',
                                       style: TextStyle(
-                                        fontFamily: 'Arial',
+                                        fontFamily: 'Menlo',
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
-                                        color: Swatch.buttons.shade400,
+                                        color: Theme.of(context).colorScheme.background,
                                       ),
                                     ),
-                                  )
-                                ],
+                                  ],
+                                ),
+                              ),
+                            )
+                        ),
+                        const SizedBox(height: 10),
+                        Stack(
+                            children: [
+                              const Divider(thickness: 1, color: Swatch.prime),
+                              Center(child: Container(height: 40, width: 40, color: Theme.of(context).colorScheme.background, child: const Text('OR', textAlign: TextAlign.center, style: TextStyle(fontSize: 16)))),
+                            ]
+                        ),
+                        ElevatedButton(
+                            style: ButtonStyle(
+                              elevation: const MaterialStatePropertyAll(5),
+                              backgroundColor: const MaterialStatePropertyAll(Colors.white),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50)
+                                ),
                               ),
                             ),
-                          )
-                      )
-                    ],
+                            onPressed: () {},
+                            child: SizedBox(
+                              height: 55,
+                              width: double.maxFinite,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      width: 30,
+                                      height: 25,
+                                        child: Image(
+                                          image: AssetImage('lib/assets/logo/google_logo.png')
+                                        )
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                                      child: Text(
+                                        'Sign in with Google',
+                                        style: TextStyle(
+                                          fontFamily: 'Menlo',
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                          color: Swatch.buttons.shade400,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            )
-          ]
+              )
+            ]
+          ),
         ),
       ),
     );
