@@ -1,12 +1,17 @@
+import 'package:carparksys/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import '../../assets/swatches/custom_colors.dart';
+import '../pages/lots.dart';
 
 Widget drawerHeader = UserAccountsDrawerHeader(
-  accountName: Text('Test Test', style: TextStyle(fontFamily: 'Arial', color: Swatch.buttons.shade800)),
-  accountEmail: Text('testing@email.com', style: TextStyle(fontFamily: 'Arial', color: Swatch.buttons.shade800)),
+  accountName: Text(FirebaseAuth.instance.currentUser!.displayName!, style: TextStyle(fontFamily: 'Arial', color: Swatch.buttons.shade800)),
+  accountEmail: Text(FirebaseAuth.instance.currentUser!.email!, style: TextStyle(fontFamily: 'Arial', color: Swatch.buttons.shade800)),
   currentAccountPicture: CircleAvatar(
-    child: Icon(Icons.account_circle, size: 70, color: Swatch.buttons.shade400),
+    backgroundImage: NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!)
+    //Icon(Icons.account_circle, size: 70, color: Swatch.buttons.shade400),
   ),
 );
 
@@ -28,7 +33,9 @@ Widget drawerItems(BuildContext context, int numPops) {
       ListTile(
         title: const Text('Lots'),
         leading: const Icon(Icons.dashboard_rounded),
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context)..pop()..push(MaterialPageRoute(builder: (context) => const LotsPage()),);
+        },
       ),
       ListTile(
         title: const Text('Settings'),
@@ -45,16 +52,17 @@ Widget drawerItems(BuildContext context, int numPops) {
         title: const Text('Sign out'),
         leading: const Icon(Icons.logout_rounded),
         onTap: () {
-          switch(numPops){
-            case 2: {
-              Navigator.of(context)..pop()..pop();
-            }
-            break;
-
-            case 3: {
-              Navigator.of(context)..pop()..pop()..pop();
-            }
-          }
+          AuthService().signOut();
+          // switch(numPops){
+          //   case 2: {
+          //     Navigator.of(context)..pop()..pop();
+          //   }
+          //   break;
+          //
+          //   case 3: {
+          //     Navigator.of(context)..pop()..pop()..pop();
+          //   }
+          // }
         },
       ),
     ],
