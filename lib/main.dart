@@ -1,4 +1,7 @@
-import 'package:carparksys/services/auth.dart';
+import 'package:carparksys/pages/home.dart';
+import 'package:carparksys/pages/login.dart';
+import 'package:carparksys/pages/lots.dart';
+import 'package:carparksys/services/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,6 +35,11 @@ class MyApp extends StatelessWidget {
         );
 
         return MaterialApp(
+            routes: {
+              '/login': (context) => const LoginPage(),
+              '/home': (context) => const HomePage(),
+              '/lots': (context) => const LotsPage(),
+            },
             debugShowCheckedModeBanner: false,
             title: 'Car Parking System App',
             theme: ThemeData(
