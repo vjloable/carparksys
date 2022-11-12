@@ -1,5 +1,6 @@
 import 'package:carparksys/assets/swatches/custom_colors.dart';
 import 'package:carparksys/pages/home.dart';
+import 'package:carparksys/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -165,7 +166,9 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              AuthService().signInWithGoogle();
+                            },
                             child: SizedBox(
                               height: 55,
                               width: double.maxFinite,
