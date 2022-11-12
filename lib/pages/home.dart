@@ -111,6 +111,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         child: ElevatedButton(
                                            style: ButtonStyle(
+                                             elevation: MaterialStateProperty.all<double>(5),
                                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                                  RoundedRectangleBorder(
                                                      borderRadius: BorderRadius.circular(18.0)
@@ -149,6 +150,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         child: ElevatedButton(
                                             style: ButtonStyle(
+                                                elevation: MaterialStateProperty.all<double>(5),
                                                 backgroundColor: MaterialStateProperty.all<Color>(Swatch.buttons.shade400),
                                                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                                     RoundedRectangleBorder(
