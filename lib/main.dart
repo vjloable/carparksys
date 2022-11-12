@@ -1,4 +1,4 @@
-import 'package:carparksys/pages/login.dart';
+import 'package:carparksys/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: Swatch.buttons.shade500,
             bottomAppBarColor: Swatch.buttons.shade800,
             drawerTheme: DrawerThemeData(backgroundColor: Swatch.buttons.shade600),
-            bottomSheetTheme: BottomSheetThemeData(backgroundColor: Swatch.prime.shade700),
+            bottomSheetTheme: BottomSheetThemeData(backgroundColor: Swatch.buttons.shade800),
             colorScheme: ColorScheme(
               brightness: Brightness.dark,
               primary: Swatch.prime,
@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
             ),
         ),
         themeMode: currentMode,
-        home: const LoginPage(),
+        home: AuthService().handleAuthState(),
         );
       }
     );
