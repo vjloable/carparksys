@@ -1,4 +1,3 @@
-import 'package:carparksys/assets/swatches/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 Widget showTicket(BuildContext context){

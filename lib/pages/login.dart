@@ -1,5 +1,5 @@
 import 'package:carparksys/assets/swatches/custom_colors.dart';
-import 'package:carparksys/pages/home.dart';
+import 'package:carparksys/services/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,22 +19,24 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'WELCOME!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 50,
                   fontFamily: 'Menlo',
                   fontWeight: FontWeight.bold,
+                  color: Swatch.buttons.shade800
                 ),
               ),
-              const Text(
+              Text(
                 'Sign in to your account',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 26,
                   fontFamily: 'Arial',
                   fontWeight: FontWeight.w300,
+                  color: Swatch.buttons.shade800
                 ),
               ),
               const SizedBox(height: 40),
@@ -79,6 +81,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 20),
                         TextField(
+                            obscureText: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
                             style: const TextStyle(fontSize: 16),
                             maxLines: 1,
                             minLines: 1,
@@ -112,12 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const HomePage()),
-                              );
-                            },
+                            onPressed: () {},
                             child: SizedBox(
                               height: 55,
                               width: double.maxFinite,
@@ -160,7 +160,9 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              AuthService().signInWithGoogle();
+                            },
                             child: SizedBox(
                               height: 55,
                               width: double.maxFinite,

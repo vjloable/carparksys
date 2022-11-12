@@ -1,4 +1,7 @@
+import 'package:carparksys/pages/home.dart';
 import 'package:carparksys/pages/login.dart';
+import 'package:carparksys/pages/lots.dart';
+import 'package:carparksys/services/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,6 +35,11 @@ class MyApp extends StatelessWidget {
         );
 
         return MaterialApp(
+            routes: {
+              '/login': (context) => const LoginPage(),
+              '/home': (context) => const HomePage(),
+              '/lots': (context) => const LotsPage(),
+            },
             debugShowCheckedModeBanner: false,
             title: 'Car Parking System App',
             theme: ThemeData(
@@ -62,7 +70,7 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: Swatch.buttons.shade500,
             bottomAppBarColor: Swatch.buttons.shade800,
             drawerTheme: DrawerThemeData(backgroundColor: Swatch.buttons.shade600),
-            bottomSheetTheme: BottomSheetThemeData(backgroundColor: Swatch.prime.shade700),
+            bottomSheetTheme: BottomSheetThemeData(backgroundColor: Swatch.buttons.shade800),
             colorScheme: ColorScheme(
               brightness: Brightness.dark,
               primary: Swatch.prime,
@@ -79,7 +87,7 @@ class MyApp extends StatelessWidget {
             ),
         ),
         themeMode: currentMode,
-        home: const LoginPage(),
+        home: AuthService().handleAuthState(),
         );
       }
     );

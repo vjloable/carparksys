@@ -52,6 +52,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1080891804344',
     projectId: 'carparksys',
     authDomain: 'carparksys.firebaseapp.com',
+    databaseURL: 'https://carparksys-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'carparksys.appspot.com',
   );
 
@@ -60,6 +61,7 @@ class DefaultFirebaseOptions {
     appId: '1:1080891804344:android:9b3acceee1261b9466824d',
     messagingSenderId: '1080891804344',
     projectId: 'carparksys',
+    databaseURL: 'https://carparksys-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'carparksys.appspot.com',
   );
 
@@ -68,6 +70,7 @@ class DefaultFirebaseOptions {
     appId: '1:1080891804344:ios:deca85b909a8738466824d',
     messagingSenderId: '1080891804344',
     projectId: 'carparksys',
+    databaseURL: 'https://carparksys-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'carparksys.appspot.com',
     androidClientId: '1080891804344-9faa7ovfr1odgf16d4003iie65ik2q59.apps.googleusercontent.com',
     iosClientId: '1080891804344-4lbjfghnf503utl106n5cbshhjsl4knt.apps.googleusercontent.com',

@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:carparksys/assets/swatches/custom_colors.dart';
+import 'package:carparksys/controllers/firebase_db.dart';
 import 'package:carparksys/pages/lots.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../components/appbar.dart';
 import '../components/drawer.dart';
@@ -15,6 +19,29 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  late String _statsAvailable = '-';
+  late String _statsOccupied = '-';
+  late String _statsReserved = '-';
+  DBController dbc = DBController();
+  late Stream<Iterable<DataSnapshot>> dbStream = dbc.dbStreamController.stream;
+  late StreamSubscription<Iterable<DataSnapshot>> dbStreamSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    dbc.activateListenersStats();
+    subDBStreamListener();
+  }
+
+  void subDBStreamListener() {
+    dbStreamSubscription = dbStream.listen((event) {
+      setState(() {
+        _statsAvailable = event.elementAt(0).value.toString();
+        _statsOccupied = event.elementAt(1).value.toString();
+        _statsReserved = event.elementAt(2).value.toString();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +138,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         child: ElevatedButton(
                                            style: ButtonStyle(
+                                             elevation: MaterialStateProperty.all<double>(5),
                                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                                  RoundedRectangleBorder(
                                                      borderRadius: BorderRadius.circular(18.0)
@@ -149,6 +177,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         child: ElevatedButton(
                                             style: ButtonStyle(
+                                                elevation: MaterialStateProperty.all<double>(5),
                                                 backgroundColor: MaterialStateProperty.all<Color>(Swatch.buttons.shade400),
                                                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                                     RoundedRectangleBorder(
@@ -213,21 +242,21 @@ class _HomePageState extends State<HomePage> {
                               textBaseline: TextBaseline.alphabetic,
                               children: [
                                 Column(
-                                  children: const [
-                                    SizedBox(height: 10, width: 1),
-                                    CircleAvatar(
+                                  children: [
+                                    const SizedBox(height: 10, width: 1),
+                                    const CircleAvatar(
                                         radius: 4,
                                         backgroundColor: SigCol.red ///Colors.red
                                     ),
-                                    SizedBox(height: 10, width: 1),
+                                    const SizedBox(height: 10, width: 1),
                                     Text(
-                                        '12',
-                                        style: TextStyle(
+                                        _statsOccupied,
+                                        style: const TextStyle(
                                             fontSize: 30,
                                             fontWeight: FontWeight.bold,
                                         )
                                     ),
-                                    Text(
+                                    const Text(
                                         'OCCUPIED',
                                         style: TextStyle(
                                             fontSize: 12,
@@ -237,21 +266,21 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                                 Column(
-                                  children: const [
-                                    SizedBox(height: 10, width: 1),
-                                    CircleAvatar(
+                                  children: [
+                                    const SizedBox(height: 10, width: 1),
+                                    const CircleAvatar(
                                         radius: 4,
                                         backgroundColor: SigCol.green ///Colors.green
                                     ),
-                                    SizedBox(height: 10, width: 1),
+                                    const SizedBox(height: 10, width: 1),
                                     Text(
-                                        '10',
-                                        style: TextStyle(
+                                        _statsAvailable,
+                                        style: const TextStyle(
                                             fontSize: 40,
                                             fontWeight: FontWeight.bold,
                                         )
                                     ),
-                                    Text(
+                                    const Text(
                                         'AVAILABLE',
                                         style: TextStyle(
                                             fontSize: 18,
@@ -261,21 +290,21 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                                 Column(
-                                  children: const [
-                                    SizedBox(height: 10, width: 1),
-                                    CircleAvatar(
+                                  children: [
+                                    const SizedBox(height: 10, width: 1),
+                                    const CircleAvatar(
                                         radius: 4,
                                         backgroundColor: SigCol.orange ///Colors.orange
                                     ),
-                                    SizedBox(height: 10, width: 1),
+                                    const SizedBox(height: 10, width: 1),
                                     Text(
-                                        '8',
-                                        style: TextStyle(
+                                        _statsReserved,
+                                        style: const TextStyle(
                                             fontSize: 30,
                                             fontWeight: FontWeight.bold,
                                         )
                                     ),
-                                    Text(
+                                    const Text(
                                         'RESERVED',
                                         style: TextStyle(
                                             fontSize: 12,
@@ -370,5 +399,11 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  @override
+  void deactivate(){
+    dbStreamSubscription.cancel();
+    super.deactivate();
   }
 }
