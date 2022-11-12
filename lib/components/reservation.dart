@@ -34,66 +34,67 @@ Widget showReserveLot(BuildContext context, String lot){
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: Swatch.buttons.shade900
+                          color: Theme.of(context).colorScheme.onPrimary
                       ),
                     ),
                 ),
               ),
-              Container(
-                  height: 160,
-                  width: 360,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(
-                        Radius.circular(30)
-                    ),
-                    color: Swatch.buttons.shade400,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(width: 5),
-                      SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Material(
-                          elevation: 10,
-                          color: Colors.white,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              lot,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 60,
-                                  fontWeight: FontWeight.bold,
-                                  color: Swatch.buttons.shade600
+              Material(
+                elevation: 10,
+                borderRadius: const BorderRadius.all(
+                    Radius.circular(10)
+                ),
+                color: Swatch.prime,
+                child: SizedBox(
+                    height: 160,
+                    width: 340,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(width: 5),
+                        SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Material(
+                            elevation: 3,
+                            color: Theme.of(context).colorScheme.background,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                lot,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 60,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).colorScheme.onPrimary
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 100, width: 1, child: VerticalDivider(color: Swatch.prime.shade100, thickness: 1)),
-                      const SizedBox(
-                        width: 140,
-                        child: Text(
-                          'Your Parking Space',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w400,
-                              color: Swatch.prime
+                        SizedBox(height: 100, width: 1, child: VerticalDivider(color: Swatch.buttons.shade600, thickness: 1)),
+                        SizedBox(
+                          width: 140,
+                          child: Text(
+                            'Your Parking Space',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.w400,
+                                color: Swatch.buttons.shade800
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                ),
               ),
-              const SizedBox(width: 1, height: 5),
+              const SizedBox(width: 1, height: 10),
               SizedBox(
                   height: 55,
-                  width: 360,
+                  width: 340,
                   child: SlideAction(
                     sliderButtonIconSize: 20,
                     sliderButtonIconPadding: 10,
