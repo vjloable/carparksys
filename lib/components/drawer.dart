@@ -16,12 +16,17 @@ Widget drawerItems(BuildContext context, int numPops) {
     children: [
       drawerHeader,
       ListTile(
+        title: const Text('Account'),
+        leading: const Icon(Icons.account_circle),
+        onTap: () {},
+      ),
+      ListTile(
         title: const Text('My Ticket'),
         leading: const Icon(Icons.confirmation_num_rounded),
         onTap: () {},
       ),
       ListTile(
-        title: const Text('Slots'),
+        title: const Text('Lots'),
         leading: const Icon(Icons.dashboard_rounded),
         onTap: () {},
       ),
