@@ -19,22 +19,24 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'WELCOME!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 50,
                   fontFamily: 'Menlo',
                   fontWeight: FontWeight.bold,
+                  color: Swatch.buttons.shade800
                 ),
               ),
-              const Text(
+              Text(
                 'Sign in to your account',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 26,
                   fontFamily: 'Arial',
                   fontWeight: FontWeight.w300,
+                  color: Swatch.buttons.shade800
                 ),
               ),
               const SizedBox(height: 40),
@@ -79,6 +81,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 20),
                         TextField(
+                            obscureText: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
                             style: const TextStyle(fontSize: 16),
                             maxLines: 1,
                             minLines: 1,
