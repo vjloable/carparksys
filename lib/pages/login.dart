@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 child: SizedBox(
                   width: 350,
-                  height: 400,
+                  height: 370,
                   child: Container(
                     padding: const EdgeInsets.all(20),
                     child: Column(
@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 5),
+                        const SizedBox(height: 20),
                         TextField(
                             style: const TextStyle(fontSize: 16),
                             maxLines: 1,
@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(height: 30),
                         ElevatedButton(
                             style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.onPrimary),
+                              backgroundColor: const MaterialStatePropertyAll(Swatch.prime),
                               elevation: const MaterialStatePropertyAll(5),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
@@ -125,14 +125,14 @@ class _LoginPageState extends State<LoginPage> {
                                 padding: const EdgeInsets.all(12),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
+                                  children: const [
                                     Text(
                                       'SUBMIT',
                                       style: TextStyle(
                                         fontFamily: 'Menlo',
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
-                                        color: Theme.of(context).colorScheme.background,
+                                        color: Swatch.buttons,
                                       ),
                                     ),
                                   ],
@@ -140,17 +140,20 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             )
                         ),
-                        const SizedBox(height: 10),
-                        Stack(
-                            children: [
-                              const Divider(thickness: 1, color: Swatch.prime),
-                              Center(child: Container(height: 40, width: 40, color: Theme.of(context).colorScheme.background, child: const Text('OR', textAlign: TextAlign.center, style: TextStyle(fontSize: 16)))),
-                            ]
+                        const SizedBox(height: 15),
+                        SizedBox(
+                          height: 40,
+                          child: Stack(
+                              children: [
+                                const Divider(thickness: 1, color: Swatch.prime),
+                                Center(child: Container(height: 40, width: 40, color: Theme.of(context).colorScheme.background, child: const Text('OR', textAlign: TextAlign.center, style: TextStyle(fontSize: 16)))),
+                              ]
+                          ),
                         ),
                         ElevatedButton(
                             style: ButtonStyle(
                               elevation: const MaterialStatePropertyAll(5),
-                              backgroundColor: const MaterialStatePropertyAll(Colors.white),
+                              backgroundColor: MaterialStatePropertyAll(Swatch.buttons.shade400),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(50)
@@ -165,8 +168,8 @@ class _LoginPageState extends State<LoginPage> {
                                 padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
+                                  children: const [
+                                    SizedBox(
                                       width: 30,
                                       height: 25,
                                         child: Image(
@@ -174,14 +177,14 @@ class _LoginPageState extends State<LoginPage> {
                                         )
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                                      padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
                                       child: Text(
                                         'Sign in with Google',
                                         style: TextStyle(
                                           fontFamily: 'Menlo',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,
-                                          color: Swatch.buttons.shade400,
+                                          color: Colors.white,
                                         ),
                                       ),
                                     )
