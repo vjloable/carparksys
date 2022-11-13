@@ -99,7 +99,7 @@ Widget showReserveLot(BuildContext context, String lot){
                     sliderButtonIconSize: 20,
                     sliderButtonIconPadding: 10,
                     innerColor: Swatch.prime,
-                    outerColor: Swatch.buttons.shade600,
+                    outerColor: Swatch.buttons.shade900,
                     elevation: 15,
                     text: '   Slide to confirm',
                     textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w100, color: Swatch.prime.shade100),
