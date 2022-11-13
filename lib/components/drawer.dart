@@ -13,7 +13,7 @@ Widget drawerHeader = UserAccountsDrawerHeader(
     backgroundImage: NetworkImage(
         FirebaseAuth.instance.currentUser!.photoURL!,
     )
-  ),
+  )
 );
 
 Widget drawerItems(BuildContext context, int numPops) {
@@ -21,10 +21,10 @@ Widget drawerItems(BuildContext context, int numPops) {
     padding: EdgeInsets.zero,
     children: [
       drawerHeader,
-      ListTile(
-        title: const Text('Account'),
-        leading: const Icon(Icons.account_circle),
-        onTap: () {},
+      const ListTile(
+        title: Text('Account'),
+        leading: Icon(Icons.account_circle),
+        onTap: null,
       ),
       ListTile(
         title: const Text('My Ticket'),
@@ -59,15 +59,15 @@ Widget drawerItems(BuildContext context, int numPops) {
           );
         },
       ),
-      ListTile(
-        title: const Text('Settings'),
-        leading: const Icon(Icons.settings_rounded),
-        onTap: () {},
+      const ListTile(
+        title: Text('Settings'),
+        leading: Icon(Icons.settings_rounded),
+        onTap: null,
       ),
-      ListTile(
-        title: const Text('Help'),
-        leading: const Icon(Icons.help),
-        onTap: () {},
+      const ListTile(
+        title: Text('Help'),
+        leading: Icon(Icons.help),
+        onTap: null,
       ),
       const Divider(thickness: 1),
       ListTile(
