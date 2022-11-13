@@ -1,7 +1,7 @@
 import 'package:carparksys/services/rtdb.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-RTDBController rtdbRef = RTDBController();
+RTDBService rtdbRef = RTDBService();
 
 class Reserve{
   late DataSnapshot _snapshotAvailable;
