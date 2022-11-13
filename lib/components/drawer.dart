@@ -1,5 +1,5 @@
 import 'package:carparksys/components/ticket.dart';
-import 'package:carparksys/services/firebase_auth.dart';
+import 'package:carparksys/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
