@@ -48,14 +48,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 child: SizedBox(
                   width: 350,
-                  height: 370,
+                  height: 400,
                   child: Container(
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 1),
+                        const SizedBox(height: 15),
                         TextField(
                           style: const TextStyle(fontSize: 16),
                           maxLines: 1,
@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: null,
                             child: SizedBox(
                               height: 55,
                               width: double.maxFinite,
@@ -194,7 +194,8 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             )
-                        )
+                        ),
+                        const SizedBox(height: 15),
                       ],
                     ),
                   ),
