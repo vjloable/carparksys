@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:carparksys/assets/swatches/custom_colors.dart';
-import 'package:carparksys/controllers/firebase_db.dart';
+import 'package:carparksys/controllers/statistics.dart';
 import 'package:carparksys/pages/lots.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -22,19 +22,19 @@ class _HomePageState extends State<HomePage> {
   late String _statsAvailable = '-';
   late String _statsOccupied = '-';
   late String _statsReserved = '-';
-  DBController dbc = DBController();
-  late Stream<Iterable<DataSnapshot>> dbStream = dbc.dbStreamController.stream;
-  late StreamSubscription<Iterable<DataSnapshot>> dbStreamSubscription;
+  StatisticsController controllerStatistics = StatisticsController();
+  late Stream<Iterable<DataSnapshot>> statisticsStream = controllerStatistics.statisticsStreamController.stream;
+  late StreamSubscription<Iterable<DataSnapshot>> statisticsStreamSubscription;
 
   @override
   void initState() {
     super.initState();
-    dbc.activateListenersStats();
-    subDBStreamListener();
+    controllerStatistics.activateListenersStats();
+    statisticsStreamListener();
   }
 
-  void subDBStreamListener() {
-    dbStreamSubscription = dbStream.listen((event) {
+  void statisticsStreamListener() {
+    statisticsStreamSubscription = statisticsStream.listen((event) {
       setState(() {
         _statsAvailable = event.elementAt(0).value.toString();
         _statsOccupied = event.elementAt(1).value.toString();
@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Text(
-                                'Ticket Status:',
+                                'Your Ticket Status:',
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     color: Swatch.buttons.shade300
@@ -403,7 +403,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void deactivate(){
-    dbStreamSubscription.cancel();
+    statisticsStreamSubscription.cancel();
+    controllerStatistics.deactivateListenerStats();
     super.deactivate();
   }
 }
