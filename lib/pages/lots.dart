@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../assets/swatches/custom_colors.dart';
 import '../components/appbar.dart';
-import '../components/reservation.dart';
 import '../components/drawer.dart';
+import '../components/reservation.dart';
+import '../controllers/spaces.dart';
 
 class LotsPage extends StatefulWidget {
   const LotsPage({Key? key}) : super(key: key);
@@ -13,16 +16,27 @@ class LotsPage extends StatefulWidget {
 
 class _LotsPageState extends State<LotsPage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-  List<String> _parkingLotsName() {
-    return [
-      '1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B', '3C',
-      '4A', '4B', '4C', '5A', '5B', '5C', '6A', '6B', '6C',
-    ];
+  late List<String> _parkingLotsName = [];
+  late List<int> _parkingLotsStatus = [];
+
+  SpacesController controllerSpaces = SpacesController();
+  late Stream<List> spacesStream = controllerSpaces.spacesStreamController.stream;
+  late StreamSubscription<List> spacesStreamSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    controllerSpaces.activateListenersSpaces();
+    spacesStreamListener();
   }
-  List<int> _parkingLotsStatus() {
-    return [
-      1, 1, 2, 1, 3, 2, 1, 2, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1
-    ];
+
+  void spacesStreamListener() {
+    spacesStreamSubscription = spacesStream.listen((event){
+      setState(() {
+        _parkingLotsName = event[0];
+        _parkingLotsStatus = event[1];
+      });
+    });
   }
 
   @override
@@ -33,22 +47,24 @@ class _LotsPageState extends State<LotsPage> {
         drawer: Drawer(
           child: drawerItems(context, 3),
         ),
-        body: GridView.count(
+        body: !(_parkingLotsName.isEmpty && _parkingLotsStatus.isEmpty) ?
+          GridView.count(
           crossAxisSpacing: 20,
           mainAxisSpacing: 20,
           crossAxisCount: 3,
           padding: const EdgeInsets.all(60),
-          children: List.generate(_parkingLotsName().length, (index) {
+          children:
+          List.generate(_parkingLotsName.length, (index) {
             return Center(
                 child: RawMaterialButton(
-                    onPressed: (_parkingLotsStatus()[index] == 1) ? () {
+                    onPressed: (_parkingLotsStatus[index] == 1) ? () {
                       showModalBottomSheet(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                           context: context,
                           builder: (BuildContext context) {
-                            return showReserveLot(context, _parkingLotsName()[index]);
+                            return showReserveLot(context, _parkingLotsName[index]);
                           }
                       );
                     } : null,
@@ -56,15 +72,15 @@ class _LotsPageState extends State<LotsPage> {
                     highlightElevation: 15,
                     splashColor: Swatch.prime,
                     elevation: 5.0,
-                    fillColor: (_parkingLotsStatus()[index] == 1)
+                    fillColor: (_parkingLotsStatus[index] == 1)
                         ? Theme.of(context).colorScheme.background
                         : Theme.of(context).colorScheme.error,
                     shape: Border(
                       bottom: BorderSide(
                           width: 3,
-                          color: (_parkingLotsStatus()[index] == 1)
+                          color: (_parkingLotsStatus[index] == 1)
                               ? SigCol.green
-                              : ((_parkingLotsStatus()[index] == 2)
+                              : ((_parkingLotsStatus[index] == 2)
                               ? SigCol.red
                               : SigCol.orange)
                       ),
@@ -77,9 +93,9 @@ class _LotsPageState extends State<LotsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(_parkingLotsName()[index].toString(),
+                          Text(_parkingLotsName[index].toString(),
                               style: TextStyle(
-                                  color: (_parkingLotsStatus()[index] == 1)
+                                  color: (_parkingLotsStatus[index] == 1)
                                       ? Theme.of(context).colorScheme.onPrimary
                                       : Theme.of(context).colorScheme.onError,
                                   fontSize: 20,
@@ -91,7 +107,19 @@ class _LotsPageState extends State<LotsPage> {
                     )
                 )
             );
-          }),
+          })
+        )
+            :
+        Center(
+          child: SizedBox(
+            width: 100,
+            height: 100,
+            child: CircularProgressIndicator(
+              value: null,
+              backgroundColor: Theme.of(context).colorScheme.background,
+              strokeWidth: 6,
+            ),
+          ),
         ),
         bottomNavigationBar: SizedBox(
             height: 90,
@@ -132,5 +160,12 @@ class _LotsPageState extends State<LotsPage> {
             )
         )
     );
+  }
+
+  @override
+  void deactivate() {
+    spacesStreamSubscription.cancel();
+    controllerSpaces.deactivateListenerSpaces();
+    super.deactivate();
   }
 }
