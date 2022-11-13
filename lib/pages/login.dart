@@ -1,5 +1,5 @@
 import 'package:carparksys/assets/swatches/custom_colors.dart';
-import 'package:carparksys/services/firebase_auth.dart';
+import 'package:carparksys/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
