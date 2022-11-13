@@ -1,4 +1,5 @@
 import 'package:carparksys/assets/swatches/custom_colors.dart';
+import 'package:carparksys/controllers/reserve.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
@@ -103,8 +104,12 @@ Widget showReserveLot(BuildContext context, String lot){
                     elevation: 15,
                     text: '   Slide to confirm',
                     textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w100, color: Swatch.prime.shade100),
-                    onSubmit: () {
-
+                    onSubmit: () async {
+                      Reserve().reserve(lot);
+                      Future.delayed(
+                        const Duration(milliseconds: 200),
+                            () => Navigator.pop(context)
+                      );
                     },
                   )
               ),
