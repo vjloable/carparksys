@@ -6,7 +6,7 @@ import '../main.dart';
 class MyAppbar {
   Widget myAppbar(GlobalKey<ScaffoldState> key, BuildContext context){
     return PreferredSize(
-      preferredSize: const Size.fromHeight(75.0),
+      preferredSize: const Size.fromHeight(60.0),
       child: AppBar(
         automaticallyImplyLeading: false,
         title: Container(
