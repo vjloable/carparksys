@@ -1,5 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
 
-class RTDBController {
+class RTDBService {
   final database = FirebaseDatabase.instance.ref();
 }
