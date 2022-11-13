@@ -21,10 +21,13 @@ Widget showTicket(BuildContext context){
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Container(
-                color: Colors.grey,
-                height: 300,
-                width: 300,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Container(
+                  color: Colors.grey,
+                  height: 300,
+                  width: 300,
+                ),
               )
             ],
           ),
