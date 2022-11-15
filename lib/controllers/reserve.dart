@@ -5,18 +5,19 @@ RTDBService rtdbRef = RTDBService();
 
 class Reserve{
   late DataSnapshot _snapshotCheck;
+  late int stateCheck = 1;
 
-  Future<bool> reserve(lot) async {
+  Future<void> reserve(lot) async {
     _snapshotCheck = await rtdbRef.database.child('spaces/$lot').get();
     if(_snapshotCheck.value != 1){
-      return Future<bool>.value(false);
+      stateCheck = 0;
     }else{
       await rtdbRef.database.update(
           {
             'spaces/$lot': 3,
           }
       );
-      return Future<bool>.value(true);
+      stateCheck = 1;
     }
   }
 
