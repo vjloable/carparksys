@@ -4,19 +4,20 @@ import 'package:firebase_database/firebase_database.dart';
 RTDBService rtdbRef = RTDBService();
 
 class Reserve{
-  late DataSnapshot _snapshotAvailable;
-  late DataSnapshot _snapshotReserved;
+  late DataSnapshot _snapshotCheck;
 
-  Future<void> reserve(lot) async {
-    _snapshotAvailable = await rtdbRef.database.child('stats/available').get();
-    _snapshotReserved = await rtdbRef.database.child('stats/reserved').get();
-    await rtdbRef.database.update(
-        {
-          'spaces/$lot': 3,
-          'stats/reserved': (_snapshotReserved.value as int) + 1,
-          'stats/available': (_snapshotAvailable.value as int) - 1,
-        }
-    );
+  Future<bool> reserve(lot) async {
+    _snapshotCheck = await rtdbRef.database.child('spaces/$lot').get();
+    if(_snapshotCheck.value != 1){
+      return Future<bool>.value(false);
+    }else{
+      await rtdbRef.database.update(
+          {
+            'spaces/$lot': 3,
+          }
+      );
+      return Future<bool>.value(true);
+    }
   }
 
 
