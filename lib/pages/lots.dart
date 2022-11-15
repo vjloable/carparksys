@@ -54,8 +54,8 @@ class _LotsPageState extends State<LotsPage> {
     return Scaffold(
         key: _key,
         appBar: MyAppbar().myAppbar(_key, context) as PreferredSizeWidget,
-        drawer: Drawer(
-          child: drawerItems(context, 3),
+        drawer: const Drawer(
+          child: MyDrawer(3),
         ),
         body: Stack(
           alignment: Alignment.center,
@@ -77,7 +77,8 @@ class _LotsPageState extends State<LotsPage> {
                                 ),
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return showReserveLot(context, _parkingLotsName[index]);
+                                  return ReserveLot(_parkingLotsName[index]);
+                                  //return showReserveLot(context, _parkingLotsName[index]);
                                 }
                             );
                           } : null,
