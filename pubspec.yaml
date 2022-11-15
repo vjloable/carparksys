@@ -19,7 +19,6 @@ dependencies:
   google_sign_in: ^5.4.2
   firebase_database: ^10.0.5
   intl: ^0.17.0
-  dart_random_choice: ^0.0.2
 
 dev_dependencies:
   flutter_test:
