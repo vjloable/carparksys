@@ -2,13 +2,16 @@ import 'dart:async';
 
 import 'package:carparksys/assets/swatches/custom_colors.dart';
 import 'package:carparksys/components/time_runner.dart';
+import 'package:carparksys/controllers/reserve.dart';
 import 'package:carparksys/controllers/statistics.dart';
+import 'package:carparksys/controllers/suggestion.dart';
 import 'package:carparksys/pages/lots.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../components/appbar.dart';
 import '../components/drawer.dart';
 import '../components/ticket.dart';
+import '../controllers/spaces.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -24,18 +27,27 @@ class _HomePageState extends State<HomePage> {
   late String _statsOccupied = '-';
   late String _statsReserved = '-';
   late String _time = '';
+  late String _suggestedLot = '...';
+
   StatisticsController controllerStatistics = StatisticsController();
+  SuggestionController controllerSuggestion = SuggestionController();
+  SpacesController controllerSpaces = SpacesController();
   late Stream<Iterable<DataSnapshot>> statisticsStream = controllerStatistics.statisticsStreamController.stream;
+  late Stream<List<dynamic>> suggestionStream = controllerSuggestion.suggestionStreamController.stream;
   late StreamSubscription<Iterable<DataSnapshot>> statisticsStreamSubscription;
+  late StreamSubscription<List<dynamic>> suggestionStreamSubscription;
   late Timer timer;
 
   @override
   void initState() {
     super.initState();
     _time = TimeRunner().now();
-    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => updateTime());
+    timer = Timer.periodic(const Duration(milliseconds: 500), (Timer t) => updateTime());
     controllerStatistics.activateListenersStats();
+    controllerSuggestion.activateListenersSuggestion();
+    controllerSpaces.activateListenersSpaces();
     statisticsStreamListener();
+    suggestionStreamListener();
   }
 
   void updateTime() {
@@ -50,6 +62,19 @@ class _HomePageState extends State<HomePage> {
         _statsAvailable = event.elementAt(0).value.toString();
         _statsOccupied = event.elementAt(1).value.toString();
         _statsReserved = event.elementAt(2).value.toString();
+      });
+    });
+  }
+
+  void suggestionStreamListener() {
+    suggestionStreamSubscription = suggestionStream.listen((event) {
+      setState(() {
+        if(event.isNotEmpty) {
+          _suggestedLot = (event..shuffle()).first;
+          controllerSuggestion.setPrevSuggestion(_suggestedLot);
+        } else {
+          _suggestedLot = '...';
+        }
       });
     });
   }
@@ -120,16 +145,16 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 const Text('Suggested Parking Space:', style: TextStyle(fontSize: 16)),
                                 const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
-                                const SizedBox(
+                                SizedBox(
                                   height: 150,
                                   child: FittedBox(
                                       fit: BoxFit.contain,
                                       child: SizedBox(
                                         width: 300,
                                         child: Text(
-                                          '2W',
+                                          _suggestedLot,
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 120
                                           ),
@@ -141,25 +166,23 @@ class _HomePageState extends State<HomePage> {
                                 FittedBox(
                                     child: Row(
                                       children: [
-                                        Container(
+                                        SizedBox(
                                             height: 60,
                                             width: 200,
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)
-                                              ),
-                                              color: Swatch.prime,
-                                            ),
                                             child: ElevatedButton(
-                                               style: ButtonStyle(
-                                                 elevation: MaterialStateProperty.all<double>(5),
-                                                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                     RoundedRectangleBorder(
-                                                         borderRadius: BorderRadius.circular(18.0)
-                                                     )
-                                                 )
+                                               style: ElevatedButton.styleFrom(
+                                                 elevation: 5,
+                                                 disabledBackgroundColor: Swatch.prime.shade200,
+                                                 backgroundColor: Swatch.prime,
+                                                 shape: RoundedRectangleBorder(
+                                                     borderRadius: BorderRadius.circular(18.0)
+                                                 ),
                                                ),
-                                                onPressed: (){},
+                                                onPressed: (){
+                                                 setState(() {
+                                                   !(_suggestedLot == '...') ? Reserve().reserve(_suggestedLot) : null;
+                                                 });
+                                                },
                                                 child: Row(
                                                   crossAxisAlignment: CrossAxisAlignment.center,
                                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -180,23 +203,15 @@ class _HomePageState extends State<HomePage> {
                                             )
                                         ),
                                         const SizedBox(height: 1, width: 15),
-                                        Container(
+                                        SizedBox(
                                             height: 60,
                                             width: 120,
-                                            decoration: BoxDecoration(
-                                              borderRadius: const BorderRadius.all(
-                                                  Radius.circular(20)
-                                              ),
-                                              color: Swatch.buttons.shade400,
-                                            ),
                                             child: ElevatedButton(
-                                                style: ButtonStyle(
-                                                    elevation: MaterialStateProperty.all<double>(5),
-                                                    backgroundColor: MaterialStateProperty.all<Color>(Swatch.buttons.shade400),
-                                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                        RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(18.0)
-                                                        )
+                                                style: ElevatedButton.styleFrom(
+                                                    elevation: 5,
+                                                    backgroundColor: Swatch.buttons.shade400,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(18.0)
                                                     )
                                                 ),
                                                 onPressed: (){
@@ -449,7 +464,10 @@ class _HomePageState extends State<HomePage> {
   void deactivate(){
     timer.cancel();
     statisticsStreamSubscription.cancel();
+    suggestionStreamSubscription.cancel();
     controllerStatistics.deactivateListenerStats();
+    controllerSpaces.deactivateListenerSpaces();
+    controllerSuggestion.deactivateListenerSuggestion();
     super.deactivate();
   }
 }
