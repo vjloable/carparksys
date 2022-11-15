@@ -48,7 +48,6 @@ class SpacesController{
           'stats/reserved': _countReserved,
         }
     );
-    print([_countAvailable, _countOccupied, _countReserved]);
     resetCounts();
   }
 
