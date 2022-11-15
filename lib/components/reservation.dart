@@ -3,6 +3,10 @@ import 'package:carparksys/controllers/reserve.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
+Widget _errorIcon = const Icon(Icons.error, color: SigCol.red);
+Widget _passedIcon = const Icon(Icons.check_circle, color: SigCol.green);
+bool isPassed = true;
+
 Widget showReserveLot(BuildContext context, String lot){
   return Stack(
     children: [
@@ -103,9 +107,10 @@ Widget showReserveLot(BuildContext context, String lot){
                     outerColor: Swatch.buttons.shade900,
                     elevation: 15,
                     text: '   Slide to confirm',
+                    submittedIcon: isPassed ? _passedIcon : _errorIcon,
                     textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w100, color: Swatch.prime.shade100),
                     onSubmit: () async {
-                      Reserve().reserve(lot);
+                      isPassed = await Reserve().reserve(lot);
                       Future.delayed(
                         const Duration(milliseconds: 200),
                             () => Navigator.pop(context)
