@@ -84,8 +84,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _key,
       appBar: MyAppbar().myAppbar(_key, context) as PreferredSizeWidget,
-      drawer: Drawer(
-        child: drawerItems(context, 2),
+      drawer: const Drawer(
+        child: MyDrawer(2),
       ),
       body: Stack(
         alignment: Alignment.center,
@@ -182,6 +182,25 @@ class _HomePageState extends State<HomePage> {
                                                  setState(() {
                                                    !(_suggestedLot == '...') ? Reserve().reserve(_suggestedLot) : null;
                                                  });
+                                                 // showDialog(
+                                                 //   context: context,
+                                                 //   builder: (context) => AlertDialog(
+                                                 //     title: const Text("Alert Dialog Box"),
+                                                 //     content: const Text("You have raised a Alert Dialog Box"),
+                                                 //     actions: <Widget>[
+                                                 //       TextButton(
+                                                 //         onPressed: () {
+                                                 //           Navigator.of(context).pop();
+                                                 //         },
+                                                 //         child: Container(
+                                                 //           color: Colors.green,
+                                                 //           padding: const EdgeInsets.all(14),
+                                                 //           child: const Text("okay"),
+                                                 //         ),
+                                                 //       ),
+                                                 //     ],
+                                                 //   ),
+                                                 // );
                                                 },
                                                 child: Row(
                                                   crossAxisAlignment: CrossAxisAlignment.center,
