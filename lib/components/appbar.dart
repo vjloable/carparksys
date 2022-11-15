@@ -14,7 +14,9 @@ class MyAppbar {
             child: Container(
               height: 40,
               width: double.maxFinite,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.white),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40), color: Theme.of(context).colorScheme.background
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -22,7 +24,7 @@ class MyAppbar {
                       onPressed: (){
                         key.currentState!.openDrawer();
                       },
-                      icon: const Icon(Icons.menu_rounded)
+                      icon: Icon(Icons.menu_rounded, color: Theme.of(context).colorScheme.onPrimary)
                   ),
                   Expanded(
                     child: Column(
@@ -43,7 +45,7 @@ class MyAppbar {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(
+                    icon: Icon(color: Theme.of(context).colorScheme.onPrimary,
                         MyApp.themeNotifier.value == ThemeMode.light
                             ? Icons.dark_mode_outlined
                             : Icons.light_mode
