@@ -8,11 +8,11 @@ class Reserve{
   late int stateCheck = 1;
 
   Future<void> reserve(lot) async {
-    _snapshotCheck = await rtdbRef.database.child('spaces/$lot').get();
+    _snapshotCheck = await rtdbRef.databaseRef.child('spaces/$lot').get();
     if(_snapshotCheck.value != 1){
       stateCheck = 0;
     }else{
-      await rtdbRef.database.update(
+      await rtdbRef.databaseRef.update(
           {
             'spaces/$lot': 3,
           }
