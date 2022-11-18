@@ -3,7 +3,7 @@ import 'package:carparksys/services/rtdb.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class SuggestionController{
-  final _database = RTDBService().database;
+  final _database = RTDBService().databaseRef;
   late String _prevSuggestion = '...';
   late StreamSubscription _suggestionStream;
   late StreamController<List> suggestionStreamController = StreamController<List>();
