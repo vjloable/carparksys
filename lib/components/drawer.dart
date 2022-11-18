@@ -117,7 +117,7 @@ class _MyDrawerState extends State<MyDrawer> {
           leading: const Icon(Icons.keyboard_return),
           onTap: () async {
             Map<String, int> resetter = { for (var e in _parkingLotsName) e : 1 };
-            await rtdbRef.database.child('spaces').update(
+            await rtdbRef.databaseRef.child('spaces').update(
               resetter
             );
           },
