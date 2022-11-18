@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:carparksys/assets/swatches/custom_colors.dart';
 import 'package:carparksys/components/time_runner.dart';
@@ -6,6 +7,7 @@ import 'package:carparksys/controllers/reserve.dart';
 import 'package:carparksys/controllers/statistics.dart';
 import 'package:carparksys/controllers/suggestion.dart';
 import 'package:carparksys/pages/lots.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../components/appbar.dart';
@@ -22,21 +24,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  StatisticsController controllerStatistics = StatisticsController();
+  SuggestionController controllerSuggestion = SuggestionController();
+  SpacesController controllerSpaces = SpacesController();
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   late String _statsAvailable = '-';
   late String _statsOccupied = '-';
   late String _statsReserved = '-';
   late String _time = '';
   late String _suggestedLot = '...';
-
-  StatisticsController controllerStatistics = StatisticsController();
-  SuggestionController controllerSuggestion = SuggestionController();
-  SpacesController controllerSpaces = SpacesController();
   late Stream<Iterable<DataSnapshot>> statisticsStream = controllerStatistics.statisticsStreamController.stream;
   late Stream<List<dynamic>> suggestionStream = controllerSuggestion.suggestionStreamController.stream;
   late StreamSubscription<Iterable<DataSnapshot>> statisticsStreamSubscription;
   late StreamSubscription<List<dynamic>> suggestionStreamSubscription;
   late Timer timer;
+
 
   @override
   void initState() {
@@ -78,6 +80,35 @@ class _HomePageState extends State<HomePage> {
       });
     });
   }
+
+
+  // Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+  //   var reliabilityCheck = true;
+  //   if(result != ConnectivityResult.none){
+  //     try {
+  //       final result = await InternetAddress.lookup('google.com');
+  //       final result2 = await InternetAddress.lookup('facebook.com');
+  //       final result3 = await InternetAddress.lookup('microsoft.com');
+  //       if ((result.isNotEmpty && result[0].rawAddress.isNotEmpty) ||
+  //           (result2.isNotEmpty && result2[0].rawAddress.isNotEmpty) ||
+  //           (result3.isNotEmpty && result3[0].rawAddress.isNotEmpty)) {
+  //         reliabilityCheck = true;
+  //       } else {
+  //         reliabilityCheck = false;
+  //       }
+  //     } on SocketException catch (_) {
+  //       reliabilityCheck = false;
+  //     }
+  //     setState((){
+  //       _connectionResult = reliabilityCheck;
+  //     });
+  //   }else{
+  //     setState((){
+  //       _connectionResult = reliabilityCheck;
+  //     });
+  //   }
+  //print(_connectionResult);
+  //}
 
   @override
   Widget build(BuildContext context) {
@@ -151,12 +182,32 @@ class _HomePageState extends State<HomePage> {
                                       fit: BoxFit.contain,
                                       child: SizedBox(
                                         width: 300,
-                                        child: Text(
-                                          _suggestedLot,
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 120
+                                        child: Visibility(
+                                          visible: true, //_connectionResult == true,
+                                          replacement: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                Center(
+                                                  child: SizedBox(
+                                                    width: 100,
+                                                    height: 100,
+                                                    child: CircularProgressIndicator(
+                                                      value: null,
+                                                      backgroundColor: Theme.of(context).colorScheme.background,
+                                                      strokeWidth: 6,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const Icon(Icons.wifi_off, color: Swatch.prime, size: 50),
+                                              ]
+                                          ),
+                                          child: Text(
+                                            _suggestedLot,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 120
+                                            ),
                                           ),
                                         ),
                                       )
@@ -484,6 +535,7 @@ class _HomePageState extends State<HomePage> {
     timer.cancel();
     statisticsStreamSubscription.cancel();
     suggestionStreamSubscription.cancel();
+    //connectivitySubscription.cancel();
     controllerStatistics.deactivateListenerStats();
     controllerSpaces.deactivateListenerSpaces();
     controllerSuggestion.deactivateListenerSuggestion();
