@@ -3,7 +3,7 @@ import 'package:carparksys/services/rtdb.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class StatisticsController{
-  final _database = RTDBService().database;
+  final _database = RTDBService().databaseRef;
   late StreamSubscription _statsStream;
   late StreamController<Iterable<DataSnapshot>> statisticsStreamController = StreamController<Iterable<DataSnapshot>>();
 
