@@ -11,16 +11,12 @@ class Reserve{
     _snapshotCheck = await rtdbRef.databaseRef.child('spaces/$lot').get();
     if(_snapshotCheck.value != 1){
       stateCheck = 0;
-    }else{
+    }else {
       await rtdbRef.databaseRef.update(
           {
             'spaces/$lot': 3,
           }
       );
-      stateCheck = 1;
     }
   }
-
-
-
 }
