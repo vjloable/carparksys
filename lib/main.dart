@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
             routes: {
               '/login': (context) => const LoginPage(),
               '/home': (context) => const HomePage(),
-              '/lots': (context) => const LotsPage(),
+              '/lots': (context) => const LotsPage(true),
             },
             debugShowCheckedModeBanner: false,
             title: 'Car Parking System App',
