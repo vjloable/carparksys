@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:carparksys/components/ticket.dart';
 import 'package:carparksys/services/auth.dart';
@@ -33,6 +34,7 @@ class _MyDrawerState extends State<MyDrawer> {
   SpacesController controllerSpaces = SpacesController();
   late Stream<List> spacesStream = controllerSpaces.spacesStreamController.stream;
   late StreamSubscription<List> spacesStreamSubscription;
+  late bool _connectionResult = true;
 
   @override
   void initState() {
@@ -46,6 +48,28 @@ class _MyDrawerState extends State<MyDrawer> {
       setState(() {
         _parkingLotsName = event[0];
       });
+    });
+  }
+
+  Future<void> _updateConnectionStatus() async {
+    var reliabilityCheck = false;
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      final result2 = await InternetAddress.lookup('facebook.com');
+      final result3 = await InternetAddress.lookup('microsoft.com');
+      if ((result.isNotEmpty && result[0].rawAddress.isNotEmpty) ||
+          (result2.isNotEmpty && result2[0].rawAddress.isNotEmpty) ||
+          (result3.isNotEmpty && result3[0].rawAddress.isNotEmpty)) {
+        reliabilityCheck = true;
+      } else {
+        reliabilityCheck = false;
+      }
+    } on SocketException catch (_) {
+      reliabilityCheck = false;
+    }
+
+    setState((){
+      _connectionResult = reliabilityCheck;
     });
   }
 
@@ -89,7 +113,7 @@ class _MyDrawerState extends State<MyDrawer> {
             Navigator.of(context).pop();
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const LotsPage()),
+              MaterialPageRoute(builder: (context) => LotsPage(_connectionResult)),
             );
           },
         ),
@@ -116,10 +140,13 @@ class _MyDrawerState extends State<MyDrawer> {
           title: const Text('RESET',style: TextStyle(color: Colors.red)),
           leading: const Icon(Icons.keyboard_return),
           onTap: () async {
-            Map<String, int> resetter = { for (var e in _parkingLotsName) e : 1 };
-            await rtdbRef.databaseRef.child('spaces').update(
-              resetter
-            );
+            await _updateConnectionStatus();
+            if(_connectionResult){
+              Map<String, int> resetter = { for (var e in _parkingLotsName) e : 1 };
+              await rtdbRef.databaseRef.child('spaces').update(
+                  resetter
+              );
+            }
           },
         ),
       ],
@@ -132,4 +159,4 @@ class _MyDrawerState extends State<MyDrawer> {
     controllerSpaces.deactivateListenerSpaces();
     super.deactivate();
   }
-}
+} 
