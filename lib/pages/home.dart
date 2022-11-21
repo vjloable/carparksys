@@ -7,7 +7,6 @@ import 'package:carparksys/controllers/reserve.dart';
 import 'package:carparksys/controllers/statistics.dart';
 import 'package:carparksys/controllers/suggestion.dart';
 import 'package:carparksys/pages/lots.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../components/appbar.dart';
@@ -38,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   late StreamSubscription<Iterable<DataSnapshot>> statisticsStreamSubscription;
   late StreamSubscription<List<dynamic>> suggestionStreamSubscription;
   late Timer timer;
-
+  late bool _connectionResult = true;
 
   @override
   void initState() {
@@ -82,33 +81,27 @@ class _HomePageState extends State<HomePage> {
   }
 
 
-  // Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-  //   var reliabilityCheck = true;
-  //   if(result != ConnectivityResult.none){
-  //     try {
-  //       final result = await InternetAddress.lookup('google.com');
-  //       final result2 = await InternetAddress.lookup('facebook.com');
-  //       final result3 = await InternetAddress.lookup('microsoft.com');
-  //       if ((result.isNotEmpty && result[0].rawAddress.isNotEmpty) ||
-  //           (result2.isNotEmpty && result2[0].rawAddress.isNotEmpty) ||
-  //           (result3.isNotEmpty && result3[0].rawAddress.isNotEmpty)) {
-  //         reliabilityCheck = true;
-  //       } else {
-  //         reliabilityCheck = false;
-  //       }
-  //     } on SocketException catch (_) {
-  //       reliabilityCheck = false;
-  //     }
-  //     setState((){
-  //       _connectionResult = reliabilityCheck;
-  //     });
-  //   }else{
-  //     setState((){
-  //       _connectionResult = reliabilityCheck;
-  //     });
-  //   }
-  //print(_connectionResult);
-  //}
+  Future<void> _updateConnectionStatus() async {
+    var reliabilityCheck = false;
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      final result2 = await InternetAddress.lookup('facebook.com');
+      final result3 = await InternetAddress.lookup('microsoft.com');
+      if ((result.isNotEmpty && result[0].rawAddress.isNotEmpty) ||
+          (result2.isNotEmpty && result2[0].rawAddress.isNotEmpty) ||
+          (result3.isNotEmpty && result3[0].rawAddress.isNotEmpty)) {
+        reliabilityCheck = true;
+      } else {
+        reliabilityCheck = false;
+      }
+    } on SocketException catch (_) {
+      reliabilityCheck = false;
+    }
+
+    setState((){
+      _connectionResult = reliabilityCheck;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                                       child: SizedBox(
                                         width: 300,
                                         child: Visibility(
-                                          visible: true, //_connectionResult == true,
+                                          visible: _connectionResult,
                                           replacement: Stack(
                                               alignment: Alignment.center,
                                               children: [
@@ -221,37 +214,148 @@ class _HomePageState extends State<HomePage> {
                                             height: 60,
                                             width: 200,
                                             child: ElevatedButton(
-                                               style: ElevatedButton.styleFrom(
-                                                 elevation: 5,
-                                                 disabledBackgroundColor: Swatch.prime.shade200,
-                                                 backgroundColor: Swatch.prime,
-                                                 shape: RoundedRectangleBorder(
-                                                     borderRadius: BorderRadius.circular(18.0)
-                                                 ),
-                                               ),
-                                                onPressed: (){
-                                                 setState(() {
-                                                   !(_suggestedLot == '...') ? Reserve().reserve(_suggestedLot) : null;
-                                                 });
-                                                 // showDialog(
-                                                 //   context: context,
-                                                 //   builder: (context) => AlertDialog(
-                                                 //     title: const Text("Alert Dialog Box"),
-                                                 //     content: const Text("You have raised a Alert Dialog Box"),
-                                                 //     actions: <Widget>[
-                                                 //       TextButton(
-                                                 //         onPressed: () {
-                                                 //           Navigator.of(context).pop();
-                                                 //         },
-                                                 //         child: Container(
-                                                 //           color: Colors.green,
-                                                 //           padding: const EdgeInsets.all(14),
-                                                 //           child: const Text("okay"),
-                                                 //         ),
-                                                 //       ),
-                                                 //     ],
-                                                 //   ),
-                                                 // );
+                                                style: ElevatedButton.styleFrom(
+                                                  elevation: 5,
+                                                  disabledBackgroundColor: Swatch.prime.shade200,
+                                                  backgroundColor: Swatch.prime,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(18.0)
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  await _updateConnectionStatus();
+                                                  setState(() {
+                                                    if(_connectionResult){
+                                                      if(_suggestedLot != '...'){
+                                                        Reserve().reserve(_suggestedLot);
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (context) => AlertDialog(
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(20),
+                                                            ),
+                                                            backgroundColor: Theme.of(context).colorScheme.background,
+                                                            elevation: 10,
+                                                            content: Container(
+                                                              height: 200,
+                                                              width: 330,
+                                                              padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                                                              child: FittedBox(
+                                                                fit: BoxFit.contain,
+                                                                child: Column(
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  children: [
+                                                                    const Icon(Icons.garage, color: Swatch.prime, size: 200),
+                                                                    const SizedBox(height: 20),
+                                                                    Text('RESERVED SUCCESSFULLY!', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold, fontSize: 45)),
+                                                                    const SizedBox(height: 30),
+                                                                    Text('Proceed to LOT $_suggestedLot', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 40)),
+                                                                    const SizedBox(height: 10),
+                                                                    Text('Show your ticket in entering the space', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            actions: [
+                                                              Center(
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                                                  child: TextButton(
+                                                                    onPressed: () {Navigator.of(context).pop();},
+                                                                    child: Icon(Icons.close_outlined, color: Theme.of(context).colorScheme.onPrimary, size: 30),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      }else{
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (context) => AlertDialog(
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(20),
+                                                            ),
+                                                            backgroundColor: Swatch.prime,
+                                                            elevation: 10,
+                                                            content: Container(
+                                                              height: 170,
+                                                              width: 330,
+                                                              padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                                                              child: FittedBox(
+                                                                fit: BoxFit.contain,
+                                                                child: Column(
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  children: [
+                                                                    CircleAvatar(radius: 70, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.warning, color: SigCol.orange, size: 60)),
+                                                                    const SizedBox(height: 20),
+                                                                    Text('NO SPACES LEFT!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
+                                                                    const SizedBox(height: 30),
+                                                                    Text('Kindly wait for a spot for a while,', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
+                                                                    const SizedBox(height: 10),
+                                                                    Text('Thank you for your patience!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            actions: [
+                                                              Center(
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                                                  child: TextButton(
+                                                                    onPressed: () {Navigator.of(context).pop();},
+                                                                    child: Icon(Icons.close_outlined, color: Swatch.buttons.shade800, size: 30),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      }
+                                                    }else{
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) => AlertDialog(
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(20),
+                                                          ),
+                                                          backgroundColor: Swatch.prime,
+                                                          elevation: 10,
+                                                          content: Container(
+                                                            height: 200,
+                                                            width: 330,
+                                                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                                                            child: FittedBox(
+                                                              fit: BoxFit.contain,
+                                                              child: Column(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: [
+                                                                  CircleAvatar(radius: 70, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.wifi_off, color: SigCol.red, size: 60)),
+                                                                  const SizedBox(height: 20),
+                                                                  Text('CONNECTION ERROR!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
+                                                                  const SizedBox(height: 30),
+                                                                  Text('Slow or no Internet connection.', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
+                                                                  const SizedBox(height: 10),
+                                                                  Text('Check your connection, then try again', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          actions: [
+                                                            Center(
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                                                child: TextButton(
+                                                                  onPressed: () {Navigator.of(context).pop();},
+                                                                  child: Icon(Icons.close_outlined, color: Swatch.buttons.shade800, size: 30),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    }
+                                                  });
                                                 },
                                                 child: Row(
                                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -287,7 +391,7 @@ class _HomePageState extends State<HomePage> {
                                                 onPressed: (){
                                                   Navigator.push(
                                                     context,
-                                                    MaterialPageRoute(builder: (context) => const LotsPage()),
+                                                    MaterialPageRoute(builder: (context) => LotsPage(_connectionResult)),
                                                   );
                                                 },
                                                 child: Row(
@@ -424,31 +528,40 @@ class _HomePageState extends State<HomePage> {
                 ),
               )
           ),
-          Visibility(
-            visible: true,
-            child: Positioned(
-              top: 0,
-              child: Material(
-                color: Theme.of(context).colorScheme.background,
-                elevation: 5,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.zero,
-                  topRight: Radius.zero,
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
-                child: SizedBox(
-                  width: 200,
-                  height: 25,
-                  child: Center(
-                    child: Text(
-                      _time,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary
-                      ),
+          Positioned(
+            top: 0,
+            child: Material(
+              color: Theme.of(context).colorScheme.background,
+              elevation: 5,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.zero,
+                topRight: Radius.zero,
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+              ),
+              child: SizedBox(
+                width: 200,
+                height: 25,
+                child: Center(
+                  child: Text(
+                    _time,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary
                     ),
                   ),
                 ),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: !_connectionResult,
+            child: const Positioned(
+              top: 0,
+              left: 85,
+              child: SizedBox(
+                width: 25,
+                height: 25,
+                child: Icon(Icons.wifi_off, color: SigCol.red, size: 20)
               ),
             ),
           )
@@ -494,7 +607,7 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const LotsPage()),
+                              MaterialPageRoute(builder: (context) => LotsPage(_connectionResult)),
                             );
                           }
                       ),
