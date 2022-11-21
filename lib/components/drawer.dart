@@ -75,80 +75,95 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.zero,
+    return Stack(
       children: [
-        drawerHeader,
-        const ListTile(
-          title: Text('Account'),
-          leading: Icon(Icons.account_circle),
-          onTap: null,
-        ),
-        ListTile(
-          title: const Text('My Ticket'),
-          leading: const Icon(Icons.confirmation_num_rounded),
-          onTap: () {
-            if (widget.numPops == 2) {
-              Navigator.of(context).pop();
-            } else if (widget.numPops == 3) {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            }
-            showModalBottomSheet(
-                backgroundColor: Theme.of(context).colorScheme.background,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                context: context,
-                builder: (BuildContext context) {
-                  return showTicket(context);
+        ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(width: 200, height: 32, color: Swatch.prime),
+            drawerHeader,
+            const ListTile(
+              title: Text('Account'),
+              leading: Icon(Icons.account_circle),
+              onTap: null,
+            ),
+            ListTile(
+              title: const Text('My Ticket'),
+              leading: const Icon(Icons.confirmation_num_rounded),
+              onTap: () {
+                if (widget.numPops == 2) {
+                  Navigator.of(context).pop();
+                } else if (widget.numPops == 3) {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                 }
-            );
-          },
+                showModalBottomSheet(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    context: context,
+                    builder: (BuildContext context) {
+                      return showTicket(context);
+                    }
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Lots'),
+              leading: const Icon(Icons.dashboard_rounded),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LotsPage(_connectionResult)),
+                );
+              },
+            ),
+            const ListTile(
+              title: Text('Settings'),
+              leading: Icon(Icons.settings_rounded),
+              onTap: null,
+            ),
+            const ListTile(
+              title: Text('Help'),
+              leading: Icon(Icons.help),
+              onTap: null,
+            ),
+            const Divider(thickness: 1),
+            ListTile(
+              title: const Text('Sign out'),
+              leading: const Icon(Icons.logout_rounded),
+              onTap: () {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+                AuthService().signOut();
+              },
+            ),
+            ListTile(
+              title: const Text('RESET',style: TextStyle(color: SigCol.red)),
+              leading: const Icon(Icons.keyboard_return, color: SigCol.red),
+              onTap: () async {
+                await _updateConnectionStatus();
+                if(_connectionResult){
+                  Map<String, int> resetter = { for (var e in _parkingLotsName) e : 1 };
+                  await rtdbRef.databaseRef.child('spaces').update(
+                      resetter
+                  );
+                }
+              },
+            ),
+          ],
         ),
-        ListTile(
-          title: const Text('Lots'),
-          leading: const Icon(Icons.dashboard_rounded),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LotsPage(_connectionResult)),
-            );
-          },
-        ),
-        const ListTile(
-          title: Text('Settings'),
-          leading: Icon(Icons.settings_rounded),
-          onTap: null,
-        ),
-        const ListTile(
-          title: Text('Help'),
-          leading: Icon(Icons.help),
-          onTap: null,
-        ),
-        const Divider(thickness: 1),
-        ListTile(
-          title: const Text('Sign out'),
-          leading: const Icon(Icons.logout_rounded),
-          onTap: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-            AuthService().signOut();
-          },
-        ),
-        ListTile(
-          title: const Text('RESET',style: TextStyle(color: Colors.red)),
-          leading: const Icon(Icons.keyboard_return),
-          onTap: () async {
-            await _updateConnectionStatus();
-            if(_connectionResult){
-              Map<String, int> resetter = { for (var e in _parkingLotsName) e : 1 };
-              await rtdbRef.databaseRef.child('spaces').update(
-                  resetter
-              );
-            }
-          },
-        ),
+        Positioned(
+          top: 40,
+          right: 10,
+          child: IconButton(
+              onPressed: (){
+                Navigator.of(context).pop();
+              },
+              icon: Icon(Icons.arrow_back_ios_new, color: Swatch.buttons.shade800)
+          ),
+        )
       ],
     );
   }
