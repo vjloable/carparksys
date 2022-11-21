@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../assets/swatches/custom_colors.dart';
 import '../components/appbar.dart';
@@ -8,7 +9,8 @@ import '../components/time_runner.dart';
 import '../controllers/spaces.dart';
 
 class LotsPage extends StatefulWidget {
-  const LotsPage({Key? key}) : super(key: key);
+  final bool _connection;
+  const LotsPage(this._connection, {super.key});
 
   @override
   State<LotsPage> createState() => _LotsPageState();
@@ -160,6 +162,18 @@ class _LotsPageState extends State<LotsPage> {
                 ),
               ),
             ),
+            Visibility(
+              visible: !widget._connection,
+              child: const Positioned(
+                top: 0,
+                left: 85,
+                child: SizedBox(
+                    width: 25,
+                    height: 25,
+                    child: Icon(Icons.wifi_off, color: SigCol.red, size: 20)
+                ),
+              ),
+            )
           ],
         ),
         bottomNavigationBar: SizedBox(
