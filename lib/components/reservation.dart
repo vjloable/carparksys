@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:carparksys/assets/swatches/custom_colors.dart';
 import 'package:carparksys/components/time_runner.dart';
 import 'package:carparksys/controllers/reserve.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
@@ -20,13 +19,10 @@ class ReserveLot extends StatefulWidget {
 
 class _ReserveLotState extends State<ReserveLot> {
   SpacesController controllerSpaces = SpacesController();
-  ConnectivityResult connectivityResult = ConnectivityResult.none;
   int isPassed = 2;
-  final Connectivity _connectivity = Connectivity();
   final Widget _errorIcon = const Icon(Icons.error, color: SigCol.red);
   final Widget _passedIcon = const Icon(Icons.check_circle, color: SigCol.green);
   final Widget _waitingIcon = const Icon(Icons.access_time_filled_outlined, color: SigCol.orange);
-  late StreamSubscription<ConnectivityResult> connectivitySubscription;
   late StreamSubscription<List> spacesStreamSubscription;
   late List<String> _parkingLotsName = [];
   late Timer timer;
@@ -40,7 +36,6 @@ class _ReserveLotState extends State<ReserveLot> {
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => updateTime());
     controllerSpaces.activateListenersSpaces();
     spacesStreamListener();
-    connectivityStreamListener();
   }
 
   void updateTime() {
@@ -57,12 +52,6 @@ class _ReserveLotState extends State<ReserveLot> {
     });
   }
 
-  void connectivityStreamListener() {
-    connectivitySubscription = _connectivity.onConnectivityChanged.listen(
-        _updateConnectionStatus
-    );
-  }
-
   void updateSubmitIcon(int overrider) {
     if(mounted){
       setState(() {
@@ -71,31 +60,26 @@ class _ReserveLotState extends State<ReserveLot> {
     }
   }
 
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+  Future<void> _updateConnectionStatus() async {
     var reliabilityCheck = false;
-    if(result != ConnectivityResult.none){
-      try {
-        final result = await InternetAddress.lookup('google.com');
-        final result2 = await InternetAddress.lookup('facebook.com');
-        final result3 = await InternetAddress.lookup('microsoft.com');
-        if ((result.isNotEmpty && result[0].rawAddress.isNotEmpty) ||
-            (result2.isNotEmpty && result2[0].rawAddress.isNotEmpty) ||
-            (result3.isNotEmpty && result3[0].rawAddress.isNotEmpty)) {
-          reliabilityCheck = true;
-        } else {
-          reliabilityCheck = false;
-        }
-      } on SocketException catch (_) {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      final result2 = await InternetAddress.lookup('facebook.com');
+      final result3 = await InternetAddress.lookup('microsoft.com');
+      if ((result.isNotEmpty && result[0].rawAddress.isNotEmpty) ||
+          (result2.isNotEmpty && result2[0].rawAddress.isNotEmpty) ||
+          (result3.isNotEmpty && result3[0].rawAddress.isNotEmpty)) {
+        reliabilityCheck = true;
+      } else {
         reliabilityCheck = false;
       }
-      setState((){
-        _connectionResult = reliabilityCheck;
-      });
-    }else{
-      setState((){
-        _connectionResult = reliabilityCheck;
-      });
+    } on SocketException catch (_) {
+      reliabilityCheck = false;
     }
+
+    setState((){
+      _connectionResult = reliabilityCheck;
+    });
   }
 
   @override
@@ -133,13 +117,13 @@ class _ReserveLotState extends State<ReserveLot> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CircleAvatar(radius: 70, backgroundColor: Theme.of(context).colorScheme.onPrimary, child: const Icon(Icons.wifi_off, color: SigCol.red, size: 60)),
+                          CircleAvatar(radius: 70, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.wifi_off, color: SigCol.red, size: 60)),
                           const SizedBox(height: 20),
-                          const Text('Connection Error!', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 45)),
+                          Text('CONNECTION ERROR!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
                           const SizedBox(height: 30),
-                          const Text('Slow or no Internet connection.', textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
+                          Text('Slow or no Internet connection.', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
                           const SizedBox(height: 10),
-                          const Text('Check your connection, then try again', textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
+                          Text('Check your connection, then try again', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
                         ],
                       ),
                     ),
@@ -236,16 +220,16 @@ class _ReserveLotState extends State<ReserveLot> {
                               submittedIcon: isPassed == 2 ? _waitingIcon : isPassed == 1 ? _passedIcon : _errorIcon,
                               textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w100, color: Swatch.prime.shade100),
                               onSubmit: () async {
-                                if (!_connectionResult){
+                                await _updateConnectionStatus();
+                                if (_connectionResult){
                                   await Reserve().reserve(widget._lot);
-                                  Future.delayed(const Duration(seconds: 1));
                                   updateSubmitIcon(0);
+                                  Future.delayed(const Duration(seconds: 1));
                                 }else{
                                   updateSubmitIcon(3);
                                 }
-
                                 Future.delayed(
-                                    const Duration(milliseconds: 200),
+                                    const Duration(milliseconds: 600),
                                         () => mounted ? Navigator.pop(context) : null
                                 );
                               },
@@ -266,7 +250,6 @@ class _ReserveLotState extends State<ReserveLot> {
   @override
   void deactivate() {
     timer.cancel();
-    connectivitySubscription.cancel();
     spacesStreamSubscription.cancel();
     controllerSpaces.deactivateListenerSpaces();
     super.deactivate();
