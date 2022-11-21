@@ -229,7 +229,7 @@ class _ReserveLotState extends State<ReserveLot> {
                                   updateSubmitIcon(3);
                                 }
                                 Future.delayed(
-                                    const Duration(milliseconds: 600),
+                                    const Duration(milliseconds: 900),
                                         () => mounted ? Navigator.pop(context) : null
                                 );
                               },
