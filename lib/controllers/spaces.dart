@@ -6,6 +6,7 @@ class SpacesController{
   RTDBService rtdb = RTDBService();
   late StreamSubscription _spacesStream;
   late StreamController<List> spacesStreamController = StreamController<List>();
+
   int _countOccupied = 0;
   int _countAvailable = 0;
   int _countReserved = 0;
