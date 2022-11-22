@@ -6,14 +6,14 @@ class Reserve{
   RTDBService rtdb = RTDBService();
   late DataSnapshot _snapshotCheck;
   late DataSnapshot _snapshotUser;
-  static int stateCheck = 0;
+  static int _stateCheck = 0;
 
   int getStateCheck(){
-    return stateCheck;
+    return _stateCheck;
   }
 
   void updateStateCheck(int state){
-    stateCheck = state;
+    _stateCheck = state;
   }
 
   Future<void> reserve(lot) async {
@@ -58,6 +58,5 @@ class Reserve{
         updateStateCheck(1);
       }
     }
-    print(stateCheck);
   }
 }
