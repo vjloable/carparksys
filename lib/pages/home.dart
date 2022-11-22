@@ -107,219 +107,286 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
+      extendBodyBehindAppBar: true,
       appBar: MyAppbar().myAppbar(_key, context) as PreferredSizeWidget,
       drawer: const Drawer(
         child: MyDrawer(2),
       ),
       body: Stack(
         alignment: Alignment.center,
+        fit: StackFit.expand,
         children: [
-          Center(
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.all(40),
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(30)
-                            ),
-                            color: Swatch.buttonsAccent.shade100,
-                          ),
-                          child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Text(
-                                    'Your Ticket Status:',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        color: Swatch.buttons.shade400
-                                    )
-                                  ),
-                                  Text(
-                                      'No Reservation',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          color: Swatch.buttons.shade400
-                                      )
-                                  ),
-                                ],
-                              )
-                          )
-                      ),
-                      const SizedBox(height: 10, width: 1),
-                      Material(
-                        elevation: 10,
+          SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Container(
+              height: 1000,
+              padding: const EdgeInsets.all(40),
+              child: Column(
+                children: [
+                  const SizedBox(width: 1, height: 100),
+                  Container(
+                      height: 30,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
                         borderRadius: const BorderRadius.all(
-                            Radius.circular(20),
+                            Radius.circular(30)
                         ),
-                        color: Theme.of(context).colorScheme.background,
-                        child: SizedBox(
-                          height: 300,
-                          width: double.infinity,
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                const Text('Suggested Parking Space:', style: TextStyle(fontSize: 16)),
-                                const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
-                                SizedBox(
-                                  height: 150,
-                                  child: FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: SizedBox(
-                                        width: 300,
-                                        child: Visibility(
-                                          visible: _connectionResult,
-                                          replacement: Stack(
-                                              alignment: Alignment.center,
-                                              children: [
-                                                Center(
-                                                  child: SizedBox(
-                                                    width: 100,
-                                                    height: 100,
-                                                    child: CircularProgressIndicator(
-                                                      value: null,
-                                                      backgroundColor: Theme.of(context).colorScheme.background,
-                                                      strokeWidth: 6,
-                                                    ),
+                        color: Swatch.buttonsAccent.shade100,
+                      ),
+                      child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                'Your Ticket Status:',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: Swatch.buttons.shade400
+                                )
+                              ),
+                              Text(
+                                  'No Reservation',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      color: Swatch.buttons.shade400
+                                  )
+                              ),
+                            ],
+                          )
+                      )
+                  ),
+                  const SizedBox(height: 10, width: 1),
+                  Visibility(
+                    visible: !true,
+                    replacement: Material(
+                      elevation: 10,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                      color: Theme.of(context).colorScheme.background,
+                      child: SizedBox(
+                        height: 300,
+                        width: double.infinity,
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              const Text('Reservation', style: TextStyle(fontSize: 16)),
+                              const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
+                              SizedBox(
+                                height: 150,
+                                child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: SizedBox(
+                                      width: 300,
+                                      child: Visibility(
+                                        visible: _connectionResult,
+                                        replacement: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              Center(
+                                                child: SizedBox(
+                                                  width: 100,
+                                                  height: 100,
+                                                  child: CircularProgressIndicator(
+                                                    value: null,
+                                                    backgroundColor: Theme.of(context).colorScheme.background,
+                                                    strokeWidth: 6,
                                                   ),
                                                 ),
-                                                const Icon(Icons.wifi_off, color: Swatch.prime, size: 50),
-                                              ]
-                                          ),
-                                          child: Text(
-                                            _suggestedLot,
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 120
-                                            ),
+                                              ),
+                                              const Icon(Icons.wifi_off, color: Swatch.prime, size: 50),
+                                            ]
+                                        ),
+                                        child: Text(
+                                          _suggestedLot,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 120
                                           ),
                                         ),
-                                      )
-                                  ),
+                                      ),
+                                    )
                                 ),
-                                const SizedBox(height: 1, width: 15),
-                                FittedBox(
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                            height: 60,
-                                            width: 200,
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                  elevation: 5,
-                                                  disabledBackgroundColor: Swatch.prime.shade200,
-                                                  backgroundColor: Swatch.prime,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(18.0)
+                              ),
+                              const SizedBox(height: 1, width: 15),
+                              FittedBox(
+                                  fit: BoxFit.fitHeight,
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                          height: 60,
+                                          width: 200,
+                                          child: Material(
+                                            elevation: 1,
+                                            borderRadius: const BorderRadius.only(
+                                                topLeft: Radius.circular(18),
+                                                topRight: Radius.circular(0),
+                                                bottomLeft: Radius.circular(18),
+                                                bottomRight: Radius.circular(0),
+                                            ),
+                                            color: Swatch.prime.shade200,
+                                            child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                              children: [
+                                                SizedBox(
+                                                  width: 24,
+                                                  height: 24,
+                                                  child: CircularProgressIndicator(
+                                                    color: Swatch.buttons.shade600,
+                                                    value: null,
                                                   ),
                                                 ),
-                                                onPressed: () async {
-                                                  await _updateConnectionStatus();
-                                                  setState(() {
-                                                    if(_connectionResult){
-                                                      if(_suggestedLot != '...'){
-                                                        Reserve().reserve(_suggestedLot);
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (context) => AlertDialog(
-                                                            shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(20),
-                                                            ),
-                                                            backgroundColor: Theme.of(context).colorScheme.background,
-                                                            elevation: 10,
-                                                            content: Container(
-                                                              height: 200,
-                                                              width: 330,
-                                                              padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                                                              child: FittedBox(
-                                                                fit: BoxFit.contain,
-                                                                child: Column(
-                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                  children: [
-                                                                    const Icon(Icons.garage, color: Swatch.prime, size: 200),
-                                                                    const SizedBox(height: 20),
-                                                                    Text('RESERVED SUCCESSFULLY!', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold, fontSize: 45)),
-                                                                    const SizedBox(height: 30),
-                                                                    Text('Proceed to LOT $_suggestedLot', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 40)),
-                                                                    const SizedBox(height: 10),
-                                                                    Text('Show your ticket in entering the space', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            actions: [
-                                                              Center(
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                                                                  child: TextButton(
-                                                                    onPressed: () {Navigator.of(context).pop();},
-                                                                    child: Icon(Icons.close_outlined, color: Theme.of(context).colorScheme.onPrimary, size: 30),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      }else{
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (context) => AlertDialog(
-                                                            shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(20),
-                                                            ),
-                                                            backgroundColor: Swatch.prime,
-                                                            elevation: 10,
-                                                            content: Container(
-                                                              height: 170,
-                                                              width: 330,
-                                                              padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                                                              child: FittedBox(
-                                                                fit: BoxFit.contain,
-                                                                child: Column(
-                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                  children: [
-                                                                    CircleAvatar(radius: 70, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.warning, color: SigCol.orange, size: 60)),
-                                                                    const SizedBox(height: 20),
-                                                                    Text('NO SPACES LEFT!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
-                                                                    const SizedBox(height: 30),
-                                                                    Text('Kindly wait for a spot for a while,', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
-                                                                    const SizedBox(height: 10),
-                                                                    Text('Thank you for your patience!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            actions: [
-                                                              Center(
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                                                                  child: TextButton(
-                                                                    onPressed: () {Navigator.of(context).pop();},
-                                                                    child: Icon(Icons.close_outlined, color: Swatch.buttons.shade800, size: 30),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      }
-                                                    }else{
+                                                Text(
+                                                  '  CONFIRM',
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight: FontWeight.w400,
+                                                      fontFamily: 'Arial',
+                                                      color: Swatch.buttons.shade800
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                      ),
+                                      const SizedBox(height: 1, width: 0),
+                                      SizedBox(
+                                          height: 60,
+                                          width: 135,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  elevation: 5,
+                                                  backgroundColor: Swatch.prime,
+                                                  shape: const RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.only(
+                                                        topLeft: Radius.circular(0),
+                                                        topRight: Radius.circular(18),
+                                                        bottomLeft: Radius.circular(0),
+                                                        bottomRight: Radius.circular(18),
+                                                      ),
+                                                  )
+                                              ),
+                                              onPressed: (){},
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.cancel_rounded,
+                                                    size: 24,
+                                                    color: Swatch.buttons.shade800,
+                                                  ),
+                                                  Text(
+                                                    '  CANCEL',
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight: FontWeight.w400,
+                                                        fontFamily: 'Arial',
+                                                        color: Swatch.buttons.shade800
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                          )
+                                      )
+                                    ],
+                                  )
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    child: Material(
+                      elevation: 10,
+                      borderRadius: const BorderRadius.all(
+                          Radius.circular(20),
+                      ),
+                      color: Theme.of(context).colorScheme.background,
+                      child: SizedBox(
+                        height: 300,
+                        width: double.infinity,
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              const Text('Suggested Parking Space:', style: TextStyle(fontSize: 16)),
+                              const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
+                              SizedBox(
+                                height: 150,
+                                child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: SizedBox(
+                                      width: 300,
+                                      child: Visibility(
+                                        visible: _connectionResult,
+                                        replacement: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              Center(
+                                                child: SizedBox(
+                                                  width: 100,
+                                                  height: 100,
+                                                  child: CircularProgressIndicator(
+                                                    value: null,
+                                                    backgroundColor: Theme.of(context).colorScheme.background,
+                                                    strokeWidth: 6,
+                                                  ),
+                                                ),
+                                              ),
+                                              const Icon(Icons.wifi_off, color: Swatch.prime, size: 50),
+                                            ]
+                                        ),
+                                        child: Text(
+                                          _suggestedLot,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 120
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                ),
+                              ),
+                              const SizedBox(height: 1, width: 15),
+                              FittedBox(
+                                fit: BoxFit.fitHeight,
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                          height: 60,
+                                          width: 200,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                elevation: 5,
+                                                disabledBackgroundColor: Swatch.prime.shade200,
+                                                backgroundColor: Swatch.prime,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(18.0)
+                                                ),
+                                              ),
+                                              onPressed: () async {
+                                                await _updateConnectionStatus();
+                                                setState(() {
+                                                  if(_connectionResult){
+                                                    if(_suggestedLot != '...'){
+                                                      Reserve().reserve(_suggestedLot);
                                                       showDialog(
                                                         context: context,
                                                         builder: (context) => AlertDialog(
                                                           shape: RoundedRectangleBorder(
                                                             borderRadius: BorderRadius.circular(20),
                                                           ),
-                                                          backgroundColor: Swatch.prime,
+                                                          backgroundColor: Theme.of(context).colorScheme.background,
                                                           elevation: 10,
                                                           content: Container(
                                                             height: 200,
@@ -330,13 +397,55 @@ class _HomePageState extends State<HomePage> {
                                                               child: Column(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: [
-                                                                  CircleAvatar(radius: 70, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.wifi_off, color: SigCol.red, size: 60)),
+                                                                  const Icon(Icons.garage, color: Swatch.prime, size: 200),
                                                                   const SizedBox(height: 20),
-                                                                  Text('CONNECTION ERROR!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
+                                                                  Text('RESERVED SUCCESSFULLY!', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold, fontSize: 45)),
                                                                   const SizedBox(height: 30),
-                                                                  Text('Slow or no Internet connection.', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
+                                                                  Text('Proceed to LOT $_suggestedLot', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 40)),
                                                                   const SizedBox(height: 10),
-                                                                  Text('Check your connection, then try again', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
+                                                                  Text('Show your ticket in entering the space', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          actions: [
+                                                            Center(
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                                                child: TextButton(
+                                                                  onPressed: () {Navigator.of(context).pop();},
+                                                                  child: Icon(Icons.close_outlined, color: Theme.of(context).colorScheme.onPrimary, size: 30),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    }else{
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) => AlertDialog(
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(20),
+                                                          ),
+                                                          backgroundColor: Swatch.prime,
+                                                          elevation: 10,
+                                                          content: Container(
+                                                            height: 170,
+                                                            width: 330,
+                                                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                                                            child: FittedBox(
+                                                              fit: BoxFit.contain,
+                                                              child: Column(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: [
+                                                                  CircleAvatar(radius: 70, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.warning, color: SigCol.orange, size: 60)),
+                                                                  const SizedBox(height: 20),
+                                                                  Text('NO SPACES LEFT!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
+                                                                  const SizedBox(height: 30),
+                                                                  Text('Kindly wait for a spot for a while,', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
+                                                                  const SizedBox(height: 10),
+                                                                  Text('Thank you for your patience!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
                                                                 ],
                                                               ),
                                                             ),
@@ -355,181 +464,224 @@ class _HomePageState extends State<HomePage> {
                                                         ),
                                                       );
                                                     }
-                                                  });
-                                                },
-                                                child: Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(Icons.confirmation_number_outlined, size: 24, color: Swatch.buttons.shade800),
-                                                    Text(
-                                                      '  RESERVE',
-                                                      textAlign: TextAlign.start,
-                                                      style: TextStyle(
-                                                        fontSize: 18,
-                                                        fontWeight: FontWeight.w400,
-                                                        fontFamily: 'Arial',
-                                                        color: Swatch.buttons.shade800
+                                                  }else{
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) => AlertDialog(
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                        ),
+                                                        backgroundColor: Swatch.prime,
+                                                        elevation: 10,
+                                                        content: Container(
+                                                          height: 200,
+                                                          width: 330,
+                                                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                                                          child: FittedBox(
+                                                            fit: BoxFit.contain,
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                CircleAvatar(radius: 70, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.wifi_off, color: SigCol.red, size: 60)),
+                                                                const SizedBox(height: 20),
+                                                                Text('CONNECTION ERROR!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
+                                                                const SizedBox(height: 30),
+                                                                Text('Slow or no Internet connection.', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
+                                                                const SizedBox(height: 10),
+                                                                Text('Check your connection, then try again', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        actions: [
+                                                          Center(
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                                              child: TextButton(
+                                                                onPressed: () {Navigator.of(context).pop();},
+                                                                child: Icon(Icons.close_outlined, color: Swatch.buttons.shade800, size: 30),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
+                                                    );
+                                                  }
+                                                });
+                                              },
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(Icons.confirmation_number_outlined, size: 24, color: Swatch.buttons.shade800),
+                                                  Text(
+                                                    '  RESERVE',
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight: FontWeight.w400,
+                                                      fontFamily: 'Arial',
+                                                      color: Swatch.buttons.shade800
                                                     ),
-                                                  ],
-                                                )
-                                            )
-                                        ),
-                                        const SizedBox(height: 1, width: 15),
-                                        SizedBox(
-                                            height: 60,
-                                            width: 120,
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    elevation: 5,
-                                                    backgroundColor: Swatch.buttons.shade400,
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(18.0)
-                                                    )
-                                                ),
-                                                onPressed: (){
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(builder: (context) => LotsPage(_connectionResult)),
-                                                  );
-                                                },
-                                                child: Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: const [
-                                                    Icon(
-                                                      Icons.space_dashboard_outlined,
-                                                      size: 24,
-                                                      color: Swatch.prime,
+                                                  ),
+                                                ],
+                                              )
+                                          )
+                                      ),
+                                      const SizedBox(height: 1, width: 15),
+                                      SizedBox(
+                                          height: 60,
+                                          width: 120,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  elevation: 5,
+                                                  backgroundColor: Swatch.buttons.shade400,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(18.0)
+                                                  )
+                                              ),
+                                              onPressed: (){
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => LotsPage(_connectionResult)),
+                                                );
+                                              },
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: const [
+                                                  Icon(
+                                                    Icons.space_dashboard_outlined,
+                                                    size: 24,
+                                                    color: Swatch.prime,
+                                                  ),
+                                                  Text(
+                                                    '  LOTS',
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight: FontWeight.w400,
+                                                      fontFamily: 'Arial',
+                                                      color: Swatch.prime
                                                     ),
-                                                    Text(
-                                                      '  LOTS',
-                                                      textAlign: TextAlign.start,
-                                                      style: TextStyle(
-                                                        fontSize: 18,
-                                                        fontWeight: FontWeight.w400,
-                                                        fontFamily: 'Arial',
-                                                        color: Swatch.prime
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                            )
-                                        )
-                                      ],
-                                    )
-                                ),
-                              ],
-                            ),
+                                                  ),
+                                                ],
+                                              )
+                                          )
+                                      )
+                                    ],
+                                  )
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 40, width: double.infinity),
-                      Material(
-                        elevation: 10,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(20),
-                        ),
-                        color: Theme.of(context).colorScheme.background,
-                        child: SizedBox(
-                          height: 150,
-                          width: double.infinity,
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                  ),
+                  const SizedBox(height: 40, width: double.infinity),
+                  Material(
+                    elevation: 10,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                    color: Theme.of(context).colorScheme.background,
+                    child: SizedBox(
+                      height: 150,
+                      width: double.infinity,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Parking Space Statistics:', style: TextStyle(fontSize: 16)),
+                            const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              textBaseline: TextBaseline.alphabetic,
                               children: [
-                                const Text('Parking Space Statistics:', style: TextStyle(fontSize: 16)),
-                                const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  textBaseline: TextBaseline.alphabetic,
+                                Column(
                                   children: [
-                                    Column(
-                                      children: [
-                                        const SizedBox(height: 10, width: 1),
-                                        const CircleAvatar(
-                                            radius: 4,
-                                            backgroundColor: SigCol.red ///Colors.red
-                                        ),
-                                        const SizedBox(height: 10, width: 1),
-                                        Text(
-                                            _statsOccupied,
-                                            style: const TextStyle(
-                                                fontSize: 30,
-                                                fontWeight: FontWeight.bold,
-                                            )
-                                        ),
-                                        const Text(
-                                            'OCCUPIED',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                            )
-                                        ),
-                                      ],
+                                    const SizedBox(height: 10, width: 1),
+                                    const CircleAvatar(
+                                        radius: 4,
+                                        backgroundColor: SigCol.red ///Colors.red
                                     ),
-                                    Column(
-                                      children: [
-                                        const SizedBox(height: 10, width: 1),
-                                        const CircleAvatar(
-                                            radius: 4,
-                                            backgroundColor: SigCol.green ///Colors.green
-                                        ),
-                                        const SizedBox(height: 10, width: 1),
-                                        Text(
-                                            _statsAvailable,
-                                            style: const TextStyle(
-                                                fontSize: 40,
-                                                fontWeight: FontWeight.bold,
-                                            )
-                                        ),
-                                        const Text(
-                                            'AVAILABLE',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                            )
-                                        ),
-                                      ],
+                                    const SizedBox(height: 10, width: 1),
+                                    Text(
+                                        _statsOccupied,
+                                        style: const TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                        )
                                     ),
-                                    Column(
-                                      children: [
-                                        const SizedBox(height: 10, width: 1),
-                                        const CircleAvatar(
-                                            radius: 4,
-                                            backgroundColor: SigCol.orange ///Colors.orange
-                                        ),
-                                        const SizedBox(height: 10, width: 1),
-                                        Text(
-                                            _statsReserved,
-                                            style: const TextStyle(
-                                                fontSize: 30,
-                                                fontWeight: FontWeight.bold,
-                                            )
-                                        ),
-                                        const Text(
-                                            'RESERVED',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                            )
-                                        ),
-                                      ],
+                                    const Text(
+                                        'OCCUPIED',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                        )
                                     ),
                                   ],
                                 ),
-                              ]
-                          )
-                        ),
-                      ),
-                      const SizedBox(height: 10, width: double.infinity),
-                    ],
+                                Column(
+                                  children: [
+                                    const SizedBox(height: 10, width: 1),
+                                    const CircleAvatar(
+                                        radius: 4,
+                                        backgroundColor: SigCol.green ///Colors.green
+                                    ),
+                                    const SizedBox(height: 10, width: 1),
+                                    Text(
+                                        _statsAvailable,
+                                        style: const TextStyle(
+                                            fontSize: 40,
+                                            fontWeight: FontWeight.bold,
+                                        )
+                                    ),
+                                    const Text(
+                                        'AVAILABLE',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                        )
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    const SizedBox(height: 10, width: 1),
+                                    const CircleAvatar(
+                                        radius: 4,
+                                        backgroundColor: SigCol.orange ///Colors.orange
+                                    ),
+                                    const SizedBox(height: 10, width: 1),
+                                    Text(
+                                        _statsReserved,
+                                        style: const TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                        )
+                                    ),
+                                    const Text(
+                                        'RESERVED',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                        )
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ]
+                      )
+                    ),
                   ),
-                ),
-              )
+                  const SizedBox(height: 40, width: double.infinity),
+                ],
+              ),
+            ),
           ),
           Positioned(
-            top: 0,
+            top: 90,
             child: Material(
               color: Theme.of(context).colorScheme.background,
               elevation: 5,
@@ -556,7 +708,7 @@ class _HomePageState extends State<HomePage> {
           Visibility(
             visible: !_connectionResult,
             child: const Positioned(
-              top: 0,
+              top: 90,
               left: 85,
               child: SizedBox(
                 width: 25,
