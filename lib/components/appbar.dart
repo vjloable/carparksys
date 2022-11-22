@@ -8,6 +8,13 @@ class MyAppbar {
     return PreferredSize(
       preferredSize: const Size.fromHeight(60.0),
       child: AppBar(
+        scrolledUnderElevation: 3,
+        centerTitle: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(40),
+          ),
+        ),
         automaticallyImplyLeading: false,
         title: Container(
             padding: const EdgeInsets.fromLTRB(0,25,0,10),
@@ -15,7 +22,8 @@ class MyAppbar {
               height: 40,
               width: double.maxFinite,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40), color: Theme.of(context).colorScheme.background
+                  borderRadius: BorderRadius.circular(40),
+                  color: Theme.of(context).colorScheme.background
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -59,12 +67,6 @@ class MyAppbar {
                 ],
               ),
             )
-        ),
-        centerTitle: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(40),
-          ),
         ),
       ),
     );
