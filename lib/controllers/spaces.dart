@@ -4,7 +4,7 @@ import 'package:carparksys/services/rtdb.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class SpacesController{
-  final _database = RTDBService().databaseRef;
+  final rtdbRef = RTDBService().databaseRef;
   late StreamSubscription _spacesStream;
   late StreamController<List> spacesStreamController = StreamController<List>();
   int _countOccupied = 0;
@@ -18,7 +18,7 @@ class SpacesController{
   }
 
   void activateListenersSpaces() {
-    _spacesStream = _database.child('spaces/').onValue.listen((event) {
+    _spacesStream = rtdbRef.child('spaces/').onValue.listen((event) {
       Iterable<DataSnapshot> spaces = event.snapshot.children;
       List<String> lots = spaces.map((e) => e.key as String).toList();
       List<int> status = spaces.map((e) => e.value as int).toList();
@@ -41,7 +41,7 @@ class SpacesController{
   }
 
   Future<void> updateStatistics() async {
-    await rtdbRef.databaseRef.update(
+    await rtdb.databaseRef.update(
         {
           'stats/available': _countAvailable,
           'stats/occupied': _countOccupied,
