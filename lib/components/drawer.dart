@@ -143,7 +143,7 @@ class _MyDrawerState extends State<MyDrawer> {
             await _updateConnectionStatus();
             if(_connectionResult){
               Map<String, int> resetter = { for (var e in _parkingLotsName) e : 1 };
-              await rtdbRef.databaseRef.child('spaces').update(
+              await rtdb.databaseRef.child('spaces').update(
                   resetter
               );
             }
