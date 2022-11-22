@@ -29,7 +29,7 @@ class _LotsPageState extends State<LotsPage> {
   @override
   void initState() {
     super.initState();
-    _time = TimeRunner().now();
+    _time = TimeRunner().formatterMDY(TimeRunner().now());
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => updateTime());
     controllerSpaces.activateListenersSpaces();
     spacesStreamListener();
@@ -37,7 +37,7 @@ class _LotsPageState extends State<LotsPage> {
 
   void updateTime() {
     setState(() {
-      _time = TimeRunner().now();
+      _time = TimeRunner().formatterMDY(TimeRunner().now());
     });
   }
 
@@ -103,7 +103,6 @@ class _LotsPageState extends State<LotsPage> {
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return ReserveLot(_parkingLotsName[index]);
-                                                //return showReserveLot(context, _parkingLotsName[index]);
                                               }
                                           );
                                         } : null,
@@ -124,16 +123,6 @@ class _LotsPageState extends State<LotsPage> {
                                                   : SigCol.orange)
                                           ),
                                         ),
-                                        // Border(
-                                        //   bottom: BorderSide(
-                                        //       width: 3,
-                                        //       color: (_parkingLotsStatus[index] == 1)
-                                        //           ? SigCol.green
-                                        //           : ((_parkingLotsStatus[index] == 2)
-                                        //           ? SigCol.red
-                                        //           : SigCol.orange)
-                                        //   ),
-                                        // ),
                                         child: SizedBox(
                                           width: 40,
                                           height: 90,
