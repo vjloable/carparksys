@@ -3,13 +3,13 @@ import 'package:carparksys/services/rtdb.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class SuggestionController{
-  final _database = RTDBService().databaseRef;
+  RTDBService rtdb = RTDBService();
   late String _prevSuggestion = '...';
   late StreamSubscription _suggestionStream;
   late StreamController<List> suggestionStreamController = StreamController<List>();
 
   void activateListenersSuggestion() {
-    _suggestionStream = _database.child('spaces/').onValue.listen((event) {
+    _suggestionStream = rtdb.databaseRef.child('spaces/').onValue.listen((event) {
       List<String> suggestions = [];
       Iterable<DataSnapshot> snapshot = event.snapshot.children;
       List<String> lots = snapshot.map((e) => e.key as String).toList();

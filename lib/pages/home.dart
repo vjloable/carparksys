@@ -119,7 +119,6 @@ class _HomePageState extends State<HomePage> {
           SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: Container(
-              height: 1000,
               padding: const EdgeInsets.all(40),
               child: Column(
                 children: [

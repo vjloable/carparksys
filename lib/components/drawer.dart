@@ -7,9 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../assets/swatches/custom_colors.dart';
-import '../controllers/reserve.dart';
 import '../controllers/spaces.dart';
 import '../pages/lots.dart';
+import '../services/rtdb.dart';
 
 Widget drawerHeader = UserAccountsDrawerHeader(
   accountName: Text(FirebaseAuth.instance.currentUser!.displayName!, style: TextStyle(fontFamily: 'Arial', color: Swatch.buttons.shade800)),
@@ -30,8 +30,9 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  late List<String> _parkingLotsName = [];
+  RTDBService rtdb = RTDBService();
   SpacesController controllerSpaces = SpacesController();
+  late List<String> _parkingLotsName = [];
   late Stream<List> spacesStream = controllerSpaces.spacesStreamController.stream;
   late StreamSubscription<List> spacesStreamSubscription;
   late bool _connectionResult = true;
