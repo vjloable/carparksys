@@ -33,7 +33,7 @@ class _ReserveLotState extends State<ReserveLot> {
   @override
   void initState() {
     super.initState();
-    _time = TimeRunner().now();
+    _time = TimeRunner().formatterMDY(TimeRunner().now());
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => updateTime());
     controllerSpaces.activateListenersSpaces();
     spacesStreamListener();
@@ -41,7 +41,7 @@ class _ReserveLotState extends State<ReserveLot> {
 
   void updateTime() {
     setState(() {
-      _time = TimeRunner().now();
+      _time = TimeRunner().formatterMDY(TimeRunner().now());
     });
   }
 
