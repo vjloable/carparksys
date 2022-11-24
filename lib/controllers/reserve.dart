@@ -11,14 +11,24 @@ class Reserve{
   late StreamSubscription _reserveStream;
   late StreamController<List<dynamic>> reserveStreamController = StreamController<List<dynamic>>();
   static int _stateCheck = 0;
+  static String _selectedLot = '...';
 
   int getStateCheck(){
     return _stateCheck;
   }
 
-  void updateStateCheck(int state){
+  Future<void> updateStateCheck(int state) async{
     _stateCheck = state;
   }
+
+  String getSelectedLot(){
+    return _selectedLot;
+  }
+
+  void updateSelectedLot(String lot){
+    _selectedLot = lot;
+  }
+
   void activateListenersReserve() {
     var userId = FirebaseAuth.instance.currentUser?.uid;
     String lot = '...';
@@ -27,7 +37,7 @@ class Reserve{
       if(event.snapshot.exists){
         if(event.snapshot.child('has_ticket').value == true) {
           hasTicket = true;
-          lot = (await rtdb.databaseRef.child('users/$userId/lot').get()).value.toString();
+          lot = (await rtdb.databaseRef.child('users/$userId/details/lot').get()).value.toString();
         }else{
           hasTicket = false;
           lot = '...';
@@ -37,59 +47,98 @@ class Reserve{
     });
   }
 
-  Future<void> dislodge(String lot) async {
-    print(lot);
+  Future<void> setRetention() async {
     var userId = FirebaseAuth.instance.currentUser?.uid;
-    //var lot = (await rtdb.databaseRef.child('users/$userId/lot').get()).value.toString();
-    // await rtdb.databaseDB.ref('spaces').update(
-    //     {
-    //       lot : 1,
-    //     });
-    await rtdb.databaseDB.ref('users/$userId').update(
-        {
-          'has_ticket' : false,
-          'lot' : lot,
-        });
+    _snapshotUser = await rtdb.databaseRef.child('users/$userId').get();
+    if(_snapshotUser.exists){
+      if(_snapshotUser.child('has_ticket').value == true) {
+        await rtdb.databaseDB.ref('users/$userId').update(
+            {
+              'timepause': DateTime
+                  .now()
+                  .millisecondsSinceEpoch,
+            });
+      }
+    }
+  }
+
+  Future<bool> getRetention() async {
+
+    return true;
+  }
+
+  Future<void> dislodge(String lot) async {
+    var userId = FirebaseAuth.instance.currentUser?.uid;
+    _snapshotUser = await rtdb.databaseRef.child('users').get();
+    if(_snapshotUser.exists){
+      await rtdb.databaseDB.ref('spaces').update(
+          {
+            lot : 1,
+          });
+      await rtdb.databaseDB.ref('users/$userId').update(
+          {
+            'has_ticket' : false,
+          });
+      await rtdb.databaseDB.ref('users/$userId/details').remove();
+    }
   }
 
   Future<void> reserve(String lot) async {
     _snapshotCheck = await rtdb.databaseRef.child('spaces/$lot').get();
     if(_snapshotCheck.value != 1){
-      updateStateCheck(3);
+      await updateStateCheck(3);
     }else {
       var userId = FirebaseAuth.instance.currentUser?.uid;
       _snapshotUser = await rtdb.databaseRef.child('users/$userId').get();
       if(_snapshotUser.exists){
         if(_snapshotUser.child('has_ticket').value == false) {
+          updateSelectedLot(lot);
+          int timestart = DateTime.now().millisecondsSinceEpoch;
+          int timestop = timestart + (1000 * 480);
+          await updateStateCheck(2);
           await rtdb.databaseRef.update(
               {
                 'users/$userId' : {
                   'has_ticket' : true,
-                  'lot' : lot,
+                  'timestart' : timestart,
+                  'timestop' : timestop,
+                  'timepause' : 0,
+                  'details': {
+                    'lot' : lot,
+                    'cd' : 360,
+                  }
                 }
               });
           await rtdb.databaseRef.update(
               {
                 'spaces/$lot': 3,
               });
-          updateStateCheck(2);
         }else{
           //Already reserved
-          updateStateCheck(3);
+          await updateStateCheck(3);
         }
       }else{
+        updateSelectedLot(lot);
+        await updateStateCheck(1);
+        int timestart = DateTime.now().millisecondsSinceEpoch;
+        int timestop = timestart + (1000 * 480);
         await rtdb.databaseRef.update(
             {
               'users/$userId' : {
                 'has_ticket' : true,
-                'lot' : lot,
+                'timestart' : timestart,
+                'timestop' : timestop,
+                'timepause' : 0,
+                'details': {
+                  'lot' : lot,
+                  'cd' : 360,
+                }
               }
             });
         await rtdb.databaseRef.update(
             {
               'spaces/$lot': 3,
             });
-        updateStateCheck(1);
       }
     }
   }
