@@ -37,7 +37,7 @@ class Reserve{
       if(event.snapshot.exists){
         if(event.snapshot.child('has_ticket').value == true) {
           hasTicket = true;
-          lot = (await rtdb.databaseRef.child('users/$userId/details/lot').get()).value.toString();
+          lot = (await rtdb.databaseRef.child('users/$userId/lot').get()).value.toString();
         }else{
           hasTicket = false;
           lot = '...';
@@ -67,18 +67,23 @@ class Reserve{
   }
 
   Future<void> dislodge(String lot) async {
+    print('dislodged!!!!');
+    String localLot = lot;
     var userId = FirebaseAuth.instance.currentUser?.uid;
-    _snapshotUser = await rtdb.databaseRef.child('users').get();
-    if(_snapshotUser.exists){
-      await rtdb.databaseDB.ref('spaces').update(
+    _snapshotUser = await rtdb.databaseDB.ref('users/$userId').get();
+    if (_snapshotUser.exists) {
+      print(lot);
+      if(localLot == '...' || localLot == 'null'){
+        localLot = (await rtdb.databaseDB.ref('users/$userId/lot').get()).value.toString();
+      }
+      await rtdb.databaseRef.update(
           {
-            lot : 1,
+            'spaces/$localLot': 1,
           });
       await rtdb.databaseDB.ref('users/$userId').update(
           {
             'has_ticket' : false,
           });
-      await rtdb.databaseDB.ref('users/$userId/details').remove();
     }
   }
 
@@ -101,9 +106,7 @@ class Reserve{
                   'has_ticket' : true,
                   'timestart' : timestart,
                   'timestop' : timestop,
-                  'details': {
-                    'lot' : lot,
-                  }
+                  'lot' : lot,
                 }
               });
           await rtdb.databaseRef.update(
@@ -125,9 +128,7 @@ class Reserve{
                 'has_ticket' : true,
                 'timestart' : timestart,
                 'timestop' : timestop,
-                'details': {
-                  'lot' : lot,
-                }
+                'lot' : lot,
               }
             });
         await rtdb.databaseRef.update(
