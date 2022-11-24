@@ -24,8 +24,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
-  AppLifecycleState? _appLifecycleState;
-
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   StatisticsController controllerStatistics = StatisticsController();
   SuggestionController controllerSuggestion = SuggestionController();
@@ -46,27 +44,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   late Timer timer;
   late bool _connectionResult = true;
   late bool _hasTicket = false;
-  StreamController<String> eventstreamController = StreamController<String>.broadcast();
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        updateRetention();
-        print("app in resumed");
-        break;
-      case AppLifecycleState.inactive:
-        Reserve().setRetention();
-        print("app in inactive");
-        break;
-      case AppLifecycleState.paused:
-        print("app in paused");
-        break;
-      case AppLifecycleState.detached:
-        print("app in detached");
-        break;
-    }
-  }
+  StreamController<List<dynamic>> eventstreamController = StreamController<List<dynamic>>.broadcast();
+  int resetTime = 480000;
 
   @override
   void initState() {
@@ -81,10 +60,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     statisticsStreamListener();
     suggestionStreamListener();
     reserveStreamListener();
+    updateRetention();
   }
 
-  void updateRetention() {
-    print(_hasTicket);
+  void updateRetention() async {
+      List<dynamic> retained = await Reserve().getRetention();
+      if(retained.first == true){
+        eventstreamController.sink.add(['resetTimer', retained.last]);
+        eventstreamController.sink.add(['startTimer', 0]);
+      }else{
+        eventstreamController.sink.add(['resetTimer', retained.last]);
+        eventstreamController.sink.add(['stopTimer', 0]);
+      }
   }
 
   void updateTime() {
@@ -277,8 +264,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                       if(_connectionResult){
                                                         if(_suggestedLot != '...'){
                                                           controllerReserve.reserve(_suggestedLot);
-                                                          eventstreamController.sink.add('resetTimer');
-                                                          eventstreamController.sink.add('startTimer');
+                                                          eventstreamController.sink.add(['resetTimer', resetTime]);
+                                                          eventstreamController.sink.add(['startTimer', 0]);
                                                           showDialog(
                                                             context: context,
                                                             builder: (context) => AlertDialog(
@@ -598,7 +585,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                     )
                                                 ),
                                                 onPressed: () {
-                                                  eventstreamController.sink.add('stopTimer');
+                                                  eventstreamController.sink.add(['stopTimer', 0]);
                                                   Reserve().dislodge(Reserve().getSelectedLot());
                                                 },
                                                 child: Row(
