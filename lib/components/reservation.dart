@@ -49,6 +49,7 @@ class _ReserveLotState extends State<ReserveLot> {
     spacesStreamSubscription = controllerSpaces.spacesStreamController.stream.listen((event){
       setState(() {
         _parkingLotsName = event[0];
+        //test
       });
     });
   }
@@ -230,7 +231,7 @@ class _ReserveLotState extends State<ReserveLot> {
                                   updateSubmitIcon();
                                 }
                                 Future.delayed(
-                                    const Duration(milliseconds: 600),
+                                    const Duration(milliseconds: 900),
                                         () => mounted ? Navigator.pop(context) : null
                                 );
                               },

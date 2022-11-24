@@ -29,6 +29,7 @@ class MyAppbar {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   IconButton(
+                      splashRadius: 25,
                       onPressed: (){
                         key.currentState!.openDrawer();
                       },
@@ -53,6 +54,7 @@ class MyAppbar {
                     ),
                   ),
                   IconButton(
+                    splashRadius: 25,
                     icon: Icon(color: Theme.of(context).colorScheme.onPrimary,
                         MyApp.themeNotifier.value == ThemeMode.light
                             ? Icons.dark_mode_outlined
