@@ -47,6 +47,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   StreamController<List<dynamic>> eventstreamController = StreamController<List<dynamic>>.broadcast();
   int resetTime = 480000;
 
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   switch (state) {
+  //     case AppLifecycleState.resumed:
+  //       print("app in resumed");
+  //       break;
+  //     case AppLifecycleState.inactive:
+  //       //_signout();
+  //       print("app in inactive");
+  //       break;
+  //     case AppLifecycleState.paused:
+  //       print("app in paused");
+  //       break;
+  //     case AppLifecycleState.detached:
+  //       print("app in detached");
+  //       break;
+  //   }
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -64,14 +83,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   }
 
   void updateRetention() async {
-      List<dynamic> retained = await Reserve().getRetention();
-      if(retained.first == true){
-        eventstreamController.sink.add(['resetTimer', retained.last]);
-        eventstreamController.sink.add(['startTimer', 0]);
-      }else{
-        eventstreamController.sink.add(['resetTimer', retained.last]);
-        eventstreamController.sink.add(['stopTimer', 0]);
-      }
+    List<dynamic> retained = await Reserve().getRetention();
+    if(_hasTicket){
+      eventstreamController.sink.add(['resetTimer', retained.last]);
+      eventstreamController.sink.add(['startTimer', 0]);
+    }else{
+      eventstreamController.sink.add(['resetTimer', retained.last]);
+      eventstreamController.sink.add(['stopTimer', 0]);
+    }
   }
 
   void updateTime() {
@@ -586,7 +605,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                 ),
                                                 onPressed: () {
                                                   eventstreamController.sink.add(['stopTimer', 0]);
-                                                  Reserve().dislodge(Reserve().getSelectedLot());
+                                                  //Reserve().dislodge(Reserve().getSelectedLot());
                                                 },
                                                 child: Row(
                                                   crossAxisAlignment: CrossAxisAlignment.center,
