@@ -12,14 +12,14 @@ import '../pages/lots.dart';
 import '../services/rtdb.dart';
 
 Widget drawerHeader = UserAccountsDrawerHeader(
-  accountName: Text(FirebaseAuth.instance.currentUser!.displayName!, style: TextStyle(fontFamily: 'Arial', color: Swatch.buttons.shade800)),
-  accountEmail: Text(FirebaseAuth.instance.currentUser!.email!, style: TextStyle(fontFamily: 'Arial', color: Swatch.buttons.shade800)),
-  currentAccountPicture: CircleAvatar(
-    backgroundImage: NetworkImage(
-        FirebaseAuth.instance.currentUser!.photoURL!,
-    )
-  )
-);
+    accountName: Text(FirebaseAuth.instance.currentUser!.displayName!,
+        style: TextStyle(fontFamily: 'Arial', color: Swatch.buttons.shade800)),
+    accountEmail: Text(FirebaseAuth.instance.currentUser!.email!,
+        style: TextStyle(fontFamily: 'Arial', color: Swatch.buttons.shade800)),
+    currentAccountPicture: CircleAvatar(
+        backgroundImage: NetworkImage(
+      FirebaseAuth.instance.currentUser!.photoURL!,
+    )));
 
 class MyDrawer extends StatefulWidget {
   final int numPops;
@@ -33,7 +33,8 @@ class _MyDrawerState extends State<MyDrawer> {
   RTDBService rtdb = RTDBService();
   SpacesController controllerSpaces = SpacesController();
   late List<String> _parkingLotsName = [];
-  late Stream<List> spacesStream = controllerSpaces.spacesStreamController.stream;
+  late Stream<List> spacesStream =
+      controllerSpaces.spacesStreamController.stream;
   late StreamSubscription<List> spacesStreamSubscription;
   late bool _connectionResult = true;
 
@@ -45,7 +46,7 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   void spacesStreamListener() {
-    spacesStreamSubscription = spacesStream.listen((event){
+    spacesStreamSubscription = spacesStream.listen((event) {
       setState(() {
         _parkingLotsName = event[0];
       });
@@ -69,7 +70,7 @@ class _MyDrawerState extends State<MyDrawer> {
       reliabilityCheck = false;
     }
 
-    setState((){
+    setState(() {
       _connectionResult = reliabilityCheck;
     });
   }
@@ -78,17 +79,15 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            Container(width: 200, height: 32, color: Swatch.prime),
-            drawerHeader,
-            const ListTile(
-              title: Text('Account'),
-              leading: Icon(Icons.account_circle),
-              onTap: null,
-            ),
-            ListTile(
+        ListView(padding: EdgeInsets.zero, children: [
+          Container(width: 200, height: 32, color: Swatch.prime),
+          drawerHeader,
+          const ListTile(
+            title: Text('Account'),
+            leading: Icon(Icons.account_circle),
+            onTap: null,
+          ),
+          ListTile(
               title: const Text('My Ticket'),
               leading: const Icon(Icons.confirmation_num_rounded),
               onTap: () {
@@ -98,51 +97,6 @@ class _MyDrawerState extends State<MyDrawer> {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 }
-            );
-          },
-        ),
-        ListTile(
-          title: const Text('Lots'),
-          leading: const Icon(Icons.dashboard_rounded),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LotsPage(_connectionResult)),
-            );
-          },
-        ),
-        const ListTile(
-          title: Text('Settings'),
-          leading: Icon(Icons.settings_rounded),
-          onTap: null,
-        ),
-        const ListTile(
-          title: Text('Help'),
-          leading: Icon(Icons.help),
-          onTap: null,
-        ),
-        const Divider(thickness: 1),
-        ListTile(
-          title: const Text('Sign out'),
-          leading: const Icon(Icons.logout_rounded),
-          onTap: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-            AuthService().signOut();
-          },
-        ),
-        ListTile(
-          title: const Text('RESET',style: TextStyle(color: Colors.red)),
-          leading: const Icon(Icons.keyboard_return),
-          onTap: () async {
-            await _updateConnectionStatus();
-            if(_connectionResult){
-              Map<String, int> resetter = { for (var e in _parkingLotsName) e : 1 };
-              await rtdb.databaseRef.child('spaces').update(
-                  resetter
-              );
-            }
-          },
                 showModalBottomSheet(
                     backgroundColor: Theme.of(context).colorScheme.background,
                     shape: RoundedRectangleBorder(
@@ -153,62 +107,60 @@ class _MyDrawerState extends State<MyDrawer> {
                       return showTicket(context);
                     }
                 );
-              },
-            ),
-            ListTile(
-              title: const Text('Lots'),
-              leading: const Icon(Icons.dashboard_rounded),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
+              }),
+          ListTile(
+            title: const Text('Lots'),
+            leading: const Icon(Icons.dashboard_rounded),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LotsPage(_connectionResult)),
-                );
-              },
-            ),
-            const ListTile(
-              title: Text('Settings'),
-              leading: Icon(Icons.settings_rounded),
-              onTap: null,
-            ),
-            const ListTile(
-              title: Text('Help'),
-              leading: Icon(Icons.help),
-              onTap: null,
-            ),
-            const Divider(thickness: 1),
-            ListTile(
-              title: const Text('Sign out'),
-              leading: const Icon(Icons.logout_rounded),
-              onTap: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-                AuthService().signOut();
-              },
-            ),
-            ListTile(
-              title: const Text('RESET',style: TextStyle(color: SigCol.red)),
-              leading: const Icon(Icons.keyboard_return, color: SigCol.red),
-              onTap: () async {
-                await _updateConnectionStatus();
-                if(_connectionResult){
-                  Map<String, int> resetter = { for (var e in _parkingLotsName) e : 1 };
-                  await rtdbRef.databaseRef.child('spaces').update(
-                      resetter
-                  );
-                }
-              },
-            ),
-          ],
-        ),
+                  MaterialPageRoute(
+                      builder: (context) => LotsPage(_connectionResult)));
+            },
+          ),
+          const ListTile(
+            title: Text('Settings'),
+            leading: Icon(Icons.settings_rounded),
+            onTap: null,
+          ),
+          const ListTile(
+            title: Text('Help'),
+            leading: Icon(Icons.help),
+            onTap: null,
+          ),
+          const Divider(thickness: 1),
+          ListTile(
+            title: const Text('Sign out'),
+            leading: const Icon(Icons.logout_rounded),
+            onTap: () {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              AuthService().signOut();
+            },
+          ),
+          ListTile(
+            title: const Text('RESET', style: TextStyle(color: Colors.red)),
+            leading: const Icon(Icons.keyboard_return),
+            onTap: () async {
+              await _updateConnectionStatus();
+              if (_connectionResult) {
+                Map<String, int> resetter = {
+                  for (var e in _parkingLotsName) e: 1
+                };
+                await rtdb.databaseRef.child('spaces').update(resetter);
+              }
+            },
+          ),
+        ]),
         Positioned(
           top: 40,
           right: 10,
           child: IconButton(
-              onPressed: (){
+              onPressed: () {
                 Navigator.of(context).pop();
               },
-              icon: Icon(Icons.arrow_back_ios_new, color: Swatch.buttons.shade800)
-          ),
+              icon: Icon(Icons.arrow_back_ios_new,
+                  color: Swatch.buttons.shade800)),
         )
       ],
     );
@@ -220,4 +172,4 @@ class _MyDrawerState extends State<MyDrawer> {
     controllerSpaces.deactivateListenerSpaces();
     super.deactivate();
   }
-} 
+}
