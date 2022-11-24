@@ -13,7 +13,7 @@ class CountdownTimer extends StatefulWidget {
 }
 
 class _CountdownTimerState extends State<CountdownTimer> {
-  Timer? countdownTimer;
+  late Timer countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
   Duration myDuration = const Duration(milliseconds: 480000);
   late StreamSubscription<List<dynamic>> eventStreamSubscription;
 
@@ -37,13 +37,12 @@ class _CountdownTimerState extends State<CountdownTimer> {
   }
 
   void startTimer() {
-    print('start : ${DateTime.now().millisecondsSinceEpoch}');
     countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
   }
 
   void stopTimer() {
     Reserve().dislodge(Reserve().getSelectedLot());
-    setState(() => countdownTimer!.cancel());
+    setState(() => countdownTimer.cancel());
   }
 
   // Step 5
@@ -58,10 +57,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
       final seconds = myDuration.inSeconds - reduceSecondsBy;
       if (seconds <= 0) {
         stopTimer();
-        //print('end   : ${DateTime.now().millisecondsSinceEpoch}');
       } else {
-        //print('during: ${DateTime.now().millisecondsSinceEpoch}');
-        //Reserve().setRetention();
         myDuration = Duration(seconds: seconds);
       }
     });
@@ -69,6 +65,8 @@ class _CountdownTimerState extends State<CountdownTimer> {
 
   @override
   void dispose() {
+    eventStreamSubscription.cancel();
+    countdownTimer.cancel();
     super.dispose();
   }
 
