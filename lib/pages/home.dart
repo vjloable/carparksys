@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:carparksys/assets/swatches/custom_colors.dart';
+import 'package:carparksys/components/countdown.dart';
 import 'package:carparksys/components/time_runner.dart';
 import 'package:carparksys/controllers/reserve.dart';
 import 'package:carparksys/controllers/statistics.dart';
@@ -9,8 +10,6 @@ import 'package:carparksys/controllers/suggestion.dart';
 import 'package:carparksys/pages/lots.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import '../components/appbar.dart';
 import '../components/drawer.dart';
 import '../components/ticket.dart';
@@ -24,13 +23,14 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
+  AppLifecycleState? _appLifecycleState;
+
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   StatisticsController controllerStatistics = StatisticsController();
   SuggestionController controllerSuggestion = SuggestionController();
   SpacesController controllerSpaces = SpacesController();
   Reserve controllerReserve = Reserve();
-  late CountdownTimerController controllerCountdownTimer;
   late String _statsAvailable = '-';
   late String _statsOccupied = '-';
   late String _statsReserved = '-';
@@ -46,14 +46,34 @@ class _HomePageState extends State<HomePage> {
   late Timer timer;
   late bool _connectionResult = true;
   late bool _hasTicket = false;
-  late int _timeCD = TimeRunner().countdown(15);
+  StreamController<String> eventstreamController = StreamController<String>.broadcast();
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        updateRetention();
+        print("app in resumed");
+        break;
+      case AppLifecycleState.inactive:
+        Reserve().setRetention();
+        print("app in inactive");
+        break;
+      case AppLifecycleState.paused:
+        print("app in paused");
+        break;
+      case AppLifecycleState.detached:
+        print("app in detached");
+        break;
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _time = TimeRunner().formatterMDY(TimeRunner().now());
     timer = Timer.periodic(const Duration(milliseconds: 500), (Timer t) => updateTime());
-    controllerCountdownTimer = CountdownTimerController(endTime: _timeCD, onEnd: onEnd);
     controllerStatistics.activateListenersStats();
     controllerSuggestion.activateListenersSuggestion();
     controllerSpaces.activateListenersSpaces();
@@ -63,13 +83,8 @@ class _HomePageState extends State<HomePage> {
     reserveStreamListener();
   }
 
-  void onEnd() {
-    controllerCountdownTimer.disposeTimer();
-  }
-
-  CountdownTimerController onStart() {
-    controllerCountdownTimer = CountdownTimerController(endTime: _timeCD, onEnd: onEnd);
-    return controllerCountdownTimer;
+  void updateRetention() {
+    print(_hasTicket);
   }
 
   void updateTime() {
@@ -151,7 +166,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(40),
               child: Column(
                 children: [
-                  const SizedBox(width: 1, height: 100),
+                  const SizedBox(width: 1, height: 150),
                   Container(
                       height: 30,
                       width: double.infinity,
@@ -262,7 +277,8 @@ class _HomePageState extends State<HomePage> {
                                                       if(_connectionResult){
                                                         if(_suggestedLot != '...'){
                                                           controllerReserve.reserve(_suggestedLot);
-                                                          onStart();
+                                                          eventstreamController.sink.add('resetTimer');
+                                                          eventstreamController.sink.add('startTimer');
                                                           showDialog(
                                                             context: context,
                                                             builder: (context) => AlertDialog(
@@ -381,7 +397,9 @@ class _HomePageState extends State<HomePage> {
                                                                 child: Padding(
                                                                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
                                                                   child: TextButton(
-                                                                    onPressed: () {Navigator.of(context).pop();},
+                                                                    onPressed: () {
+                                                                      Navigator.of(context).pop();
+                                                                      },
                                                                     child: Icon(Icons.close_outlined, color: Swatch.buttons.shade800, size: 30),
                                                                   ),
                                                                 ),
@@ -460,17 +478,17 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         secondChild: SizedBox(
-                          height: 600,
+                          height: 500,
                           width: double.infinity,
                           child: Container(
                             padding: const EdgeInsets.all(20),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                const Text('Reservation', style: TextStyle(fontSize: 16)),
+                                const Text('Your Parking Reservation', style: TextStyle(fontSize: 16)),
                                 const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
                                 SizedBox(
-                                  height: 150,
+                                  height: 300,
                                   child: FittedBox(
                                       fit: BoxFit.contain,
                                       child: SizedBox(
@@ -525,42 +543,39 @@ class _HomePageState extends State<HomePage> {
                                               color: Swatch.prime.shade200,
                                               child: Row(
                                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
-                                                  SizedBox(
-                                                    width: 24,
-                                                    height: 24,
-                                                    child: CircularProgressIndicator(
-                                                      color: Swatch.buttons.shade600,
-                                                      value: null,
-                                                    ),
-                                                  ),
-                                                  Center(
-                                                    child: SizedBox(
-                                                      height: 24,
-                                                      width: 100,
-                                                      child: FittedBox(
-                                                        fit: BoxFit.contain,
-                                                        child: CountdownTimer(
-                                                          textStyle: const TextStyle(fontSize: 18),
-                                                          endWidget: Container(),
-                                                          controller: onStart(),
-                                                          onEnd: onEnd,
-                                                          endTime: _timeCD,
+                                                  Container(
+                                                    color: Colors.transparent,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(18),
+                                                      child: SizedBox(
+                                                        width: 18,
+                                                        height: 18,
+                                                        child: CircularProgressIndicator(
+                                                          color: Swatch.buttons.shade600,
+                                                          strokeWidth: 2,
+                                                          value: null,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                  // Text(
-                                                  //   '  $_timeCD',
-                                                  //   textAlign: TextAlign.start,
-                                                  //   style: TextStyle(
-                                                  //       fontSize: 18,
-                                                  //       fontWeight: FontWeight.w400,
-                                                  //       fontFamily: 'Arial',
-                                                  //       color: Swatch.buttons.shade800
-                                                  //   ),
-                                                  // ),
+                                                  Expanded(
+                                                    child: Container(
+                                                      color: Colors.transparent,
+                                                      child: Center(
+                                                        child: SizedBox(
+                                                          height: 24,
+                                                          width: 70,
+                                                          child: FittedBox(
+                                                            fit: BoxFit.contain,
+                                                            child: CountdownTimer(eventStreamController: eventstreamController),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 24, width: 15),
                                                 ],
                                               ),
                                             )
@@ -582,8 +597,9 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                     )
                                                 ),
-                                                onPressed: () async {
-                                                  onEnd();
+                                                onPressed: () {
+                                                  eventstreamController.sink.add('stopTimer');
+                                                  Reserve().dislodge(Reserve().getSelectedLot());
                                                 },
                                                 child: Row(
                                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -845,6 +861,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   void deactivate(){
     timer.cancel();
     statisticsStreamSubscription.cancel();
@@ -854,7 +876,7 @@ class _HomePageState extends State<HomePage> {
     controllerSpaces.deactivateListenerSpaces();
     controllerSuggestion.deactivateListenerSuggestion();
     controllerReserve.deactivateListenerReserve();
-    controllerCountdownTimer.dispose();
+    eventstreamController.close();
     super.deactivate();
   }
 }
