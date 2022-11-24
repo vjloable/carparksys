@@ -47,24 +47,23 @@ class Reserve{
     });
   }
 
-  Future<void> setRetention() async {
+  Future<List<dynamic>> getRetention() async {
+    int returnable = 480000;
+    bool isNotDone = false;
     var userId = FirebaseAuth.instance.currentUser?.uid;
     _snapshotUser = await rtdb.databaseRef.child('users/$userId').get();
     if(_snapshotUser.exists){
       if(_snapshotUser.child('has_ticket').value == true) {
-        await rtdb.databaseDB.ref('users/$userId').update(
-            {
-              'timepause': DateTime
-                  .now()
-                  .millisecondsSinceEpoch,
-            });
+        int timestop = (await rtdb.databaseDB.ref('users/$userId/timestop').get()).value as int;
+        int timepause = DateTime.now().millisecondsSinceEpoch;
+        if(timepause < timestop){
+          returnable = (timestop - timepause);
+          isNotDone = true;
+        }
       }
     }
-  }
-
-  Future<bool> getRetention() async {
-
-    return true;
+    return [isNotDone, returnable];
+    //return returnable;
   }
 
   Future<void> dislodge(String lot) async {
@@ -102,10 +101,8 @@ class Reserve{
                   'has_ticket' : true,
                   'timestart' : timestart,
                   'timestop' : timestop,
-                  'timepause' : 0,
                   'details': {
                     'lot' : lot,
-                    'cd' : 360,
                   }
                 }
               });
@@ -128,10 +125,8 @@ class Reserve{
                 'has_ticket' : true,
                 'timestart' : timestart,
                 'timestop' : timestop,
-                'timepause' : 0,
                 'details': {
                   'lot' : lot,
-                  'cd' : 360,
                 }
               }
             });
