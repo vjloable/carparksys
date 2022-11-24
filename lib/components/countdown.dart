@@ -5,7 +5,7 @@ import 'package:carparksys/controllers/reserve.dart';
 import 'package:flutter/material.dart';
 
 class CountdownTimer extends StatefulWidget {
-  final StreamController<String> eventStreamController;
+  final StreamController<List<dynamic>> eventStreamController;
   const CountdownTimer({super.key, required this.eventStreamController});
 
   @override
@@ -14,8 +14,8 @@ class CountdownTimer extends StatefulWidget {
 
 class _CountdownTimerState extends State<CountdownTimer> {
   Timer? countdownTimer;
-  Duration myDuration = const Duration(seconds: 10);
-  late StreamSubscription<String> eventStreamSubscription;
+  Duration myDuration = const Duration(milliseconds: 480000);
+  late StreamSubscription<List<dynamic>> eventStreamSubscription;
 
   @override
   void initState() {
@@ -26,12 +26,12 @@ class _CountdownTimerState extends State<CountdownTimer> {
 
   void eventlistenerCD() {
     eventStreamSubscription = widget.eventStreamController.stream.listen((event){
-      if(event == 'startTimer'){
+      if(event.first == 'startTimer'){
         startTimer();
-      }else if(event == 'stopTimer'){
+      }else if(event.first == 'stopTimer'){
         stopTimer();
-      }else if(event == 'resetTimer'){
-        resetTimer(8);
+      }else if(event.first == 'resetTimer'){
+        resetTimer(event.last);
       }
     });
   }
@@ -47,8 +47,8 @@ class _CountdownTimerState extends State<CountdownTimer> {
   }
 
   // Step 5
-  void resetTimer(int mins) {
-    setState(() => myDuration = Duration(seconds: mins));
+  void resetTimer(int ms) {
+    setState(() => myDuration = Duration(milliseconds: ms));
   }
 
   // Step 6
@@ -58,9 +58,10 @@ class _CountdownTimerState extends State<CountdownTimer> {
       final seconds = myDuration.inSeconds - reduceSecondsBy;
       if (seconds <= 0) {
         stopTimer();
-        print('end   : ${DateTime.now().millisecondsSinceEpoch}');
+        //print('end   : ${DateTime.now().millisecondsSinceEpoch}');
       } else {
-        print('during: ${DateTime.now().millisecondsSinceEpoch}');
+        //print('during: ${DateTime.now().millisecondsSinceEpoch}');
+        //Reserve().setRetention();
         myDuration = Duration(seconds: seconds);
       }
     });
@@ -68,7 +69,6 @@ class _CountdownTimerState extends State<CountdownTimer> {
 
   @override
   void dispose() {
-
     super.dispose();
   }
 
