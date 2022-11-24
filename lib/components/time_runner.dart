@@ -1,11 +1,11 @@
 import 'package:intl/intl.dart';
 
 class TimeRunner{
-  String formatter(DateTime dateTime){
+  String formatterMDY(DateTime dateTime){
     return DateFormat('MM/dd/yyyy').add_jms().format(dateTime);
   }
 
-  String now(){
-    return formatter(DateTime.now());
+  DateTime now(){
+    return DateTime.now();
   }
 }

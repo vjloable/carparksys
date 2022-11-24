@@ -19,6 +19,7 @@ class ReserveLot extends StatefulWidget {
 
 class _ReserveLotState extends State<ReserveLot> {
   SpacesController controllerSpaces = SpacesController();
+  Reserve controllerReserve = Reserve();
   int isPassed = 2;
   final Widget _errorIcon = const Icon(Icons.error, color: SigCol.red);
   final Widget _passedIcon = const Icon(Icons.check_circle, color: SigCol.green);
@@ -32,7 +33,7 @@ class _ReserveLotState extends State<ReserveLot> {
   @override
   void initState() {
     super.initState();
-    _time = TimeRunner().now();
+    _time = TimeRunner().formatterMDY(TimeRunner().now());
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => updateTime());
     controllerSpaces.activateListenersSpaces();
     spacesStreamListener();
@@ -40,7 +41,7 @@ class _ReserveLotState extends State<ReserveLot> {
 
   void updateTime() {
     setState(() {
-      _time = TimeRunner().now();
+      _time = TimeRunner().formatterMDY(TimeRunner().now());
     });
   }
 
@@ -53,10 +54,10 @@ class _ReserveLotState extends State<ReserveLot> {
     });
   }
 
-  void updateSubmitIcon(int overrider) {
+  void updateSubmitIcon() {
     if(mounted){
       setState(() {
-        isPassed = (overrider == 0) ? Reserve().stateCheck : 3;
+        isPassed = controllerReserve.getStateCheck();
       });
     }
   }
@@ -223,11 +224,11 @@ class _ReserveLotState extends State<ReserveLot> {
                               onSubmit: () async {
                                 await _updateConnectionStatus();
                                 if (_connectionResult){
-                                  await Reserve().reserve(widget._lot);
-                                  updateSubmitIcon(0);
+                                  await controllerReserve.reserve(widget._lot);
+                                  updateSubmitIcon();
                                   Future.delayed(const Duration(seconds: 1));
                                 }else{
-                                  updateSubmitIcon(3);
+                                  updateSubmitIcon();
                                 }
                                 Future.delayed(
                                     const Duration(milliseconds: 900),

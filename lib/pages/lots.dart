@@ -29,7 +29,7 @@ class _LotsPageState extends State<LotsPage> {
   @override
   void initState() {
     super.initState();
-    _time = TimeRunner().now();
+    _time = TimeRunner().formatterMDY(TimeRunner().now());
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => updateTime());
     controllerSpaces.activateListenersSpaces();
     spacesStreamListener();
@@ -37,7 +37,7 @@ class _LotsPageState extends State<LotsPage> {
 
   void updateTime() {
     setState(() {
-      _time = TimeRunner().now();
+      _time = TimeRunner().formatterMDY(TimeRunner().now());
     });
   }
 
@@ -54,12 +54,14 @@ class _LotsPageState extends State<LotsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _key,
+        extendBodyBehindAppBar: true,
         appBar: MyAppbar().myAppbar(_key, context) as PreferredSizeWidget,
         drawer: const Drawer(
           child: MyDrawer(3),
         ),
         body: Stack(
           alignment: Alignment.center,
+          fit: StackFit.expand,
           children: [
             Visibility(
               visible: !(_parkingLotsName.isEmpty && _parkingLotsStatus.isEmpty),
@@ -74,71 +76,86 @@ class _LotsPageState extends State<LotsPage> {
                   ),
                 ),
               ),
-              child: GridView.count(
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                  crossAxisCount: 3,
-                  padding: const EdgeInsets.all(60),
-                  children:
-                  List.generate(_parkingLotsName.length, (index) {
-                    return Center(
-                        child: RawMaterialButton(
-                            onPressed: (_parkingLotsStatus[index] == 1) ? () {
-                              showModalBottomSheet(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return ReserveLot(_parkingLotsName[index]);
-                                    //return showReserveLot(context, _parkingLotsName[index]);
-                                  }
-                              );
-                            } : null,
-                            highlightColor: Swatch.prime.shade800,
-                            highlightElevation: 15,
-                            splashColor: Swatch.prime,
-                            elevation: 5.0,
-                            fillColor: (_parkingLotsStatus[index] == 1)
-                                ? Theme.of(context).colorScheme.background
-                                : Theme.of(context).colorScheme.error,
-                            shape: Border(
-                              bottom: BorderSide(
-                                  width: 3,
-                                  color: (_parkingLotsStatus[index] == 1)
-                                      ? SigCol.green
-                                      : ((_parkingLotsStatus[index] == 2)
-                                      ? SigCol.red
-                                      : SigCol.orange)
-                              ),
-                            ),
-                            child: SizedBox(
-                              width: 40,
-                              height: 90,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(_parkingLotsName[index].toString(),
-                                      style: TextStyle(
-                                          color: (_parkingLotsStatus[index] == 1)
-                                              ? Theme.of(context).colorScheme.onPrimary
-                                              : Theme.of(context).colorScheme.onError,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold
-                                      )
-                                  ),
-                                ],
-                              ),
-                            )
-                        )
-                    );
-                  })
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          const SizedBox(width: double.maxFinite, height: 100),
+                        ]
+                      )
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(40),
+                    sliver: SliverGrid(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 20, mainAxisSpacing: 20),
+                      delegate: SliverChildListDelegate(
+                          List.generate(_parkingLotsName.length, (index) {
+                            return Center(
+                                child: Column(
+                                  children: [
+                                    RawMaterialButton(
+                                        onPressed: (_parkingLotsStatus[index] == 1) ? () {
+                                          showModalBottomSheet(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30.0),
+                                              ),
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return ReserveLot(_parkingLotsName[index]);
+                                              }
+                                          );
+                                        } : null,
+                                        highlightColor: Swatch.prime.shade800,
+                                        highlightElevation: 15,
+                                        splashColor: Swatch.prime,
+                                        elevation: 5.0,
+                                        fillColor: (_parkingLotsStatus[index] == 1)
+                                            ? Theme.of(context).colorScheme.background
+                                            : Theme.of(context).colorScheme.error,
+                                        shape: Border(
+                                          bottom: BorderSide(
+                                              width: 3,
+                                              color: (_parkingLotsStatus[index] == 1)
+                                                  ? SigCol.green
+                                                  : ((_parkingLotsStatus[index] == 2)
+                                                  ? SigCol.red
+                                                  : SigCol.orange)
+                                          ),
+                                        ),
+                                        child: SizedBox(
+                                          width: 40,
+                                          height: 90,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(_parkingLotsName[index].toString(),
+                                                  style: TextStyle(
+                                                      color: (_parkingLotsStatus[index] == 1)
+                                                          ? Theme.of(context).colorScheme.onPrimary
+                                                          : Theme.of(context).colorScheme.onError,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold
+                                                  )
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                    ),
+                                  ],
+                                )
+                            );
+                          })
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
             Positioned(
-              top: 0,
+              top: 90,
               child: Material(
                 color: Theme.of(context).colorScheme.background,
                 elevation: 5,
@@ -165,7 +182,7 @@ class _LotsPageState extends State<LotsPage> {
             Visibility(
               visible: !widget._connection,
               child: const Positioned(
-                top: 0,
+                top: 90,
                 left: 85,
                 child: SizedBox(
                     width: 25,
