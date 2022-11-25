@@ -63,16 +63,13 @@ class Reserve{
       }
     }
     return [isNotDone, returnable];
-    //return returnable;
   }
 
   Future<void> dislodge(String lot) async {
-    print('dislodged!!!!');
     String localLot = lot;
     var userId = FirebaseAuth.instance.currentUser?.uid;
     _snapshotUser = await rtdb.databaseDB.ref('users/$userId').get();
     if (_snapshotUser.exists) {
-      print(lot);
       if(localLot == '...' || localLot == 'null'){
         localLot = (await rtdb.databaseDB.ref('users/$userId/lot').get()).value.toString();
       }
@@ -99,7 +96,7 @@ class Reserve{
           updateSelectedLot(lot);
           int timestart = DateTime.now().millisecondsSinceEpoch;
           int timestop = timestart + (1000 * 480);
-          await updateStateCheck(2);
+          await updateStateCheck(1);
           await rtdb.databaseRef.update(
               {
                 'users/$userId' : {
