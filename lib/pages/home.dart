@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:badges/badges.dart';
 import 'package:carparksys/assets/swatches/custom_colors.dart';
 import 'package:carparksys/components/countdown.dart';
 import 'package:carparksys/components/time_runner.dart';
@@ -36,6 +37,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   late String _time = '';
   late String _suggestedLot = '...';
   late String _ticketLot = '...';
+  late String _ytstatus = 'No Reservation';
   late Stream<Iterable<DataSnapshot>> statisticsStream = controllerStatistics.statisticsStreamController.stream;
   late Stream<List<dynamic>> suggestionStream = controllerSuggestion.suggestionStreamController.stream;
   late Stream<List<dynamic>> reserveStream = controllerReserve.reserveStreamController.stream;
@@ -45,6 +47,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   late Timer timer;
   late bool _connectionResult = true;
   late bool _hasTicket = false;
+  late bool showBadgeTicket = false;
   StreamController<List<dynamic>> eventstreamController = StreamController<List<dynamic>>.broadcast();
   int resetTime = 480000;
 
@@ -81,6 +84,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     suggestionStreamListener();
     reserveStreamListener();
     updateRetention();
+  }
+
+  void badgeHandler(bool show){
+    //Future.delayed(Duration(s))
+    setState(() {
+      showBadgeTicket = show;
+    });
   }
 
   void updateRetention() async {
@@ -120,6 +130,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
       setState(() {
         _ticketLot = event.elementAt(0).toString();
         _hasTicket = event.elementAt(1) as bool;
+        _ytstatus = _hasTicket ? 'En Route' : 'No Reservation';
       });
     });
   }
@@ -201,7 +212,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                 )
                               ),
                               Text(
-                                  'No Reservation',
+                                  _ytstatus,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                       color: Swatch.buttons.shade400
@@ -291,6 +302,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                           controllerReserve.reserve(_suggestedLot);
                                                           eventstreamController.sink.add(['resetTimer', resetTime]);
                                                           eventstreamController.sink.add(['startTimer', 0]);
+                                                          badgeHandler(true);
                                                           showDialog(
                                                             context: context,
                                                             builder: (context) => AlertDialog(
@@ -613,6 +625,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                   await _updateConnectionStatus();
                                                   if(_connectionResult){
                                                     eventstreamController.sink.add(['stopTimer', 0]);
+                                                    badgeHandler(false);
                                                   }else{
                                                     showDialog(
                                                       context: context,
@@ -892,26 +905,37 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
               )
           )
       ),
-      floatingActionButton: SizedBox(
-          height: 70,
-          width: 70,
-          child: FloatingActionButton(
-            elevation: 10,
-            onPressed: () {
-              showModalBottomSheet(
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  context: context,
-                  builder: (BuildContext context) {
-                    return showTicket(context);
-                  }
-              );
-            },
-            child:
-                  Icon(Icons.confirmation_num, size: 32, color: Swatch.buttons.shade500),
-          ),
+      floatingActionButton: Badge(
+        toAnimate: true,
+        badgeContent: const Padding(padding: EdgeInsets.all(1), child: Text('!', style: TextStyle(color: Colors.white))),
+        animationType: BadgeAnimationType.scale,
+        shape: BadgeShape.circle,
+        badgeColor: SigCol.red,
+        showBadge: showBadgeTicket,
+        elevation: 2,
+        position: BadgePosition.topEnd(top: -3, end: -3),
+        child: SizedBox(
+            height: 70,
+            width: 70,
+            child: FloatingActionButton(
+              elevation: 10,
+              onPressed: () {
+                badgeHandler(false);
+                showModalBottomSheet(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    context: context,
+                    builder: (BuildContext context) {
+                      return showTicket(context);
+                    }
+                );
+              },
+              child:
+                    Icon(Icons.confirmation_num, size: 32, color: Swatch.buttons.shade500),
+            ),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
