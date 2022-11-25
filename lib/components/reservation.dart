@@ -57,7 +57,7 @@ class _ReserveLotState extends State<ReserveLot> {
   void updateSubmitIcon() {
     if(mounted){
       setState(() {
-        isPassed = controllerReserve.getStateCheck();
+        isPassed = Reserve().getStateCheck();
       });
     }
   }
