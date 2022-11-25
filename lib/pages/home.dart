@@ -624,8 +624,71 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                 onPressed: () async {
                                                   await _updateConnectionStatus();
                                                   if(_connectionResult){
-                                                    eventstreamController.sink.add(['stopTimer', 0]);
-                                                    badgeHandler(false);
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) => AlertDialog(
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                        ),
+                                                        backgroundColor: Swatch.prime,
+                                                        elevation: 10,
+                                                        title: CircleAvatar(radius: 35, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.warning, color: SigCol.orange, size: 30)),
+                                                        content: Container(
+                                                          height: 50,
+                                                          width: 330,
+                                                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                                                          child: FittedBox(
+                                                            fit: BoxFit.contain,
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                Text('CANCEL RESERVATION?', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 65)),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        actions: [
+                                                          Padding(
+                                                            padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0),
+                                                            child: Center(
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                children: [
+                                                                  Material(
+                                                                    elevation: 5,
+                                                                    shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(30.0),
+                                                                    ),
+                                                                    color: SigCol.green,
+                                                                    child: TextButton(
+                                                                      onPressed: () {
+                                                                        Navigator.pop(context);
+                                                                      },
+                                                                      child: Icon(Icons.close_outlined, color: Swatch.buttons.shade800, size: 30),
+                                                                    ),
+                                                                  ),
+                                                                  Material(
+                                                                    elevation: 5,
+                                                                    shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(30.0),
+                                                                    ),
+                                                                    color: SigCol.red,
+                                                                    child: TextButton(
+                                                                      onPressed: () {
+                                                                        Navigator.pop(context);
+                                                                        eventstreamController.sink.add(['stopTimer', 0]);
+                                                                        badgeHandler(false);
+                                                                      },
+                                                                      child: Icon(Icons.check, color: Swatch.buttons.shade800, size: 30),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
                                                   }else{
                                                     showDialog(
                                                       context: context,
