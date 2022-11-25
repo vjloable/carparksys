@@ -57,7 +57,7 @@ class MyAppbar {
                     splashRadius: 25,
                     icon: Icon(color: Theme.of(context).colorScheme.onPrimary,
                         MyApp.themeNotifier.value == ThemeMode.light
-                            ? Icons.dark_mode_outlined
+                            ? Icons.dark_mode
                             : Icons.light_mode
                     ),
                     onPressed: (){
