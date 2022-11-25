@@ -8,6 +8,7 @@ import 'package:carparksys/controllers/reserve.dart';
 import 'package:carparksys/controllers/statistics.dart';
 import 'package:carparksys/controllers/suggestion.dart';
 import 'package:carparksys/pages/lots.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../components/appbar.dart';
@@ -83,13 +84,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   }
 
   void updateRetention() async {
-    List<dynamic> retained = await Reserve().getRetention();
-    if(_hasTicket){
-      eventstreamController.sink.add(['resetTimer', retained.last]);
-      eventstreamController.sink.add(['startTimer', 0]);
+    await _updateConnectionStatus();
+    if(_connectionResult){
+      List<dynamic> retained = await Reserve().getRetention();
+      if(retained.first == true){
+        eventstreamController.sink.add(['resetTimer', retained.last]);
+        eventstreamController.sink.add(['startTimer', 0]);
+      }else{
+        eventstreamController.sink.add(['resetTimer', retained.last]);
+        eventstreamController.sink.add(['stopTimer', 0]);
+      }
     }else{
-      eventstreamController.sink.add(['resetTimer', retained.last]);
-      eventstreamController.sink.add(['stopTimer', 0]);
+      FirebaseAuth.instance.signOut();
     }
   }
 
@@ -603,9 +609,54 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                       ),
                                                     )
                                                 ),
-                                                onPressed: () {
-                                                  eventstreamController.sink.add(['stopTimer', 0]);
-                                                  //Reserve().dislodge(Reserve().getSelectedLot());
+                                                onPressed: () async {
+                                                  await _updateConnectionStatus();
+                                                  if(_connectionResult){
+                                                    eventstreamController.sink.add(['stopTimer', 0]);
+                                                  }else{
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) => AlertDialog(
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                        ),
+                                                        backgroundColor: Swatch.prime,
+                                                        elevation: 10,
+                                                        content: Container(
+                                                          height: 200,
+                                                          width: 330,
+                                                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                                                          child: FittedBox(
+                                                            fit: BoxFit.contain,
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                CircleAvatar(radius: 70, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.wifi_off, color: SigCol.red, size: 60)),
+                                                                const SizedBox(height: 20),
+                                                                Text('CONNECTION ERROR!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
+                                                                const SizedBox(height: 30),
+                                                                Text('Signing out...', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        actions: [
+                                                          Center(
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                                              child: TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(context);
+                                                                  FirebaseAuth.instance.signOut();
+                                                                },
+                                                                child: Icon(Icons.close_outlined, color: Swatch.buttons.shade800, size: 30),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }
                                                 },
                                                 child: Row(
                                                   crossAxisAlignment: CrossAxisAlignment.center,
