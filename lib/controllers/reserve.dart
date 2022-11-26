@@ -33,6 +33,8 @@ class Reserve{
     var userId = FirebaseAuth.instance.currentUser?.uid;
     String lot = '...';
     bool hasTicket = false;
+    int timestart = 0;
+    int timestop = 0;
     _reserveStream = rtdb.databaseRef.child('users/$userId').onValue.listen((event) async {
       if(event.snapshot.exists){
         if(event.snapshot.child('has_ticket').value == true) {
@@ -42,8 +44,10 @@ class Reserve{
           hasTicket = false;
           lot = '...';
         }
+        timestart = (await rtdb.databaseRef.child('users/$userId/timestart').get()).value as int;
+        timestop = (await rtdb.databaseRef.child('users/$userId/timestop').get()).value as int;
       }
-      reserveStreamController.add([lot, hasTicket]);
+      reserveStreamController.add([lot, hasTicket, timestart, timestop]);
     });
   }
 
