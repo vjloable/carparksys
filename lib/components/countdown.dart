@@ -72,14 +72,14 @@ class _CountdownTimerState extends State<CountdownTimer> {
 
   @override
   Widget build(BuildContext context) {
-    // String strDigits(int n) => n.toString().padLeft(2, '0');
+    String strDigits(int n) => n.toString().padLeft(2, '0');
     // final days = strDigits(myDuration.inDays);
     // final hours = strDigits(myDuration.inHours.remainder(24));
-    // final minutes = strDigits(myDuration.inMinutes.remainder(60));
-    // final seconds = strDigits(myDuration.inSeconds.remainder(60));
+    final minutes = strDigits(myDuration.inMinutes.remainder(60));
+    final seconds = strDigits(myDuration.inSeconds.remainder(60));
     return Text(
-      //'$minutes : $seconds',
-      '${myDuration.inSeconds} s',
+      '$minutes : $seconds',
+      //'${myDuration.inSeconds} s',
       style: TextStyle(
           fontWeight: FontWeight.w300,
           fontFamily: 'Arial',
