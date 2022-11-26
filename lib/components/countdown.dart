@@ -2,20 +2,20 @@ import 'dart:async';
 
 import 'package:carparksys/assets/swatches/custom_colors.dart';
 import 'package:carparksys/controllers/reserve.dart';
+import 'package:carparksys/main.dart';
 import 'package:flutter/material.dart';
 
 class CountdownTimer extends StatefulWidget {
-  final StreamController<List<dynamic>> eventStreamController;
-  const CountdownTimer({super.key, required this.eventStreamController});
+  const CountdownTimer({super.key});
 
   @override
   State<CountdownTimer> createState() => _CountdownTimerState();
 }
 
 class _CountdownTimerState extends State<CountdownTimer> {
+  late StreamSubscription<List<dynamic>> eventStreamSubscription;
   late Timer countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
   Duration myDuration = const Duration(milliseconds: 480000);
-  late StreamSubscription<List<dynamic>> eventStreamSubscription;
 
   @override
   void initState() {
@@ -23,9 +23,8 @@ class _CountdownTimerState extends State<CountdownTimer> {
     eventlistenerCD();
   }
 
-
   void eventlistenerCD() {
-    eventStreamSubscription = widget.eventStreamController.stream.listen((event){
+    eventStreamSubscription = MyApp.eventstreamController.stream.listen((event) {
       if(event.first == 'startTimer'){
         startTimer();
       }else if(event.first == 'stopTimer'){
