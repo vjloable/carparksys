@@ -158,7 +158,7 @@ class _LotsPageState extends State<LotsPage> {
               top: 90,
               child: Material(
                 color: Theme.of(context).colorScheme.background,
-                elevation: 5,
+                elevation: 3,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.zero,
                   topRight: Radius.zero,
@@ -167,16 +167,17 @@ class _LotsPageState extends State<LotsPage> {
                 ),
                 child: SizedBox(
                   width: 200,
-                  height: 25,
+                  height: 30,
                   child: FittedBox(
                     fit: BoxFit.fitWidth,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
                       child: Center(
                         child: Text(
                           _time,
                           style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 50,
                           ),
                         ),
                       ),
