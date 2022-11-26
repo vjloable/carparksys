@@ -27,7 +27,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver, TickerProviderStateMixin{
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   StatisticsController controllerStatistics = StatisticsController();
   SuggestionController controllerSuggestion = SuggestionController();
@@ -50,7 +50,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   late bool _connectionResult = true;
   late bool _hasTicket = false;
   late bool showBadgeTicket = false;
-  //StreamController<List<dynamic>> eventstreamController = StreamController<List<dynamic>>.broadcast();
   int resetTime = 480000;
 
   // @override
@@ -202,27 +201,40 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                         ),
                         color: Swatch.buttonsAccent.shade100,
                       ),
-                      child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Your Ticket Status:',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    color: Swatch.buttons.shade400
+                      child: SizedBox(
+                        width: 300,
+                        height: 28,
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                            child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                        'Your Ticket Status:',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Swatch.buttons.shade400,
+                                          fontSize: 16,
+                                        )
+                                    ),
+                                    const SizedBox(width: 100),
+                                    Text(
+                                        _ytstatus,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Swatch.buttons.shade400,
+                                          fontSize: 16,
+                                        )
+                                    ),
+                                  ],
                                 )
-                              ),
-                              Text(
-                                  _ytstatus,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                      color: Swatch.buttons.shade400
-                                  )
-                              ),
-                            ],
-                          )
+                            ),
+                          ),
+                        ),
                       )
                   ),
                   const SizedBox(height: 10, width: 1),
@@ -246,7 +258,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                   SizedBox(
                                     height: 150,
                                     child: FittedBox(
-                                        fit: BoxFit.contain,
+                                        fit: BoxFit.fitWidth,
                                         child: SizedBox(
                                           width: 300,
                                           child: Visibility(
@@ -844,7 +856,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
             top: 90,
             child: Material(
               color: Theme.of(context).colorScheme.background,
-              elevation: 5,
+              elevation: 3,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.zero,
                 topRight: Radius.zero,
@@ -853,16 +865,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
               ),
               child: SizedBox(
                 width: 200,
-                height: 25,
+                height: 30,
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: Center(
                       child: Text(
                         _time,
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 50,
                         ),
                       ),
                     ),
@@ -939,7 +952,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
       floatingActionButton: Badge(
         toAnimate: true,
         badgeContent: const Padding(padding: EdgeInsets.all(1), child: Text('!', style: TextStyle(color: Colors.white))),
-        animationType: BadgeAnimationType.scale,
+        animationType: BadgeAnimationType.slide,
         shape: BadgeShape.circle,
         badgeColor: SigCol.red,
         showBadge: showBadgeTicket,
