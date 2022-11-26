@@ -2,12 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:carparksys/assets/swatches/custom_colors.dart';
-import 'package:carparksys/components/time_runner.dart';
 import 'package:carparksys/controllers/reserve.dart';
 import 'package:carparksys/main.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_to_act/slide_to_act.dart';
-import '../controllers/spaces.dart';
 
 class ReserveLot extends StatefulWidget {
   final String _lot;
@@ -18,41 +16,13 @@ class ReserveLot extends StatefulWidget {
 }
 
 class _ReserveLotState extends State<ReserveLot> {
-  SpacesController controllerSpaces = SpacesController();
   Reserve controllerReserve = Reserve();
   int isPassed = 2;
   final Widget _errorIcon = const Icon(Icons.error, color: SigCol.red);
   final Widget _passedIcon = const Icon(Icons.check_circle, color: SigCol.green);
   final Widget _waitingIcon = const Icon(Icons.access_time_filled_outlined, color: SigCol.orange);
   late StreamSubscription<List> spacesStreamSubscription;
-  late List<String> _parkingLotsName = [];
-  late Timer timer;
-  late String _time = '';
   late bool _connectionResult = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _time = TimeRunner().formatterMDY(TimeRunner().now());
-    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => updateTime());
-    controllerSpaces.activateListenersSpaces();
-    spacesStreamListener();
-  }
-
-  void updateTime() {
-    setState(() {
-      _time = TimeRunner().formatterMDY(TimeRunner().now());
-    });
-  }
-
-  void spacesStreamListener() {
-    spacesStreamSubscription = controllerSpaces.spacesStreamController.stream.listen((event){
-      setState(() {
-        _parkingLotsName = event[0];
-        //test
-      });
-    });
-  }
 
   void updateSubmitIcon() {
     if(mounted){
@@ -135,13 +105,13 @@ class _ReserveLotState extends State<ReserveLot> {
                   height: 300,
                   width: 330,
                   child: FittedBox(
-                    fit: BoxFit.contain,
+                    fit: BoxFit.fitWidth,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const SizedBox(height: 20),
                         FittedBox(
-                          fit: BoxFit.scaleDown,
+                          fit: BoxFit.fitWidth,
                           child: SizedBox(
                             height: 28,
                             width: 300,
@@ -250,13 +220,4 @@ class _ReserveLotState extends State<ReserveLot> {
         ]
     );
   }
-
-  @override
-  void deactivate() {
-    timer.cancel();
-    spacesStreamSubscription.cancel();
-    controllerSpaces.deactivateListenerSpaces();
-    super.deactivate();
-  }
-
 }
