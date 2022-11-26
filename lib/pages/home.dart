@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
       setState(() {
         _ticketLot = event.elementAt(0).toString();
         _hasTicket = event.elementAt(1) as bool;
-        _ytstatus = _hasTicket ? 'En Route' : 'No Reservation';
+        _ytstatus = _hasTicket ? '   En Route   ' : 'No Reservation';
       });
     });
   }
@@ -207,7 +207,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                         child: FittedBox(
                           fit: BoxFit.fitWidth,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 40.0),
                             child: Center(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -221,7 +221,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                           fontSize: 16,
                                         )
                                     ),
-                                    const SizedBox(width: 100),
+                                    const SizedBox(width: 30),
                                     Text(
                                         _ytstatus,
                                         textAlign: TextAlign.center,
@@ -760,90 +760,98 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                     child: SizedBox(
                       height: 150,
                       width: double.infinity,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Parking Space Statistics:', style: TextStyle(fontSize: 16)),
-                            const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              textBaseline: TextBaseline.alphabetic,
+                      child: FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Padding(
+                          padding: const EdgeInsets.all(40.0),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Column(
+                                const Text('Parking Space Statistics:', style: TextStyle(fontSize: 16)),
+                                const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  textBaseline: TextBaseline.alphabetic,
                                   children: [
-                                    const SizedBox(height: 10, width: 1),
-                                    const CircleAvatar(
-                                        radius: 4,
-                                        backgroundColor: SigCol.red ///Colors.red
+                                    Column(
+                                      children: [
+                                        const SizedBox(height: 10, width: 1),
+                                        const CircleAvatar(
+                                            radius: 4,
+                                            backgroundColor: SigCol.red ///Colors.red
+                                        ),
+                                        const SizedBox(height: 10, width: 1),
+                                        Text(
+                                            _statsOccupied,
+                                            style: const TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.bold,
+                                            )
+                                        ),
+                                        const Text(
+                                            'OCCUPIED',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                            )
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(height: 10, width: 1),
-                                    Text(
-                                        _statsOccupied,
-                                        style: const TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold,
-                                        )
+                                    const SizedBox(width: 40, height: 1),
+                                    Column(
+                                      children: [
+                                        const SizedBox(height: 10, width: 1),
+                                        const CircleAvatar(
+                                            radius: 4,
+                                            backgroundColor: SigCol.green ///Colors.green
+                                        ),
+                                        const SizedBox(height: 10, width: 1),
+                                        Text(
+                                            _statsAvailable,
+                                            style: const TextStyle(
+                                                fontSize: 40,
+                                                fontWeight: FontWeight.bold,
+                                            )
+                                        ),
+                                        const Text(
+                                            'AVAILABLE',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                            )
+                                        ),
+                                      ],
                                     ),
-                                    const Text(
-                                        'OCCUPIED',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                        )
+                                    const SizedBox(width: 40, height: 1),
+                                    Column(
+                                      children: [
+                                        const SizedBox(height: 10, width: 1),
+                                        const CircleAvatar(
+                                            radius: 4,
+                                            backgroundColor: SigCol.orange ///Colors.orange
+                                        ),
+                                        const SizedBox(height: 10, width: 1),
+                                        Text(
+                                            _statsReserved,
+                                            style: const TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.bold,
+                                            )
+                                        ),
+                                        const Text(
+                                            'RESERVED',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                            )
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                                Column(
-                                  children: [
-                                    const SizedBox(height: 10, width: 1),
-                                    const CircleAvatar(
-                                        radius: 4,
-                                        backgroundColor: SigCol.green ///Colors.green
-                                    ),
-                                    const SizedBox(height: 10, width: 1),
-                                    Text(
-                                        _statsAvailable,
-                                        style: const TextStyle(
-                                            fontSize: 40,
-                                            fontWeight: FontWeight.bold,
-                                        )
-                                    ),
-                                    const Text(
-                                        'AVAILABLE',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                        )
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    const SizedBox(height: 10, width: 1),
-                                    const CircleAvatar(
-                                        radius: 4,
-                                        backgroundColor: SigCol.orange ///Colors.orange
-                                    ),
-                                    const SizedBox(height: 10, width: 1),
-                                    Text(
-                                        _statsReserved,
-                                        style: const TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold,
-                                        )
-                                    ),
-                                    const Text(
-                                        'RESERVED',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                        )
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ]
+                              ]
+                          ),
+                        ),
                       )
                     ),
                   ),
