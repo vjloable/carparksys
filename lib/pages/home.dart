@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:badges/badges.dart';
 import 'package:carparksys/assets/swatches/custom_colors.dart';
+import 'package:carparksys/components/cancel_failsafe.dart';
 import 'package:carparksys/components/countdown.dart';
 import 'package:carparksys/components/time_runner.dart';
 import 'package:carparksys/controllers/reserve.dart';
@@ -84,6 +85,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     suggestionStreamListener();
     reserveStreamListener();
     updateRetention();
+    _updateConnectionStatus();
   }
 
   void badgeHandler(bool show){
@@ -311,19 +313,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                               ),
                                                               backgroundColor: Theme.of(context).colorScheme.background,
                                                               elevation: 10,
+                                                              title: const Icon(Icons.garage, color: Swatch.prime, size: 100),
                                                               content: Container(
-                                                                height: 200,
-                                                                width: 330,
+                                                                height: 30,
+                                                                width: 250,
                                                                 padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                                                                 child: FittedBox(
-                                                                  fit: BoxFit.contain,
+                                                                  fit: BoxFit.fitWidth,
                                                                   child: Column(
                                                                     mainAxisAlignment: MainAxisAlignment.center,
                                                                     children: [
-                                                                      const Icon(Icons.garage, color: Swatch.prime, size: 200),
-                                                                      const SizedBox(height: 20),
-                                                                      Text('RESERVED SUCCESSFULLY!', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold, fontSize: 45)),
                                                                       const SizedBox(height: 30),
+                                                                      Text('RESERVED SUCCESSFULLY!', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold, fontSize: 45)),
+                                                                      const SizedBox(height: 20),
                                                                       Text('Proceed to LOT $_suggestedLot', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 40)),
                                                                       const SizedBox(height: 10),
                                                                       Text('Show your ticket in entering the space', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
@@ -334,7 +336,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                               actions: [
                                                                 Center(
                                                                   child: Padding(
-                                                                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                                                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                                                                     child: TextButton(
                                                                       onPressed: () {Navigator.of(context).pop();},
                                                                       child: Icon(Icons.close_outlined, color: Theme.of(context).colorScheme.onPrimary, size: 30),
@@ -353,19 +355,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                               ),
                                                               backgroundColor: Swatch.prime,
                                                               elevation: 10,
+                                                              title: CircleAvatar(radius: 35, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.warning, color: SigCol.orange, size: 30)),
                                                               content: Container(
-                                                                height: 170,
-                                                                width: 330,
+                                                                height: 30,
+                                                                width: 250,
                                                                 padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                                                                 child: FittedBox(
-                                                                  fit: BoxFit.contain,
+                                                                  fit: BoxFit.fitWidth,
                                                                   child: Column(
                                                                     mainAxisAlignment: MainAxisAlignment.center,
                                                                     children: [
-                                                                      CircleAvatar(radius: 70, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.warning, color: SigCol.orange, size: 60)),
-                                                                      const SizedBox(height: 20),
-                                                                      Text('NO SPACES LEFT!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
                                                                       const SizedBox(height: 30),
+                                                                      Text('NO SPACES LEFT!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
+                                                                      const SizedBox(height: 20),
                                                                       Text('Kindly wait for a spot for a while,', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
                                                                       const SizedBox(height: 10),
                                                                       Text('Thank you for your patience!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
@@ -376,7 +378,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                               actions: [
                                                                 Center(
                                                                   child: Padding(
-                                                                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                                                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                                                                     child: TextButton(
                                                                       onPressed: () {Navigator.of(context).pop();},
                                                                       child: Icon(Icons.close_outlined, color: Swatch.buttons.shade800, size: 30),
@@ -396,19 +398,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                             ),
                                                             backgroundColor: Swatch.prime,
                                                             elevation: 10,
+                                                            title: CircleAvatar(radius: 35, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.wifi_off, color: SigCol.red, size: 30)),
                                                             content: Container(
-                                                              height: 200,
-                                                              width: 330,
+                                                              height: 30,
+                                                              width: 250,
                                                               padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                                                               child: FittedBox(
-                                                                fit: BoxFit.contain,
+                                                                fit: BoxFit.fitWidth,
                                                                 child: Column(
                                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                                   children: [
-                                                                    CircleAvatar(radius: 70, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.wifi_off, color: SigCol.red, size: 60)),
-                                                                    const SizedBox(height: 20),
-                                                                    Text('CONNECTION ERROR!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
                                                                     const SizedBox(height: 30),
+                                                                    Text('CONNECTION ERROR!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
+                                                                    const SizedBox(height: 20),
                                                                     Text('Slow or no Internet connection.', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
                                                                     const SizedBox(height: 10),
                                                                     Text('Check your connection, then try again', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
@@ -419,7 +421,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                             actions: [
                                                               Center(
                                                                 child: Padding(
-                                                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                                                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                                                                   child: TextButton(
                                                                     onPressed: () {
                                                                       Navigator.of(context).pop();
@@ -634,11 +636,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                         elevation: 10,
                                                         title: CircleAvatar(radius: 35, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.warning, color: SigCol.orange, size: 30)),
                                                         content: Container(
-                                                          height: 50,
-                                                          width: 330,
+                                                          height: 20,
+                                                          width: 250,
                                                           padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                                                           child: FittedBox(
-                                                            fit: BoxFit.contain,
+                                                            fit: BoxFit.fitWidth,
                                                             child: Column(
                                                               mainAxisAlignment: MainAxisAlignment.center,
                                                               children: [
@@ -649,7 +651,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                         ),
                                                         actions: [
                                                           Padding(
-                                                            padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0),
+                                                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                                             child: Center(
                                                               child: Row(
                                                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -675,9 +677,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                                     color: SigCol.red,
                                                                     child: TextButton(
                                                                       onPressed: () {
-                                                                        Navigator.pop(context);
                                                                         eventstreamController.sink.add(['stopTimer', 0]);
                                                                         badgeHandler(false);
+                                                                        Navigator.pop(context);
                                                                       },
                                                                       child: Icon(Icons.check, color: Swatch.buttons.shade800, size: 30),
                                                                     ),
@@ -692,68 +694,33 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                   }else{
                                                     showDialog(
                                                       context: context,
-                                                      builder: (context) => AlertDialog(
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(20),
-                                                        ),
-                                                        backgroundColor: Swatch.prime,
-                                                        elevation: 10,
-                                                        content: Container(
-                                                          height: 200,
-                                                          width: 330,
-                                                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                                                          child: FittedBox(
-                                                            fit: BoxFit.contain,
-                                                            child: Column(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                              children: [
-                                                                CircleAvatar(radius: 70, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.wifi_off, color: SigCol.red, size: 60)),
-                                                                const SizedBox(height: 20),
-                                                                Text('CONNECTION ERROR!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
-                                                                const SizedBox(height: 30),
-                                                                Text('Signing out...', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        actions: [
-                                                          Center(
-                                                            child: Padding(
-                                                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                                                              child: TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.pop(context);
-                                                                  FirebaseAuth.instance.signOut();
-                                                                },
-                                                                child: Icon(Icons.close_outlined, color: Swatch.buttons.shade800, size: 30),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
+                                                      builder: (context) => const CancelAlert()
                                                     );
                                                   }
                                                 },
-                                                child: Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.cancel_rounded,
-                                                      size: 24,
-                                                      color: Swatch.buttons.shade800,
-                                                    ),
-                                                    Text(
-                                                      '  CANCEL',
-                                                      textAlign: TextAlign.start,
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight: FontWeight.w400,
-                                                          fontFamily: 'Arial',
-                                                          color: Swatch.buttons.shade800
+                                                child: FittedBox(
+                                                  fit: BoxFit.fitWidth,
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.cancel_rounded,
+                                                        size: 24,
+                                                        color: Swatch.buttons.shade800,
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Text(
+                                                        '  CANCEL',
+                                                        textAlign: TextAlign.start,
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'Arial',
+                                                            color: Swatch.buttons.shade800
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 )
                                             )
                                         )
