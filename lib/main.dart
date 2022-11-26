@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carparksys/pages/home.dart';
 import 'package:carparksys/pages/login.dart';
 import 'package:carparksys/pages/lots.dart';
@@ -19,6 +21,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
+  static final StreamController<List<dynamic>> eventstreamController = StreamController<List<dynamic>>.broadcast();
   const MyApp({super.key});
 
   // This widget is the root of your application.
