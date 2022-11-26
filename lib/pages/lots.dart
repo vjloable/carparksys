@@ -168,11 +168,17 @@ class _LotsPageState extends State<LotsPage> {
                 child: SizedBox(
                   width: 200,
                   height: 25,
-                  child: Center(
-                    child: Text(
-                      _time,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Center(
+                        child: Text(
+                          _time,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary
+                          ),
+                        ),
                       ),
                     ),
                   ),
