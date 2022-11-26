@@ -5,6 +5,14 @@ class TimeRunner{
     return DateFormat('MM/dd/yyyy').add_jms().format(dateTime);
   }
 
+  String formatterMDYMS(DateTime dateTime){
+    return DateFormat('MM/dd/yyyy').add_jms().format(dateTime);
+  }
+
+  String fromEpoch(int ms){
+    return formatterMDYMS(DateTime.fromMillisecondsSinceEpoch(ms));
+  }
+
   DateTime now(){
     return DateTime.now();
   }
