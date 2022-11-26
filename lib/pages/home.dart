@@ -645,7 +645,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                                         shape: RoundedRectangleBorder(
                                                           borderRadius: BorderRadius.circular(20),
                                                         ),
-                                                        backgroundColor: Swatch.prime,
+                                                        backgroundColor: Colors.white,
                                                         elevation: 10,
                                                         title: CircleAvatar(radius: 35, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.warning, color: SigCol.orange, size: 30)),
                                                         content: Container(
@@ -674,7 +674,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                                                     shape: RoundedRectangleBorder(
                                                                       borderRadius: BorderRadius.circular(30.0),
                                                                     ),
-                                                                    color: SigCol.green,
+                                                                    color: Swatch.prime.shade100,
                                                                     child: TextButton(
                                                                       onPressed: () {
                                                                         Navigator.pop(context);
@@ -687,7 +687,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                                                     shape: RoundedRectangleBorder(
                                                                       borderRadius: BorderRadius.circular(30.0),
                                                                     ),
-                                                                    color: SigCol.red,
+                                                                    color: Swatch.prime,
                                                                     child: TextButton(
                                                                       onPressed: () {
                                                                         MyApp.eventstreamController.sink.add(['stopTimer', 0]);
