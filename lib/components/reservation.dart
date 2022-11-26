@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:carparksys/assets/swatches/custom_colors.dart';
 import 'package:carparksys/components/time_runner.dart';
 import 'package:carparksys/controllers/reserve.dart';
+import 'package:carparksys/main.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_to_act/slide_to_act.dart';
-
 import '../controllers/spaces.dart';
 
 class ReserveLot extends StatefulWidget {
@@ -225,6 +225,8 @@ class _ReserveLotState extends State<ReserveLot> {
                                 await _updateConnectionStatus();
                                 if (_connectionResult){
                                   await controllerReserve.reserve(widget._lot);
+                                  MyApp.eventstreamController.sink.add(['resetTimer', 480000]);
+                                  MyApp.eventstreamController.sink.add(['startTimer', 0]);
                                   updateSubmitIcon();
                                   Future.delayed(const Duration(seconds: 1));
                                 }else{
