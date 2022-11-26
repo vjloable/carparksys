@@ -645,9 +645,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                                         shape: RoundedRectangleBorder(
                                                           borderRadius: BorderRadius.circular(20),
                                                         ),
-                                                        backgroundColor: Colors.white,
+                                                        backgroundColor: Theme.of(context).colorScheme.background,
                                                         elevation: 10,
-                                                        title: CircleAvatar(radius: 35, backgroundColor: Swatch.buttons.shade800, child: const Icon(Icons.warning, color: SigCol.orange, size: 30)),
+                                                        title: CircleAvatar(radius: 35, backgroundColor: Theme.of(context).colorScheme.onPrimary, child: const Icon(Icons.warning, color: SigCol.orange, size: 30)),
                                                         content: Container(
                                                           height: 20,
                                                           width: 250,
@@ -657,7 +657,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                                             child: Column(
                                                               mainAxisAlignment: MainAxisAlignment.center,
                                                               children: [
-                                                                Text('CANCEL RESERVATION?', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 65)),
+                                                                Text('CANCEL RESERVATION?', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold, fontSize: 65)),
                                                               ],
                                                             ),
                                                           ),
