@@ -9,6 +9,7 @@ import 'package:carparksys/components/time_runner.dart';
 import 'package:carparksys/controllers/reserve.dart';
 import 'package:carparksys/controllers/statistics.dart';
 import 'package:carparksys/controllers/suggestion.dart';
+import 'package:carparksys/main.dart';
 import 'package:carparksys/pages/lots.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -49,7 +50,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   late bool _connectionResult = true;
   late bool _hasTicket = false;
   late bool showBadgeTicket = false;
-  StreamController<List<dynamic>> eventstreamController = StreamController<List<dynamic>>.broadcast();
+  //StreamController<List<dynamic>> eventstreamController = StreamController<List<dynamic>>.broadcast();
   int resetTime = 480000;
 
   // @override
@@ -100,11 +101,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     if(_connectionResult){
       List<dynamic> retained = await Reserve().getRetention();
       if(retained.first == true){
-        eventstreamController.sink.add(['resetTimer', retained.last]);
-        eventstreamController.sink.add(['startTimer', 0]);
+        MyApp.eventstreamController.sink.add(['resetTimer', retained.last]);
+        MyApp.eventstreamController.sink.add(['startTimer', 0]);
       }else{
-        eventstreamController.sink.add(['resetTimer', retained.last]);
-        eventstreamController.sink.add(['stopTimer', 0]);
+        MyApp.eventstreamController.sink.add(['resetTimer', retained.last]);
+        MyApp.eventstreamController.sink.add(['stopTimer', 0]);
       }
     }else{
       FirebaseAuth.instance.signOut();
@@ -302,8 +303,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                       if(_connectionResult){
                                                         if(_suggestedLot != '...'){
                                                           controllerReserve.reserve(_suggestedLot);
-                                                          eventstreamController.sink.add(['resetTimer', resetTime]);
-                                                          eventstreamController.sink.add(['startTimer', 0]);
+                                                          MyApp.eventstreamController.sink.add(['resetTimer', resetTime]);
+                                                          MyApp.eventstreamController.sink.add(['startTimer', 0]);
                                                           badgeHandler(true);
                                                           showDialog(
                                                             context: context,
@@ -589,13 +590,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                   Expanded(
                                                     child: Container(
                                                       color: Colors.transparent,
-                                                      child: Center(
+                                                      child: const Center(
                                                         child: SizedBox(
                                                           height: 24,
                                                           width: 70,
                                                           child: FittedBox(
                                                             fit: BoxFit.contain,
-                                                            child: CountdownTimer(eventStreamController: eventstreamController),
+                                                            child: CountdownTimer(),
                                                           ),
                                                         ),
                                                       ),
@@ -677,7 +678,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                                                                     color: SigCol.red,
                                                                     child: TextButton(
                                                                       onPressed: () {
-                                                                        eventstreamController.sink.add(['stopTimer', 0]);
+                                                                        MyApp.eventstreamController.sink.add(['stopTimer', 0]);
                                                                         badgeHandler(false);
                                                                         Navigator.pop(context);
                                                                       },
@@ -987,7 +988,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     controllerSpaces.deactivateListenerSpaces();
     controllerSuggestion.deactivateListenerSuggestion();
     controllerReserve.deactivateListenerReserve();
-    eventstreamController.close();
+    MyApp.eventstreamController.close();
     super.deactivate();
   }
 }
