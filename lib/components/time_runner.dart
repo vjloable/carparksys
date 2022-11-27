@@ -13,6 +13,10 @@ class TimeRunner{
     return formatterMDYMS(DateTime.fromMillisecondsSinceEpoch(ms));
   }
 
+  int toEpoch(){
+    return now().millisecondsSinceEpoch;
+  }
+
   DateTime now(){
     return DateTime.now();
   }
