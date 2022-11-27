@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
   late bool _connectionResult = true;
   late bool _hasTicket = false;
   late bool showBadgeTicket = false;
-  int resetTime = 480000;
+  int resetTime = 0;
 
   // @override
   // void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -318,7 +318,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                                       if(_connectionResult){
                                                         if(_suggestedLot != '...'){
                                                           controllerReserve.reserve(_suggestedLot);
-                                                          MyApp.eventstreamController.sink.add(['resetTimer', resetTime]);
+                                                          MyApp.eventstreamController.sink.add(['resetTimer', Reserve().getTimeStop()]);
                                                           MyApp.eventstreamController.sink.add(['startTimer', 0]);
                                                           badgeHandler(true);
                                                           showDialog(
