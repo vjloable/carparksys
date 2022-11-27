@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:carparksys/components/time_runner.dart';
+import 'package:carparksys/main.dart';
 import 'package:carparksys/services/rtdb.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -11,19 +13,26 @@ class Reserve{
   late StreamSubscription _reserveStream;
   late StreamController<List<dynamic>> reserveStreamController = StreamController<List<dynamic>>();
   static int _stateCheck = 0;
+  static int _timeStop = 0;
   static String _selectedLot = '...';
+
 
   int getStateCheck(){
     return _stateCheck;
+  }
+
+  int getTimeStop(){
+    return _timeStop;
+  }
+
+  String getSelectedLot(){
+    return _selectedLot;
   }
 
   Future<void> updateStateCheck(int state) async{
     _stateCheck = state;
   }
 
-  String getSelectedLot(){
-    return _selectedLot;
-  }
 
   void updateSelectedLot(String lot){
     _selectedLot = lot;
@@ -52,16 +61,16 @@ class Reserve{
   }
 
   Future<List<dynamic>> getRetention() async {
-    int returnable = 480000;
+    int returnable = TimeRunner().toEpoch() + 480000;
     bool isNotDone = false;
     var userId = FirebaseAuth.instance.currentUser?.uid;
     _snapshotUser = await rtdb.databaseRef.child('users/$userId').get();
     if(_snapshotUser.exists){
       if(_snapshotUser.child('has_ticket').value == true) {
         int timestop = (await rtdb.databaseDB.ref('users/$userId/timestop').get()).value as int;
-        int timepause = DateTime.now().millisecondsSinceEpoch;
+        int timepause = TimeRunner().toEpoch();
         if(timepause < timestop){
-          returnable = (timestop - timepause);
+          returnable = timestop;
           isNotDone = true;
         }
       }
@@ -100,6 +109,8 @@ class Reserve{
           updateSelectedLot(lot);
           int timestart = DateTime.now().millisecondsSinceEpoch;
           int timestop = timestart + (1000 * 480);
+          _timeStop = timestop;
+          MyApp.eventstreamController.sink.add(['countdownTimer', timestop]);
           await updateStateCheck(1);
           await rtdb.databaseRef.update(
               {
@@ -123,6 +134,8 @@ class Reserve{
         await updateStateCheck(1);
         int timestart = DateTime.now().millisecondsSinceEpoch;
         int timestop = timestart + (1000 * 480);
+        _timeStop = timestop;
+        MyApp.eventstreamController.sink.add(['countdownTimer', timestop]);
         await rtdb.databaseRef.update(
             {
               'users/$userId' : {
