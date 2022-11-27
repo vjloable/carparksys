@@ -195,7 +195,7 @@ class _ReserveLotState extends State<ReserveLot> {
                                 await _updateConnectionStatus();
                                 if (_connectionResult){
                                   await controllerReserve.reserve(widget._lot);
-                                  MyApp.eventstreamController.sink.add(['resetTimer', 480000]);
+                                  MyApp.eventstreamController.sink.add(['resetTimer', Reserve().getTimeStop()]);
                                   MyApp.eventstreamController.sink.add(['startTimer', 0]);
                                   updateSubmitIcon();
                                   Future.delayed(const Duration(seconds: 1));
