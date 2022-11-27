@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:carparksys/assets/swatches/custom_colors.dart';
+import 'package:carparksys/components/time_runner.dart';
 import 'package:carparksys/controllers/reserve.dart';
 import 'package:carparksys/main.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +13,11 @@ class CountdownTimer extends StatefulWidget {
   State<CountdownTimer> createState() => _CountdownTimerState();
 }
 
-class _CountdownTimerState extends State<CountdownTimer> {
+class _CountdownTimerState extends State<CountdownTimer> with SingleTickerProviderStateMixin{
   late StreamSubscription<List<dynamic>> eventStreamSubscription;
-  late Timer countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
-  Duration myDuration = const Duration(milliseconds: 480000);
+  late int endTime = TimeRunner().toEpoch();
+  late int displayTime = 480000;
+  late Timer countdownTimer = Timer.periodic(const Duration(milliseconds: 500), (_) => setCountDown());
 
   @override
   void initState() {
@@ -31,12 +33,15 @@ class _CountdownTimerState extends State<CountdownTimer> {
         stopTimer();
       }else if(event.first == 'resetTimer'){
         resetTimer(event.last);
+      }else if(event.first == 'countdownTimer'){
+        endTime = event.last;
+        print('endTime in event: $endTime');
       }
     });
   }
 
   void startTimer() {
-    countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
+    countdownTimer = Timer.periodic(const Duration(milliseconds: 500), (_) => setCountDown());
   }
 
   void stopTimer() {
@@ -46,18 +51,18 @@ class _CountdownTimerState extends State<CountdownTimer> {
 
   // Step 5
   void resetTimer(int ms) {
-    setState(() => myDuration = Duration(milliseconds: ms));
+    setState(() => endTime = ms);
   }
 
   // Step 6
   void setCountDown() {
-    const reduceSecondsBy = 1;
+    int end = endTime;
     setState(() {
-      final seconds = myDuration.inSeconds - reduceSecondsBy;
-      if (seconds <= 0) {
+      final milliseconds = (end - TimeRunner().toEpoch());
+      if (milliseconds <= 0) {
         stopTimer();
       } else {
-        myDuration = Duration(seconds: seconds);
+        displayTime = milliseconds;
       }
     });
   }
@@ -74,8 +79,8 @@ class _CountdownTimerState extends State<CountdownTimer> {
     String strDigits(int n) => n.toString().padLeft(2, '0');
     // final days = strDigits(myDuration.inDays);
     // final hours = strDigits(myDuration.inHours.remainder(24));
-    final minutes = strDigits(myDuration.inMinutes.remainder(60));
-    final seconds = strDigits(myDuration.inSeconds.remainder(60));
+    final minutes = strDigits(Duration(milliseconds: displayTime).inMinutes.remainder(60));
+    final seconds = strDigits(Duration(milliseconds: displayTime).inSeconds.remainder(60));
     return Text(
       '$minutes : $seconds',
       //'${myDuration.inSeconds} s',
