@@ -6,7 +6,7 @@ class TimeRunner{
   }
 
   String formatterMDYMS(DateTime dateTime){
-    return DateFormat('MM/dd/yyyy').add_jms().format(dateTime);
+    return (DateFormat('').add_jms().format(dateTime)).trim();
   }
 
   String fromEpoch(int ms){
