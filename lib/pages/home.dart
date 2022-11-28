@@ -1047,7 +1047,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     controllerSpaces.deactivateListenerSpaces();
     controllerSuggestion.deactivateListenerSuggestion();
     controllerReserve.deactivateListenerReserve();
-    MyApp.eventstreamController.close();
     super.deactivate();
   }
 }
