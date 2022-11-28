@@ -364,7 +364,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                                                       const SizedBox(height: 30),
                                                                       Text('NO SPACES LEFT!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontWeight: FontWeight.bold, fontSize: 45)),
                                                                       const SizedBox(height: 20),
-                                                                      Text('Kindly wait for a spot for a while,', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
+                                                                      Text('Kindly wait for a spot in a while,', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 30)),
                                                                       const SizedBox(height: 10),
                                                                       Text('Thank you for your patience!', textAlign: TextAlign.center, style: TextStyle(color: Swatch.buttons.shade800, fontFamily: 'Arial', fontWeight: FontWeight.w300, fontSize: 26)),
                                                                     ],
