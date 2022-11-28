@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
               '/lots': (context) => const LotsPage(true),
             },
             debugShowCheckedModeBanner: false,
-            title: 'Car Parking System App',
+            title: 'CarParkSys',
             theme: ThemeData(
             primarySwatch: Swatch.prime,
             fontFamily: 'Menlo',
