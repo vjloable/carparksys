@@ -264,32 +264,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                         fit: BoxFit.fitWidth,
                                         child: SizedBox(
                                           width: 300,
-                                          child: Visibility(
-                                            visible: _connectionResult,
-                                            replacement: Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  Center(
-                                                    child: SizedBox(
-                                                      width: 100,
-                                                      height: 100,
-                                                      child: CircularProgressIndicator(
-                                                        value: null,
-                                                        backgroundColor: Theme.of(context).colorScheme.background,
-                                                        strokeWidth: 6,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const Icon(Icons.wifi_off, color: Swatch.prime, size: 50),
-                                                ]
-                                            ),
-                                            child: Text(
-                                              _suggestedLot,
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 120
-                                              ),
+                                          child: Text(
+                                            _suggestedLot,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 120
                                             ),
                                           ),
                                         )
@@ -534,64 +514,44 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                   width: 260,
                                   child: FittedBox(
                                       fit: BoxFit.fitWidth,
-                                      child: Visibility(
-                                        visible: _connectionResult,
-                                        replacement: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              Center(
-                                                child: SizedBox(
-                                                  width: 100,
-                                                  height: 100,
-                                                  child: CircularProgressIndicator(
-                                                    value: null,
-                                                    backgroundColor: Theme.of(context).colorScheme.background,
-                                                    strokeWidth: 6,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                            _ticketLot,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 120,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          const SizedBox(height: 120, child: VerticalDivider(color: Swatch.prime, thickness: 1)),
+                                          SizedBox(
+                                            width: 100,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  'VALID  FROM\n\n$_startReserved',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 12
                                                   ),
                                                 ),
-                                              ),
-                                              const Icon(Icons.wifi_off, color: Swatch.prime, size: 50),
-                                            ]
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              _ticketLot,
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 120,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            const SizedBox(height: 120, child: VerticalDivider(color: Swatch.prime, thickness: 1)),
-                                            SizedBox(
-                                              width: 100,
-                                              child: Column(
-                                                children: [
-                                                  Text(
-                                                    'VALID  FROM\n\n$_startReserved',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 12
-                                                    ),
+                                                const SizedBox(width: 90, child: Divider(color: Swatch.prime, thickness: 1)),
+                                                Text(
+                                                  'VALID UNTIL\n\n$_endReserved',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 12
                                                   ),
-                                                  const SizedBox(width: 90, child: Divider(color: Swatch.prime, thickness: 1)),
-                                                  Text(
-                                                    'VALID UNTIL\n\n$_endReserved',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 12
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       )
                                   ),
                                 ),
@@ -683,7 +643,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                                             ),
                                                             backgroundColor: Theme.of(context).colorScheme.background,
                                                             elevation: 10,
-                                                            title: CircleAvatar(radius: 35, backgroundColor: Theme.of(context).colorScheme.onPrimary, child: const Icon(Icons.warning, color: SigCol.orange, size: 30)),
+                                                            title: CircleAvatar(radius: 35, backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer, child: const Icon(Icons.warning, color: SigCol.orange, size: 30)),
                                                             content: Container(
                                                               height: 20,
                                                               width: 250,

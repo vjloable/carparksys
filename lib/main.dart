@@ -66,6 +66,7 @@ class MyApp extends StatelessWidget {
               onBackground: Colors.black,
               surface: Swatch.prime,
               onSurface: Colors.black,
+              secondaryContainer: Swatch.buttons.shade800,
             ),
         ),
         darkTheme: ThemeData(
@@ -88,6 +89,7 @@ class MyApp extends StatelessWidget {
               onBackground: Colors.black,
               surface: Swatch.prime,
               onSurface: Colors.black,
+              secondaryContainer: Swatch.prime,
             ),
         ),
         themeMode: currentMode,
