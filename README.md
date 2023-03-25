@@ -1,16 +1,12 @@
-# carparksys
+# Car Park Management System
 
 Car Park Management System
 
-## Getting Started
+IoT Device's source code repository: https://github.com/vjloable/carparksys-iot
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Tools and Components
+- Firebase (RTDB, Auth...)
+- Android Studio
+- Visual Studio Code (for the IoT device)
+- Platform.IO (for the IoT device)
+- AiThinker ESP32 CAM with Ultrasonic Sensor HC-SR04
