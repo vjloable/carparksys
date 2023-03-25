@@ -81,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 20),
                         TextField(
+
                             obscureText: true,
                             enableSuggestions: false,
                             autocorrect: false,

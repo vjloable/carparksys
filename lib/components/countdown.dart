@@ -27,6 +27,7 @@ class _CountdownTimerState extends State<CountdownTimer> with SingleTickerProvid
 
   void eventlistenerCD() {
     eventStreamSubscription = MyApp.eventstreamController.stream.listen((event) {
+      print(event.first);
       if(event.first == 'startTimer'){
         startTimer();
       }else if(event.first == 'stopTimer'){
@@ -36,6 +37,9 @@ class _CountdownTimerState extends State<CountdownTimer> with SingleTickerProvid
       }else if(event.first == 'countdownTimer'){
         endTime = event.last;
         print('endTime in event: $endTime');
+      }else if(event.first == 'resetArrived'){
+        endTime = event.last;
+        print('reset arrived');
       }
     });
   }

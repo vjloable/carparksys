@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import '../../assets/swatches/custom_colors.dart';
 import '../controllers/spaces.dart';
 import '../pages/lots.dart';
-import '../services/rtdb.dart';
+import '../services/db.dart';
 
 Widget drawerHeader = UserAccountsDrawerHeader(
     accountName: Text(FirebaseAuth.instance.currentUser!.displayName!,
@@ -82,11 +82,14 @@ class _MyDrawerState extends State<MyDrawer> {
         ListView(padding: EdgeInsets.zero, children: [
           Container(width: 200, height: 32, color: Swatch.prime),
           drawerHeader,
+          /*
           const ListTile(
             title: Text('Account'),
             leading: Icon(Icons.account_circle),
             onTap: null,
           ),
+          */
+          /*
           ListTile(
               title: const Text('My Ticket'),
               leading: const Icon(Icons.confirmation_num_rounded),
@@ -108,6 +111,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     }
                 );
               }),
+          */
           ListTile(
             title: const Text('Lots'),
             leading: const Icon(Icons.dashboard_rounded),
@@ -119,11 +123,13 @@ class _MyDrawerState extends State<MyDrawer> {
                       builder: (context) => LotsPage(_connectionResult)));
             },
           ),
+          /*
           const ListTile(
             title: Text('Settings'),
             leading: Icon(Icons.settings_rounded),
             onTap: null,
           ),
+          */
           const ListTile(
             title: Text('Help'),
             leading: Icon(Icons.help),
@@ -144,8 +150,8 @@ class _MyDrawerState extends State<MyDrawer> {
             onTap: () async {
               await _updateConnectionStatus();
               if (_connectionResult) {
-                Map<String, int> resetter = {
-                  for (var e in _parkingLotsName) e: 1
+                Map<String, dynamic> resetter = {
+                  for (var e in _parkingLotsName) e: {'status':1, 'user':''}
                 };
                 await rtdb.databaseRef.child('spaces').update(resetter);
               }

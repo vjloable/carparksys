@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:carparksys/services/rtdb.dart';
+import 'package:carparksys/services/db.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class SuggestionController{
@@ -13,7 +13,7 @@ class SuggestionController{
       List<String> suggestions = [];
       Iterable<DataSnapshot> snapshot = event.snapshot.children;
       List<String> lots = snapshot.map((e) => e.key as String).toList();
-      List<int> status = snapshot.map((e) => e.value as int).toList();
+      List<int> status = snapshot.map((e) => e.child('status').value as int).toList();
 
       for(int i = 0; i < lots.length; i++){
         if(status[i] == 1) {

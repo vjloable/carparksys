@@ -20,6 +20,8 @@ dependencies:
   firebase_database: ^10.0.5
   intl: ^0.17.0
   badges: ^2.0.3
+  rsa_encrypt: ^2.0.0
+  cloud_firestore: ^4.2.0
 
 dev_dependencies:
   flutter_test:

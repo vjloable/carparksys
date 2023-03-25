@@ -51,6 +51,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
   late Timer timer;
   late bool _connectionResult = true;
   late bool _hasTicket = false;
+  late bool _hasArrived = false;
   late bool showBadgeTicket = false;
   int resetTime = 0;
 
@@ -83,6 +84,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     controllerSuggestion.activateListenersSuggestion();
     controllerSpaces.activateListenersSpaces();
     controllerReserve.activateListenersReserve();
+    controllerReserve.eventlistenerArrived();
     statisticsStreamListener();
     suggestionStreamListener();
     reserveStreamListener();
@@ -100,11 +102,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     await _updateConnectionStatus();
     if(_connectionResult){
       List<dynamic> retained = await Reserve().getRetention();
-      if(retained.first == true){
-        MyApp.eventstreamController.sink.add(['resetTimer', retained.last]);
+      if(retained.elementAt(0) == true){
+        MyApp.eventstreamController.sink.add(['resetTimer', retained.elementAt(1)]);
         MyApp.eventstreamController.sink.add(['startTimer', 0]);
       }else{
-        MyApp.eventstreamController.sink.add(['resetTimer', retained.last]);
+        MyApp.eventstreamController.sink.add(['resetTimer', retained.elementAt(1)]);
         MyApp.eventstreamController.sink.add(['stopTimer', 0]);
       }
     }else{
@@ -131,11 +133,26 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
   void reserveStreamListener() {
     reserveStreamSubscription = reserveStream.listen((event) {
       setState(() {
+        _ytstatus = 'No Reservation';
         _ticketLot = event.elementAt(0).toString();
         _hasTicket = event.elementAt(1) as bool;
         _startReserved = TimeRunner().fromEpoch(event.elementAt(2));
         _endReserved = TimeRunner().fromEpoch(event.elementAt(3));
-        _ytstatus = _hasTicket ? 'En Route to $_ticketLot' : 'No Reservation';
+        _hasArrived = event.elementAt(4) as bool;
+        if(_hasArrived == true && _hasTicket == true){
+          _ytstatus = 'Parked at $_ticketLot';
+        }else if(_hasArrived == false && _hasTicket == false){
+          _ytstatus = 'No Reservation';
+          MyApp.eventstreamController.sink.add(['stopTimer', 0]);
+          MyApp.eventstreamController.sink.add(['resetArrived', 0]);
+        }else if(_hasArrived == false && _hasTicket == true){
+          _ytstatus = 'En Route to $_ticketLot';
+        }else if(_hasArrived == true && _hasTicket == false){
+          _ytstatus = 'No Reservation';
+          MyApp.eventstreamController.sink.add(['stopTimer', 0]);
+          MyApp.eventstreamController.sink.add(['resetArrived', 0]);
+        }
+        // _ytstatus = _hasTicket ? 'En Route to $_ticketLot' : 'No Reservation';
       });
     });
   }
@@ -181,6 +198,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     return Scaffold(
       key: _key,
       extendBodyBehindAppBar: true,
+      extendBody: true,
       appBar: MyAppbar().myAppbar(_key, context) as PreferredSizeWidget,
       drawer: const Drawer(
         child: MyDrawer(2),
@@ -194,7 +212,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
               padding: const EdgeInsets.all(40),
               child: Column(
                 children: [
-                  const SizedBox(width: 1, height: 150),
+                  const SizedBox(width: 1, height: 110),
                   Container(
                       height: 30,
                       width: double.infinity,
@@ -226,7 +244,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                     ),
                                     const SizedBox(width: 30),
                                     Text(
-                                        '$_ytstatus',
+                                        _ytstatus,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: Swatch.buttons.shade400,
@@ -499,298 +517,337 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                               ),
                             ),
                           ),
-                        secondChild: SizedBox(
-                          height: 480,
-                          width: double.infinity,
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                const Text('Your Parking Reservation', style: TextStyle(fontSize: 16)),
-                                const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
-                                SizedBox(
-                                  width: 300,
-                                  height: 400,
-                                  child: FittedBox(
-                                    fit: BoxFit.fitWidth,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      children: [
-                                        SizedBox(
-                                          height: 200,
-                                          width: 300,
-                                          child: FittedBox(
-                                              fit: BoxFit.fitWidth,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(50.0),
-                                                child: Text(
-                                                  _ticketLot,
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 120,
-                                                  ),
+                        secondChild:
+                            AnimatedCrossFade(
+                              firstChild: SizedBox(
+                                height: 480,
+                                width: double.infinity,
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      const Text('Your Parking Reservation', style: TextStyle(fontSize: 16)),
+                                      const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
+                                      SizedBox(
+                                        width: 300,
+                                        height: 400,
+                                        child: FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                            children: [
+                                              SizedBox(
+                                                height: 200,
+                                                width: 300,
+                                                child: FittedBox(
+                                                    fit: BoxFit.fitWidth,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(50.0),
+                                                      child: Text(
+                                                        _ticketLot,
+                                                        textAlign: TextAlign.center,
+                                                        style: const TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 120,
+                                                        ),
+                                                      ),
+                                                    )
                                                 ),
-                                              )
-                                          ),
-                                        ),
-                                        const SizedBox(height: 20),
-                                        SizedBox(
-                                          height: 40,
-                                          width: 280,
-                                          child: FittedBox(
-                                            fit: BoxFit.fitWidth,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                SizedBox(
-                                                  width: 120,
-                                                  child: Center(
-                                                    child: Column(
-                                                      children: [
-                                                        const Text(
-                                                          'FROM\n\n',
-                                                          textAlign: TextAlign.center,
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 12
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          _startReserved,
-                                                          textAlign: TextAlign.center,
-                                                          style: const TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 16
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 40, height: 60, child: Icon(Icons.arrow_forward, color: Swatch.prime)),
-                                                SizedBox(
-                                                  width: 120,
-                                                  child: Center(
-                                                    child: Column(
-                                                      children: [
-                                                        const Text(
-                                                          'UNTIL\n\n',
-                                                          textAlign: TextAlign.center,
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 12
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          _endReserved,
-                                                          textAlign: TextAlign.center,
-                                                          style: const TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 16
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 50),
-                                        SizedBox(
-                                          height: 65,
-                                          width: 300,
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                            child: FittedBox(
-                                                fit: BoxFit.fitWidth,
-                                                child: Row(
-                                                  children: [
-                                                    SizedBox(
-                                                        height: 60,
-                                                        width: 200,
-                                                        child: Material(
-                                                          elevation: 1,
-                                                          borderRadius: const BorderRadius.only(
-                                                            topLeft: Radius.circular(18),
-                                                            topRight: Radius.circular(0),
-                                                            bottomLeft: Radius.circular(18),
-                                                            bottomRight: Radius.circular(0),
-                                                          ),
-                                                          color: Swatch.prime.shade200,
-                                                          child: Row(
-                                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                              ),
+                                              const SizedBox(height: 20),
+                                              SizedBox(
+                                                height: 40,
+                                                width: 280,
+                                                child: FittedBox(
+                                                  fit: BoxFit.fitWidth,
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 120,
+                                                        child: Center(
+                                                          child: Column(
                                                             children: [
-                                                              Container(
-                                                                color: Colors.transparent,
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.all(18),
-                                                                  child: SizedBox(
-                                                                    width: 18,
-                                                                    height: 18,
-                                                                    child: CircularProgressIndicator(
-                                                                      color: Swatch.buttons.shade600,
-                                                                      strokeWidth: 2,
-                                                                      value: null,
-                                                                    ),
-                                                                  ),
+                                                              const Text(
+                                                                'FROM\n\n',
+                                                                textAlign: TextAlign.center,
+                                                                style: TextStyle(
+                                                                    fontWeight: FontWeight.bold,
+                                                                    fontSize: 12
                                                                 ),
                                                               ),
-                                                              Expanded(
-                                                                child: Container(
-                                                                  color: Colors.transparent,
-                                                                  child: const Center(
-                                                                    child: SizedBox(
-                                                                      height: 24,
-                                                                      width: 70,
-                                                                      child: FittedBox(
-                                                                        fit: BoxFit.contain,
-                                                                        child: CountdownTimer(),
-                                                                      ),
-                                                                    ),
-                                                                  ),
+                                                              Text(
+                                                                _startReserved,
+                                                                textAlign: TextAlign.center,
+                                                                style: const TextStyle(
+                                                                    fontWeight: FontWeight.bold,
+                                                                    fontSize: 16
                                                                 ),
                                                               ),
-                                                              const SizedBox(height: 24, width: 15),
                                                             ],
                                                           ),
-                                                        )
-                                                    ),
-                                                    const SizedBox(height: 1, width: 0),
-                                                    SizedBox(
-                                                        height: 60,
-                                                        width: 135,
-                                                        child: ElevatedButton(
-                                                            style: ElevatedButton.styleFrom(
-                                                                elevation: 5,
-                                                                backgroundColor: Swatch.prime,
-                                                                shape: const RoundedRectangleBorder(
-                                                                  borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius.circular(0),
-                                                                    topRight: Radius.circular(18),
-                                                                    bottomLeft: Radius.circular(0),
-                                                                    bottomRight: Radius.circular(18),
-                                                                  ),
-                                                                )
-                                                            ),
-                                                            onPressed: () async {
-                                                              await _updateConnectionStatus();
-                                                              if(_connectionResult){
-                                                                showDialog(
-                                                                  context: context,
-                                                                  builder: (context) => AlertDialog(
-                                                                    shape: RoundedRectangleBorder(
-                                                                      borderRadius: BorderRadius.circular(20),
-                                                                    ),
-                                                                    backgroundColor: Theme.of(context).colorScheme.background,
-                                                                    elevation: 10,
-                                                                    title: CircleAvatar(radius: 35, backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer, child: const Icon(Icons.warning, color: SigCol.orange, size: 30)),
-                                                                    content: Container(
-                                                                      height: 20,
-                                                                      width: 250,
-                                                                      padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                                                                      child: FittedBox(
-                                                                        fit: BoxFit.fitWidth,
-                                                                        child: Column(
-                                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                                          children: [
-                                                                            Text('CANCEL RESERVATION?', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold, fontSize: 65)),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    actions: [
-                                                                      Padding(
-                                                                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                                                        child: Center(
-                                                                          child: Row(
-                                                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                                            children: [
-                                                                              Material(
-                                                                                elevation: 5,
-                                                                                shape: RoundedRectangleBorder(
-                                                                                  borderRadius: BorderRadius.circular(30.0),
-                                                                                ),
-                                                                                color: Swatch.prime.shade100,
-                                                                                child: TextButton(
-                                                                                  onPressed: () {
-                                                                                    Navigator.pop(context);
-                                                                                  },
-                                                                                  child: Icon(Icons.close_outlined, color: Swatch.buttons.shade800, size: 30),
-                                                                                ),
-                                                                              ),
-                                                                              Material(
-                                                                                elevation: 5,
-                                                                                shape: RoundedRectangleBorder(
-                                                                                  borderRadius: BorderRadius.circular(30.0),
-                                                                                ),
-                                                                                color: Swatch.prime,
-                                                                                child: TextButton(
-                                                                                  onPressed: () {
-                                                                                    MyApp.eventstreamController.sink.add(['stopTimer', 0]);
-                                                                                    badgeHandler(false);
-                                                                                    Navigator.pop(context);
-                                                                                  },
-                                                                                  child: Icon(Icons.check, color: Swatch.buttons.shade800, size: 30),
-                                                                                ),
-                                                                              ),
-                                                                            ],
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 40, height: 60, child: Icon(Icons.arrow_forward, color: Swatch.prime)),
+                                                      SizedBox(
+                                                        width: 120,
+                                                        child: Center(
+                                                          child: Column(
+                                                            children: [
+                                                              const Text(
+                                                                'UNTIL\n\n',
+                                                                textAlign: TextAlign.center,
+                                                                style: TextStyle(
+                                                                    fontWeight: FontWeight.bold,
+                                                                    fontSize: 12
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                _endReserved,
+                                                                textAlign: TextAlign.center,
+                                                                style: const TextStyle(
+                                                                    fontWeight: FontWeight.bold,
+                                                                    fontSize: 16
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 50),
+                                              SizedBox(
+                                                height: 65,
+                                                width: 300,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                  child: FittedBox(
+                                                      fit: BoxFit.fitWidth,
+                                                      child: Row(
+                                                        children: [
+                                                          SizedBox(
+                                                              height: 60,
+                                                              width: 200,
+                                                              child: Material(
+                                                                elevation: 1,
+                                                                borderRadius: const BorderRadius.only(
+                                                                  topLeft: Radius.circular(18),
+                                                                  topRight: Radius.circular(0),
+                                                                  bottomLeft: Radius.circular(18),
+                                                                  bottomRight: Radius.circular(0),
+                                                                ),
+                                                                color: Swatch.prime.shade200,
+                                                                child: Row(
+                                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                                  children: [
+                                                                    Container(
+                                                                      color: Colors.transparent,
+                                                                      child: Padding(
+                                                                        padding: const EdgeInsets.all(18),
+                                                                        child: SizedBox(
+                                                                          width: 18,
+                                                                          height: 18,
+                                                                          child: CircularProgressIndicator(
+                                                                            color: Swatch.buttons.shade600,
+                                                                            strokeWidth: 2,
+                                                                            value: null,
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                    ],
-                                                                  ),
-                                                                );
-                                                              }else{
-                                                                showDialog(
-                                                                    context: context,
-                                                                    builder: (context) => const CancelAlert()
-                                                                );
-                                                              }
-                                                            },
-                                                            child: FittedBox(
-                                                              fit: BoxFit.fitWidth,
-                                                              child: Row(
-                                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                children: [
-                                                                  Icon(
-                                                                    Icons.cancel_rounded,
-                                                                    size: 24,
-                                                                    color: Swatch.buttons.shade800,
-                                                                  ),
-                                                                  Text(
-                                                                    '  CANCEL',
-                                                                    textAlign: TextAlign.start,
-                                                                    style: TextStyle(
-                                                                        fontSize: 18,
-                                                                        fontWeight: FontWeight.w400,
-                                                                        fontFamily: 'Arial',
-                                                                        color: Swatch.buttons.shade800
                                                                     ),
+                                                                    Expanded(
+                                                                      child: Container(
+                                                                        color: Colors.transparent,
+                                                                        child: const Center(
+                                                                          child: SizedBox(
+                                                                            height: 24,
+                                                                            width: 70,
+                                                                            child: FittedBox(
+                                                                              fit: BoxFit.contain,
+                                                                              child: CountdownTimer(),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    const SizedBox(height: 24, width: 15),
+                                                                  ],
+                                                                ),
+                                                              )
+                                                          ),
+                                                          const SizedBox(height: 1, width: 0),
+                                                          SizedBox(
+                                                              height: 60,
+                                                              width: 135,
+                                                              child: ElevatedButton(
+                                                                  style: ElevatedButton.styleFrom(
+                                                                      elevation: 5,
+                                                                      backgroundColor: Swatch.prime,
+                                                                      shape: const RoundedRectangleBorder(
+                                                                        borderRadius: BorderRadius.only(
+                                                                          topLeft: Radius.circular(0),
+                                                                          topRight: Radius.circular(18),
+                                                                          bottomLeft: Radius.circular(0),
+                                                                          bottomRight: Radius.circular(18),
+                                                                        ),
+                                                                      )
                                                                   ),
-                                                                ],
-                                                              ),
-                                                            )
-                                                        )
-                                                    )
-                                                  ],
-                                                )
-                                            ),
+                                                                  onPressed: () async {
+                                                                    await _updateConnectionStatus();
+                                                                    if(_connectionResult){
+                                                                      showDialog(
+                                                                        context: context,
+                                                                        builder: (context) => AlertDialog(
+                                                                          shape: RoundedRectangleBorder(
+                                                                            borderRadius: BorderRadius.circular(20),
+                                                                          ),
+                                                                          backgroundColor: Theme.of(context).colorScheme.background,
+                                                                          elevation: 10,
+                                                                          title: CircleAvatar(radius: 35, backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer, child: const Icon(Icons.warning, color: SigCol.orange, size: 30)),
+                                                                          content: Container(
+                                                                            height: 20,
+                                                                            width: 250,
+                                                                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                                                                            child: FittedBox(
+                                                                              fit: BoxFit.fitWidth,
+                                                                              child: Column(
+                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                children: [
+                                                                                  Text('CANCEL RESERVATION?', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold, fontSize: 65)),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          actions: [
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                                                              child: Center(
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                                  children: [
+                                                                                    Material(
+                                                                                      elevation: 5,
+                                                                                      shape: RoundedRectangleBorder(
+                                                                                        borderRadius: BorderRadius.circular(30.0),
+                                                                                      ),
+                                                                                      color: Swatch.prime.shade100,
+                                                                                      child: TextButton(
+                                                                                        onPressed: () {
+                                                                                          Navigator.pop(context);
+                                                                                        },
+                                                                                        child: Icon(Icons.close_outlined, color: Swatch.buttons.shade800, size: 30),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Material(
+                                                                                      elevation: 5,
+                                                                                      shape: RoundedRectangleBorder(
+                                                                                        borderRadius: BorderRadius.circular(30.0),
+                                                                                      ),
+                                                                                      color: Swatch.prime,
+                                                                                      child: TextButton(
+                                                                                        onPressed: () {
+                                                                                          MyApp.eventstreamController.sink.add(['stopTimer', 0]);
+                                                                                          badgeHandler(false);
+                                                                                          Navigator.pop(context);
+                                                                                        },
+                                                                                        child: Icon(Icons.check, color: Swatch.buttons.shade800, size: 30),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      );
+                                                                    }else{
+                                                                      showDialog(
+                                                                          context: context,
+                                                                          builder: (context) => const CancelAlert()
+                                                                      );
+                                                                    }
+                                                                  },
+                                                                  child: FittedBox(
+                                                                    fit: BoxFit.fitWidth,
+                                                                    child: Row(
+                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                      children: [
+                                                                        Icon(
+                                                                          Icons.cancel_rounded,
+                                                                          size: 24,
+                                                                          color: Swatch.buttons.shade800,
+                                                                        ),
+                                                                        Text(
+                                                                          '  CANCEL',
+                                                                          textAlign: TextAlign.start,
+                                                                          style: TextStyle(
+                                                                              fontSize: 18,
+                                                                              fontWeight: FontWeight.w400,
+                                                                              fontFamily: 'Arial',
+                                                                              color: Swatch.buttons.shade800
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  )
+                                                              )
+                                                          )
+                                                        ],
+                                                      )
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
+                              ),
+                              secondChild: SizedBox(
+                                height: 300,
+                                width: double.infinity,
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      const Text('Your Parking Space:', style: TextStyle(fontSize: 16)),
+                                      const SizedBox(width: 250, child: Divider(color: Swatch.prime, thickness: 1)),
+                                      SizedBox(
+                                        height: 150,
+                                        child: FittedBox(
+                                            fit: BoxFit.fitWidth,
+                                            child: SizedBox(
+                                              width: 300,
+                                              child: Text(
+                                                _ticketLot,
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 120
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                      const SizedBox(height: 1, width: 15),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              crossFadeState: !_hasArrived
+                                  ? CrossFadeState.showFirst
+                                  : CrossFadeState.showSecond,
+                              duration: const Duration(milliseconds: 300),
                             ),
-                          ),
-                        ),
                         crossFadeState: !_hasTicket
                             ? CrossFadeState.showFirst
                             : CrossFadeState.showSecond,
@@ -902,7 +959,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                       )
                     ),
                   ),
-                  const SizedBox(height: 40, width: double.infinity),
+                  const SizedBox(height: 110, width: double.infinity),
                 ],
               ),
             ),
@@ -953,6 +1010,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
           )
         ],
       ),
+
       bottomNavigationBar: SizedBox(
         height: 90,
         child:
@@ -976,13 +1034,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                       const Text('HOME', style: TextStyle(color: Colors.orange))
                     ],
                   ),
-                  Column(
+                  /*Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       SizedBox(width: 60, height: 30),
                       Text('TICKET')
                     ],
-                  ),
+                  ),*/
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -1004,6 +1062,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
               )
           )
       ),
+      /*
       floatingActionButton: Badge(
         toAnimate: true,
         badgeContent: const Padding(padding: EdgeInsets.all(1), child: Text('!', style: TextStyle(color: Colors.white))),
@@ -1037,6 +1096,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      */
     );
   }
 
